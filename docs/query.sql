@@ -1,7 +1,8 @@
 COPY anime_db_anime(
-	_id, 
+	uuid, 
 	age_rating, 
-	age_rating_guide, 
+	age_rating_guide,
+    average_rating,
 	description, 
 	episode_count,
 	episode_length,
@@ -11,6 +12,6 @@ COPY anime_db_anime(
 	title_ja_jp,
 	total_length
 )
-FROM '/data/anime_main_db.csv'
+FROM '/data/anime_db.csv'
 DELIMITER ','
 CSV HEADER;
