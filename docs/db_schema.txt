@@ -1,0 +1,16 @@
+Table Anime as A {
+  id int [pk, increment] // auto-increment
+  title_eng char
+  title_japan char
+  description text
+  show_type char
+  status char
+  episode_count int
+  episode_length int
+  total_length int
+  age_rating char
+  age_rating_guide char
+  average_rating decimal
+  poster_image image
+  
+}
