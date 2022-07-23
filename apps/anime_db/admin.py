@@ -5,14 +5,14 @@ from .models import (
     GenresTagList, 
     ReleaseInfo,
     
-    RatingStar, 
-    Rating, 
-    Reviews 
+#     RatingStar, 
+#     Rating, 
+#     Reviews 
 )
 
 admin.site.register(Anime)
 admin.site.register(GenresTagList)
 admin.site.register(ReleaseInfo)
-admin.site.register(RatingStar)
-admin.site.register(Reviews)
-admin.site.register(Rating)
+# admin.site.register(RatingStar)
+# admin.site.register(Reviews)
+# admin.site.register(Rating)
