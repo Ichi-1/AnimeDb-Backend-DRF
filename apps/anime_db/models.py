@@ -1,19 +1,9 @@
 from django.db import models
-
-
-class Genre(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Genre name')
-    slug = models.SlugField(max_length=160, unique=True)
-
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = 'Genre'
-        verbose_name_plural = 'Genres'
+from django.contrib.postgres.fields import ArrayField
 
 
 class Anime(models.Model):
+
     uuid = models.CharField(primary_key=True, max_length=255)
     age_rating = models.CharField(max_length=5, verbose_name='Age Rating')
     age_rating_guide = models.CharField(max_length=50, verbose_name='Age Rating Guidence')
@@ -27,39 +17,70 @@ class Anime(models.Model):
     title_ja_jp = models.CharField(max_length=255, verbose_name='Japan title')
     total_length = models.IntegerField(verbose_name='Total length')
  
-
-    def __str__(self):
-        return f'{self.title_en} / {self.title_ja_jp}'
-    
     class Meta:
         verbose_name = 'Anime Title'
         verbose_name_plural = 'Anime Titles'
+    
+    def __str__(self):
+        return f'{self.title_en} / {self.title_ja_jp}'
 
 
+class GenresTagList(models.Model):
+    title = models.CharField(max_length=255)   
+    genres_tags = models.TextField(null=True)
+     
+    
+    
+    class Meta:
+        verbose_name = 'Genres tag-list'
+        verbose_name_plural = 'Genre tag-lists'
+    
+    def __str__(self):
+        return self.genres_tags
+
+
+class ReleaseInfo(models.Model):
+    title = models.ForeignKey(
+        Anime, 
+        related_name='release_info', 
+        on_delete=models.CASCADE
+    )
+    end_year = models.IntegerField(verbose_name='Airing end year', default=True)
+    season = models.CharField(max_length=255, verbose_name='Realese season')
+    start_year = models.IntegerField(verbose_name='Release year')
+    
+
+    class Meta:
+        verbose_name = 'Release Info'
+    
+    def __str__(self):
+        return self.title
+
+
+
+#* Rating & Reviews System Models
 
 class RatingStar(models.Model):
     values = models.PositiveSmallIntegerField(default=0)
-
-    def __str__(self):
-        return self.values
 
     class Meta:
         verbose_name = 'Rating star'
         verbose_name_plural = 'Rating stars'
 
+    def __str__(self):
+        return self.values
 
-
-class AverageRating(models.Model):
+class Rating(models.Model):
     star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name='star')
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name='anime')
+    
+    class Meta:
+        verbose_name = 'Users rating'
+        verbose_name_plural = 'Users'
+    
 
     def __str__(self):
         return f'{self.star} - {self.anime}'
-    
-    class Meta:
-        verbose_name = 'Average score'
-        verbose_name_plural = 'Average scores'
-
 
 class Reviews(models.Model):
     email = models.EmailField()
@@ -77,11 +98,12 @@ class Reviews(models.Model):
         blank=True, 
         null=True
     )
-
-    def __str__(self):
-        return f'{self.name} - {self.movie}'
     
     class Meta:
         verbose_name = 'Review'
         verbose_name_plural = 'Reviews'
+    
+    
+    def __str__(self):
+        return f'{self.name} - {self.movie}'
 
