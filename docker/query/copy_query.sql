@@ -1,4 +1,4 @@
-COPY anime_db_anime(
+COPY database_anime(
 	age_rating, 
 	age_rating_guide,
     average_rating,
@@ -16,19 +16,21 @@ DELIMITER ','
 CSV HEADER;
 
 
-COPY anime_db_releaseinfo(
+COPY database_releaseinfo(
     end_year,
+    title_en,
     season,
     release_year,
+    tags
 )
-FROM '/data/release_info.csv'
+FROM '/data/additional_info.csv'
 DELIMITER ','
 CSV HEADER;
 
 
-COPY anime_db_genrestaglist(
-	genres_tags
-)
-FROM '/data/genres_tags.csv'
-DELIMITER ','
-CSV HEADER;
+-- COPY database_genrestaglist(
+-- 	genres_tags
+-- )
+-- FROM '/data/genres_tags.csv'
+-- DELIMITER ','
+-- CSV HEADER;

@@ -1,36 +1,24 @@
 version: "3.7"
+
 services:
   postgres_db:
     build:
       dockerfile: ./Dockerfile
       context: '.'
     container_name: postgres_dev
-  
-    environment:
-      POSTGRES_USER: marcus
-      POSTGRES_PASSWORD: marcus
-      POSTGRES_DB: my_db
-
+    env_file:
+      - ../.env
     volumes:
       - ./postgres_data:/var/postgresql/data
     ports: 
       - "5434:5432"
 
-
   pg_admin:
     image: dpage/pgadmin4
     container_name: pg_admin
-    environment: 
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+    env_file:
+      - ../.env
     ports:
       - "5050:80"
     volumes:
       - ./postgres_data:/var/postgresql/data
-
-
-
-volumes:
-  db:
-  
-

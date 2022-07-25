@@ -1,0 +1,21 @@
+[run]
+omit = 
+    *venv/*
+    conftest.py
+    *tests*
+    *settings.py*
+    *__init__.py*
+    *migrations/*
+
+[report]
+omit = 
+    *venv/*
+    conftest.py
+    *tests*
+    *settings.py*
+    *__init__.py*
+    *migrations/*
+
+
+[html]
+directory = ./tests/htmlcov

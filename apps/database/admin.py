@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import (
     Anime, 
-    GenresTagList, 
+    # GenresTagList, 
     ReleaseInfo,
     
 #     RatingStar, 
@@ -11,7 +11,7 @@ from .models import (
 )
 
 admin.site.register(Anime)
-admin.site.register(GenresTagList)
+# admin.site.register(GenresTagList)
 admin.site.register(ReleaseInfo)
 # admin.site.register(RatingStar)
 # admin.site.register(Reviews)
