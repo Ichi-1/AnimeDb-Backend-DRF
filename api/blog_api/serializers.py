@@ -9,6 +9,7 @@ class PostSerializer(ModelSerializer):
         fields = (
             'id', 
             'title',
+            'category',
             'author', 
             'annotation', 
             'content', 

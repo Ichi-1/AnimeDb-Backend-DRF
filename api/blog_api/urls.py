@@ -4,9 +4,9 @@ from .views import (
 )
 
 
-app_name = 'blog_api'
+app_name = 'blog-api'
 
 urlpatterns = [
-    path('', PostList.as_view(), name='post-list'),
-    path('<int:pk>/', PostDetail.as_view(), name='post-detail'), 
+    path('api/posts/', PostList.as_view(), name='post-list'),
+    path('api/posts/<int:pk>/', PostDetail.as_view(), name='post-detail'), 
 ]

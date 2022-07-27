@@ -1,4 +1,4 @@
-COPY database_anime(
+COPY anidb_anime(
 	age_rating, 
 	age_rating_guide,
     average_rating,

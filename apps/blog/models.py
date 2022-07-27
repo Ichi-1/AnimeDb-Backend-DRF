@@ -13,32 +13,26 @@ class Category(models.Model):
 
 class Post(models.Model):
 
-    class PostObjects(models.Manager):
-        def get_queryset(self):
-            return super().get_queryset().filter(status='published')
-
     options = [
         ('draft', 'Draft'),
         ('published', 'Published'),
     ]
     
-    category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, default=1
-    )
-    image = models.ImageField(
-        blank=True, upload_to='./media/posts_images/%Y/%m/%d'
-    )
+
+    class PostObjects(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(status='published')
+    
     title = models.CharField(max_length=255)
+    author = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='blog_posts')
     annotation = models.TextField(null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     content = models.TextField()
+    image = models.ImageField(blank=True, upload_to='./media/posts_images/%Y/%m/%d')
     slug = models.SlugField(max_length=255, unique_for_date='published')
+    status = models.CharField(max_length=10, choices=options, default='published')
     published = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, related_name='blog_posts'
-    )
-    status = models.CharField(
-        max_length=10, choices=options, default='published'
-    )
+    
     # default manager
     objects = models.Manager() 
     # custom manager 

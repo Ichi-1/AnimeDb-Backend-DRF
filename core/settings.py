@@ -1,3 +1,4 @@
+import os
 from decouple import config
 from pathlib import Path
 
@@ -22,12 +23,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework',
-    'api.blog_api',
-    'apps.blog',
-    'apps.recommendation',
-    'apps.database',
     'corsheaders',
+    'rest_framework',
+    'drf_yasg',
+
+    # my apps
+    'api.blog_api',
+    'api.anidb_api',
+    'apps.blog',
+    'apps.anidb',
+    'apps.oauth'
 ]
 
 MIDDLEWARE = [
@@ -75,6 +80,9 @@ DATABASES = {
     }
 }
 
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -100,23 +108,41 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
+# Static (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
 
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Media
+MEDIA_URL = '/media/'
+MEDIAR_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+
+# Permissions:
+#   AllowAny
+#   IsAuthenticated
+#   IsAdminUser
+#   IsAuthenticatedOrReadOnly
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ]
+   'DEFAULT_PERMISSION_CLASSES': ( 
+        'rest_framework.permissions.AllowAny', 
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+ 
 }
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:9000",
+    "http://localhost:8000",
 ]
+
+# SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade' 
+
+
+# SOCIAL_AUTH_VK_OAUTH2_ID = config('SOCIAL_AUTH_VK_OAUTH2_KEY')
+# SOCIAL_AUTH_VK_OAUTH2_SECRET = config('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+
+
+LOGIN_URL = 'auth/login/'
