@@ -3,10 +3,9 @@ from  .views import AnimeViewSet
 from rest_framework import routers
 
 
-app_name = 'anime-api'
+app_name = 'anime'
 
 router = routers.SimpleRouter()
 router.register(r'animes', AnimeViewSet)
-print(router.urls)
 
 urlpatterns = router.urls

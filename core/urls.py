@@ -22,12 +22,15 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path('api/v1/auth/', include('djoser.urls')),
+    # path('api/v1/auth/', include('djoser.urls.jwt')),
 
-    path('api/v1/', include('apps.anidb.urls', namespace='anime')),
-    # path('api/v1/', include('apps.blog.urls', namespace='blog')),
-    path('api/v1/', include('apps.oauth2.urls', namespace='oauth')),
-    path('api/v1/', include('apps.users.urls', namespace='users')),
+
+    path('api/v1/', include('apps.anidb.urls', namespace='animes')),
+    path('api/v1/auth/', include('apps.authentication.urls', namespace='auth')),
+    path('api/v1/', include('apps.blog.urls', namespace='posts')),
+
 
     # swagger documentating
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

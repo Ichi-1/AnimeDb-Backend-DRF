@@ -11,9 +11,9 @@ class CustomManager(BaseUserManager):
         except ValidationError:
             raise ValueError('You must provide a valid email')
 
-    def create_superuser(self, email, password, **extra_fields):
-        if not email:
-            raise ValueError('Superuser Account: You must provide a email')
+    def create_superuser(self, nickname, email, password, **extra_fields):
+        if not nickname:
+            raise ValueError('Superuser Account: You must provide a nickname')
 
         email = self.normalize_email(email)
         self.email_validation(email)
@@ -27,9 +27,9 @@ class CustomManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must be assigned to is_superuser=True")
 
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(nickname, email, password, **extra_fields)
 
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, nickname, email, password, **extra_fields):
         """
         Create and save a User with the given email and password.
         """
@@ -37,7 +37,7 @@ class CustomManager(BaseUserManager):
             raise ValueError('User Account: You must provide a email')
 
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(nickname=nickname, email=email, **extra_fields)
         user.set_password(password)
         user.save()
         return user

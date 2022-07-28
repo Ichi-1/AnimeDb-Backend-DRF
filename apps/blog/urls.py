@@ -1,11 +1,11 @@
-from django.urls import path
-from .views import (
-    PostList, PostDetail
-)
+from django.urls import path, include
+from .views import PostViewSet
+from rest_framework import routers
 
-app_name = 'blog-api'
+app_name = 'posts'
+router = routers.SimpleRouter()
+router.register(r'posts', PostViewSet)
 
 urlpatterns = [
-    path('posts/', PostList.as_view(), name='post-list'),
-    path('posts/<int:pk>/', PostDetail.as_view(), name='post-detail'), 
+    path('', include(router.urls)),
 ]

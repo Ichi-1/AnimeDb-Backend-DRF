@@ -15,7 +15,7 @@ class UserAdminConfig(UserAdmin):
 
     #? fileds displaying on admin single entity detail page
     fieldsets = (
-        (None, {'fields': ('nickname', 'password')}),
+        (None, {'fields': ('nickname', 'email', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
         ('Personal', {'fields': ('about',)}),
     )
@@ -24,7 +24,7 @@ class UserAdminConfig(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('nickname', 'password1', 'password2', 'is_active', 'is_staff')}
+            'fields': ('nickname', 'email', 'password1', 'password2', 'is_active', 'is_staff')}
          ),
     )
 

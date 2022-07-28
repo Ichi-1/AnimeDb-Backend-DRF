@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
+    'djoser',
     'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
@@ -32,8 +33,7 @@ INSTALLED_APPS = [
     # my apps
     'apps.anidb',
     'apps.blog',
-    'apps.oauth2',
-    'apps.users',
+    'apps.authentication',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +82,7 @@ DATABASES = {
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+AUTH_USER_MODEL = 'authentication.CustomUser'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -140,16 +140,6 @@ REST_FRAMEWORK = {
 #? CORS_ALLOWED_ORIGINS = ["http://localhost:8000"]
 CORS_ALLOW_ALL_ORIGINS = True
 
-# SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade' 
-
-
-# SOCIAL_AUTH_VK_OAUTH2_ID = config('SOCIAL_AUTH_VK_OAUTH2_KEY')
-# SOCIAL_AUTH_VK_OAUTH2_SECRET = config('SOCIAL_AUTH_VK_OAUTH2_SECRET')
-
-
-LOGIN_URL = 'auth/login/'
-
-AUTH_USER_MODEL = 'users.CustomUser'
 
 
 SIMPLE_JWT = {
@@ -182,3 +172,15 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+
+# smtp settings
+if not DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_PORT = config('EMAIL_PORT')
+    EMAIL_HOST = config('EMAIL_HOST')
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_TLS = True
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

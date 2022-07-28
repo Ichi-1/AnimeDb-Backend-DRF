@@ -6,10 +6,14 @@ from rest_framework.generics import (
     RetrieveUpdateAPIView,
     RetrieveAPIView,
     RetrieveUpdateDestroyAPIView,
+    CreateAPIView, 
 )
+from rest_framework.viewsets import GenericViewSet
+from rest_framework import mixins
 from rest_framework.permissions import (
     BasePermission,
     IsAdminUser, 
+    IsAuthenticatedOrReadOnly,
     DjangoModelPermissionsOrAnonReadOnly,
     SAFE_METHODS,
 )
@@ -27,11 +31,11 @@ class PostUserWritePermission(BasePermission):
         return obj.author == request.user
 
 
-class PostList(ListAPIView):
-    queryset = Post.custom_objects.all()
+class PostViewSet(mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.ListModelMixin,
+                  GenericViewSet):
+    
     serializer_class = PostSerializer
-
-class PostDetail(RetrieveDestroyAPIView):
+    queryset  = Post.objects.all()
     permission_classes = [PostUserWritePermission]
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer

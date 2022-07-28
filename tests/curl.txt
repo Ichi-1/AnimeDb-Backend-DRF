@@ -1,17 +1,33 @@
-curl 
-    -X POST \
-    -d '{"nickname":"test_boy", "password":"required"}'\
-    -H "Content-type: application/json" \
-    http://127.0.0.1:8000/api/token/ \
-    | json 
-
-
-
+# User tokens refresh url
 curl \
-    -X 'POST' \
+    -X 'POST' http://127.0.0.1:8000/api/token/refresh/ \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
-    -H 'X-CSRFToken: VSuy3qp9WilMHjR5I9l8X2hcfWvzwUjYvSzckrlg9tLOdjdndYvizhS94D4bqVHc' \
-    -d '{"refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY2NjcyNzU5OCwiaWF0IjoxNjU4OTUxNTk4LCJqdGkiOiJjZTRmMWM0YjA2ZTY0YWY5OTRkMzM4ZDkxZGE4YTIzZiIsInVzZXJfaWQiOjN9.oejhlx5m7G5gwwZ7AfsJr3Kbxx8lClPKffNyf42-4mw" }'\
-    http://127.0.0.1:8000/api/token/refresh/\
+    -d '{"refresh": "token" }'\ 
     | json
+
+
+# User JWT Login/Auth url
+curl \
+    -X POST http://127.0.0.1:8000/api/v1/auth/jwt/
+    -H 'accept: application/json' \
+    -H 'Content-type: application/json' \
+    -d '{"nickname": "test_boy", "password": "required" }' \
+    | json
+
+
+
+# Anime GET List. Access token needed
+curl \
+    -X 'GET' http://127.0.0.1:8000/api/v1/animes/ \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {acces_token}" \
+    | json
+   
+
+# User creation cases test url
+curl -X 'POST' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{"nickname": "user53s@example.com","email": "", "password": ""}' \
+    http://127.0.0.1:8000/api/v1/users/ | json
