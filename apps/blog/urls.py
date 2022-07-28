@@ -1,8 +1,11 @@
 from django.urls import path
-from django.views.generic import TemplateView
+from .views import (
+    PostList, PostDetail
+)
 
-app_name = 'blog'
+app_name = 'blog-api'
 
 urlpatterns = [
-    path('api/post', TemplateView.as_view(template_name='index.html'))
+    path('posts/', PostList.as_view(), name='post-list'),
+    path('posts/<int:pk>/', PostDetail.as_view(), name='post-detail'), 
 ]

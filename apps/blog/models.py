@@ -1,7 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils import timezone
-
+from django.conf import settings
 
 
 class Category(models.Model):
@@ -24,7 +23,11 @@ class Post(models.Model):
             return super().get_queryset().filter(status='published')
     
     title = models.CharField(max_length=255)
-    author = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='blog_posts')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.DO_NOTHING, 
+        related_name='blog_posts'
+    )
     annotation = models.TextField(null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     content = models.TextField()
@@ -34,13 +37,12 @@ class Post(models.Model):
     published = models.DateTimeField(default=timezone.now)
     
     # default manager
-    objects = models.Manager() 
-    # custom manager 
-    custom_objects = PostObjects() 
+    objects = models.Manager()
+    # custom manager
+    custom_objects = PostObjects()
    
     class Meta:
         ordering = ('-published',)
     
     def __str__(self):
         return self.title
-    

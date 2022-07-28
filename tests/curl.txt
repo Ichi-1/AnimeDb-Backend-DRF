@@ -1,0 +1,17 @@
+curl 
+    -X POST \
+    -d '{"nickname":"test_boy", "password":"required"}'\
+    -H "Content-type: application/json" \
+    http://127.0.0.1:8000/api/token/ \
+    | json 
+
+
+
+curl \
+    -X 'POST' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -H 'X-CSRFToken: VSuy3qp9WilMHjR5I9l8X2hcfWvzwUjYvSzckrlg9tLOdjdndYvizhS94D4bqVHc' \
+    -d '{"refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY2NjcyNzU5OCwiaWF0IjoxNjU4OTUxNTk4LCJqdGkiOiJjZTRmMWM0YjA2ZTY0YWY5OTRkMzM4ZDkxZGE4YTIzZiIsInVzZXJfaWQiOjN9.oejhlx5m7G5gwwZ7AfsJr3Kbxx8lClPKffNyf42-4mw" }'\
+    http://127.0.0.1:8000/api/token/refresh/\
+    | json

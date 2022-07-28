@@ -1,21 +1,9 @@
 from rest_framework.serializers import ModelSerializer
-from apps.anidb.models import Anime
+from ..models import Anime
 
 
 class AnimeListSerializer(ModelSerializer):
     
-    class Meta:
-        model = Anime
-        fields = (
-            'id', 
-            'title_en',
-            'title_ja_jp',
-            'poster_image',
-            'studio',
-        )
-
-class AnimeDetailsSerializer(ModelSerializer):
-
     class Meta:
         model = Anime
         fields = (
@@ -24,7 +12,7 @@ class AnimeDetailsSerializer(ModelSerializer):
             'title_ja_jp',
             'poster_image',
             'studio',
-            'description',
+            # 'description',
             'age_rating',
             'age_rating_guide',
             'average_rating',
@@ -36,3 +24,10 @@ class AnimeDetailsSerializer(ModelSerializer):
             'show_type',
             'tags',
         )
+
+
+# class AnimeDetailsSerializer(ModelSerializer):
+
+#     class Meta:
+#         model = Anime
+#         fields = ()

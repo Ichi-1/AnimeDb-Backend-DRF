@@ -1,6 +1,5 @@
 .env
 /venv
-/tests
 **/htmlcov/
 __pycache__/
 

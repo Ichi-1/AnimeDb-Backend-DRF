@@ -24,10 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    # api namespasec
-    path('', include('api.anidb_api.urls', namespace='anime-api')),
-    path('', include('api.blog_api.urls', namespace='blog-api')),
-    path('', include('apps.oauth.urls', namespace='oauth-api')),
+    path('api/v1/', include('apps.anidb.urls', namespace='anime')),
+    # path('api/v1/', include('apps.blog.urls', namespace='blog')),
+    path('api/v1/', include('apps.oauth2.urls', namespace='oauth')),
+    path('api/v1/', include('apps.users.urls', namespace='users')),
 
     # swagger documentating
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
