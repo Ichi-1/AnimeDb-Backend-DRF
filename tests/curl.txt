@@ -9,10 +9,10 @@ curl \
 
 # User JWT Login/Auth url
 curl \
-    -X POST http://127.0.0.1:8000/api/v1/auth/jwt/
+    -X POST http://127.0.0.1:8000/api/v1/auth/jwt/create/ \
     -H 'accept: application/json' \
     -H 'Content-type: application/json' \
-    -d '{"nickname": "test_boy", "password": "required" }' \
+    -d '{"nickname": "admin", "password": "admin" }' \
     | json
 
 
@@ -21,13 +21,23 @@ curl \
 curl \
     -X 'GET' http://127.0.0.1:8000/api/v1/animes/ \
     -H "Accept: application/json" \
-    -H "Authorization: Bearer {acces_token}" \
+    -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU5MjAyOTgzLCJqdGkiOiIwNWM4ZTgxN2ZiZTY0YmQ5ODZiNzI5MzQ2Y2I4MDk1ZiIsInVzZXJfaWQiOjEsIm5pY2tuYW1lIjoiYWRtaW4ifQ.ADhlBSztwE3iqCxcsphXbtFMO8MKyGQ5qJTSOvHh650" \
     | json
    
 
 # User creation cases test url
-curl -X 'POST' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{"nickname": "user53s@example.com","email": "", "password": ""}' \
-    http://127.0.0.1:8000/api/v1/users/ | json
+curl \
+    -X 'POST' http://127.0.0.1:8000/api/v1/auth/sign-up/  \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{"nickname": "test_boy55", "email": "test_boy155@mail.com", "password": "required"}' \
+    | json
+
+
+# Account Activation
+curl \
+    -X 'POST' http://127.0.0.1:8000/api/v1/auth/activation/Mg/b9dz9o-e3770cfd44d61ec07e638d9f81ee3dcd/ \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{"uid": "Mg", "token": "b9dz9o-e3770cfd44d61ec07e638d9f81ee3dcd" }' \
+    | json

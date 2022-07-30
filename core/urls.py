@@ -6,6 +6,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 
+
 schema_view = get_schema_view(
    openapi.Info(
       title="Snippets API",
@@ -23,14 +24,11 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # path('api/v1/auth/', include('djoser.urls')),
-    # path('api/v1/auth/', include('djoser.urls.jwt')),
 
 
-    path('api/v1/', include('apps.anidb.urls', namespace='animes')),
     path('api/v1/auth/', include('apps.authentication.urls', namespace='auth')),
-    path('api/v1/', include('apps.blog.urls', namespace='posts')),
-
+    path('api/v1/', include('apps.anidb.urls', namespace='animes')),
+    # path('api/v1/', include('apps.blog.urls', namespace='posts')),
 
     # swagger documentating
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

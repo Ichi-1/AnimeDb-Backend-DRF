@@ -1,4 +1,4 @@
-from .utils.services import (
+from .utils.utils import (
     get_path_upload_avatar,
     validate_size_image,
 )
@@ -41,19 +41,19 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     read_only = models.BooleanField(default=False)
 
     # Permissions
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'nickname'
-    REQUIRED_FIELDS = ['email']
+    REQUIRED_FIELDS = ['email',]
     objects = CustomManager()
 
     class Meta:
-        verbose_name = 'Custom User'
-        verbose_name_plural = 'Custom Users'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
 
     def __str__(self):
-        return self.email
+        return self.nickname
 
     @property
     def is_authenticated(self):

@@ -140,7 +140,18 @@ REST_FRAMEWORK = {
 #? CORS_ALLOWED_ORIGINS = ["http://localhost:8000"]
 CORS_ALLOW_ALL_ORIGINS = True
 
-
+#TODO Configurate djoser
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'LOGIN_FIELD': 'nickname',
+    'ACTIVATION_URL': 'api/v1/auth/activation/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFIRMATION_EMAIL': True,
+    'SERIALIZERS': {
+        'user_create':'apps.authentication.serializers.SignUpSerializer',
+    },
+}
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),

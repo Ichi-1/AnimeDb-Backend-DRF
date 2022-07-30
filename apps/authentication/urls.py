@@ -1,19 +1,26 @@
 from django.urls import path, include
-from .views import UserCreateView
-from rest_framework import routers
 
-from django.urls import path
+from djoser.views import UserViewSet
+
+from rest_framework import routers
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from .utils.tokens import MyTokenObtainPairView
+from .views import UserCreateView
 
-router = routers.SimpleRouter()
-router.register(r'users', UserCreateView)
-app_name = 'users'
+
+app_name = 'auth'
 
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('jwt/', MyTokenObtainPairView.as_view()),
+    path('sign-up/', UserViewSet.as_view({'post': 'create'})),
+    path('activation/<str:uid>/<str:token>/', UserViewSet.as_view({'post': 'activation'})),
+    path('activation-resend/', UserViewSet.as_view({'post': 'resend_activation'})),
+
+    path('jwt/create/', MyTokenObtainPairView.as_view()),
     path('jwt/refresh/', TokenRefreshView.as_view()),
     path('jwt/verify/', TokenVerifyView.as_view()),
+
+    # path('reset-password/', UserViewSet.as_view({'post': 'reset_password'})),
+    # path('reset-password-confirm/<str:uid>/<str:token>/',UserViewSet.as_view({'post': 'reset_password_confirm'})),
 ]
+

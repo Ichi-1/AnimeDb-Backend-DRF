@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 
+
 def get_path_upload_avatar(user, file_name):
     """
     Creating path to user avatars dir.
