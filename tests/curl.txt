@@ -36,8 +36,8 @@ curl \
 
 # Account Activation
 curl \
-    -X 'POST' http://127.0.0.1:8000/api/v1/auth/activation/Mg/b9dz9o-e3770cfd44d61ec07e638d9f81ee3dcd/ \
+    -X 'POST' http://127.0.0.1:8000/api/v1/auth/activation/MjE/b9e3d6-00cdc14f827ab94177db7e640258e70a/ \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
-    -d '{"uid": "Mg", "token": "b9dz9o-e3770cfd44d61ec07e638d9f81ee3dcd" }' \
+    -d '{"uid": "MjE", "token": "b9e3d6-00cdc14f827ab94177db7e640258e70a" }' \
     | json
