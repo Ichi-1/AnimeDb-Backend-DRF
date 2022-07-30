@@ -45,7 +45,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'nickname'
-    REQUIRED_FIELDS = ['email',]
+    REQUIRED_FIELDS = ['email']
     objects = CustomManager()
 
     class Meta:

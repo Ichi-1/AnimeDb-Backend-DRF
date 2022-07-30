@@ -9,7 +9,7 @@ class UserAdminConfig(UserAdmin):
     model = CustomUser
     
     list_filter = ('nickname', 'is_active', 'is_staff')
-    list_display = ('nickname', 'is_active', 'is_staff')
+    list_display = ('nickname', 'email', 'is_active', 'is_staff')
     search_fields = ('nickname',)
     ordering = ('-created_at',)
 

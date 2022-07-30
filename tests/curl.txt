@@ -30,7 +30,7 @@ curl \
     -X 'POST' http://127.0.0.1:8000/api/v1/auth/sign-up/  \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
-    -d '{"nickname": "test_boy55", "email": "test_boy155@mail.com", "password": "required"}' \
+    -d '{"nickname": "test_body", "email": "test_sb5@mail.com", "password": "required"}' \
     | json
 
 

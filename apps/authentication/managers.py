@@ -11,7 +11,7 @@ class CustomManager(BaseUserManager):
         except ValidationError:
             raise ValueError('You must provide a valid email')
 
-    def create_superuser(self, nickname, email, password, **extra_fields):
+    def create_superuser(self, nickname, email, password=None, **extra_fields):
         if not nickname:
             raise ValueError('Superuser Account: You must provide a nickname')
 
@@ -29,7 +29,7 @@ class CustomManager(BaseUserManager):
 
         return self.create_user(nickname, email, password, **extra_fields)
 
-    def create_user(self, nickname, email, password, **extra_fields):
+    def create_user(self, nickname, email, password=None, **extra_fields):
         """
         Create and save a User with the given email and password.
         """
