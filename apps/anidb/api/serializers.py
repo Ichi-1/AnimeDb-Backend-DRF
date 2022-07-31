@@ -9,25 +9,33 @@ class AnimeListSerializer(ModelSerializer):
         fields = (
             'id',
             'title_en',
+            'kind',
+            'year',
+            'average_rating',
+
+        )
+
+
+class AnimeDetailsSerializer(ModelSerializer):
+
+    class Meta:
+        model = Anime
+        fields = (
+            'id',
+            'title_en',
             'title_ja_jp',
             'poster_image',
             'studio',
-            # 'description',
+            'description',
             'age_rating',
             'age_rating_guide',
             'average_rating',
             'episode_count',
             'episode_length',
-            'release_end_year',
-            'release_season',
-            'release_start_year',
-            'show_type',
+            'year',
+            'year_end',
+            'season',
+            'kind',
             'tags',
         )
-
-
-# class AnimeDetailsSerializer(ModelSerializer):
-
-#     class Meta:
-#         model = Anime
-#         fields = ()
+        

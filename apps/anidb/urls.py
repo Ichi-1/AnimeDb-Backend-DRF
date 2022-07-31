@@ -6,6 +6,6 @@ from rest_framework import routers
 app_name = 'anime'
 
 router = routers.SimpleRouter()
-router.register(r'animes', AnimeViewSet)
+router.register(r'animes', AnimeViewSet, basename='animes')
 
 urlpatterns = router.urls

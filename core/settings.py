@@ -6,8 +6,11 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-#! SECURITY WARNING: keep the secret key used in production secret!
-#! SECURITY WARNING: don't run with debug turned on in production!
+
+#* SECURITY WARNING: keep the secret key used in production secret!
+#* SECURITY WARNING: don't run with debug turned on in production!
+
+
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 
@@ -29,6 +32,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'django_filters',
     
     # my apps
     'apps.anidb',
@@ -130,8 +134,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 30
  
 }
 
@@ -140,7 +147,8 @@ REST_FRAMEWORK = {
 #? CORS_ALLOWED_ORIGINS = ["http://localhost:8000"]
 CORS_ALLOW_ALL_ORIGINS = True
 
-#TODO Configurate djoser
+# Auth packages settings
+
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
@@ -167,7 +175,7 @@ SIMPLE_JWT = {
     'ISSUER': None,
     'JWK_URL': None,
 
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
+    'AUTH_HEADER_TYPES': ('JWT',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',

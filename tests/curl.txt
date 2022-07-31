@@ -16,15 +16,6 @@ curl \
     | json
 
 
-
-# Anime GET List. Access token needed
-curl \
-    -X 'GET' http://127.0.0.1:8000/api/v1/animes/ \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU5MjAyOTgzLCJqdGkiOiIwNWM4ZTgxN2ZiZTY0YmQ5ODZiNzI5MzQ2Y2I4MDk1ZiIsInVzZXJfaWQiOjEsIm5pY2tuYW1lIjoiYWRtaW4ifQ.ADhlBSztwE3iqCxcsphXbtFMO8MKyGQ5qJTSOvHh650" \
-    | json
-   
-
 # User creation cases test url
 curl \
     -X 'POST' http://127.0.0.1:8000/api/v1/auth/sign-up/  \
@@ -40,4 +31,23 @@ curl \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -d '{"uid": "MjE", "token": "b9e3d6-00cdc14f827ab94177db7e640258e70a" }' \
+    | json
+
+
+
+
+
+# Anime GET List. Access token needed
+curl \
+    -X 'GET' http://127.0.0.1:8000/api/v1/animes/ \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU5MjAyOTgzLCJqdGkiOiIwNWM4ZTgxN2ZiZTY0YmQ5ODZiNzI5MzQ2Y2I4MDk1ZiIsInVzZXJfaWQiOjEsIm5pY2tuYW1lIjoiYWRtaW4ifQ.ADhlBSztwE3iqCxcsphXbtFMO8MKyGQ5qJTSOvHh650" \
+    | json
+
+
+# Anime List Filter Query Param Test
+curl \
+    -X 'GET' 'http://127.0.0.1:8000/api/v1/animes/?kind=OVA%&kind=TV' \
+    -H 'accept: application/json' \
+    -H 'X-CSRFToken: MknIrLeDzNW6GAok8tHoqyn93vw36bOPmzLvWgse1Dy6QomuXyJftPtYa0ODbdUq'\
     | json

@@ -19,6 +19,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     genders = (('M', 'Male'), ('F', 'Female'))
 
+    USERNAME_FIELD = 'nickname'
+    REQUIRED_FIELDS = ['email']
+    
+    objects = CustomManager()
+
     email = models.EmailField(max_length=150, unique=True, null=False)
     nickname = models.CharField(max_length=255, unique=True, blank=True)
     name = models.CharField(max_length=255, blank=True)
@@ -39,14 +44,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     read_only = models.BooleanField(default=False)
-
     # Permissions
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-
-    USERNAME_FIELD = 'nickname'
-    REQUIRED_FIELDS = ['email']
-    objects = CustomManager()
 
     class Meta:
         verbose_name = 'User'
@@ -54,13 +54,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.nickname
-
-    @property
-    def is_authenticated(self):
-        """
-        Always return True
-        """
-        return True
 
 
 
