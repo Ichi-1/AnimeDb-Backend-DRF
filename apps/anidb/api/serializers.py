@@ -8,9 +8,10 @@ class AnimeListSerializer(ModelSerializer):
         model = Anime
         fields = (
             'id',
-            'title_en',
+            'title',
             'kind',
             'year',
+            'tags',
             'average_rating',
 
         )
@@ -22,8 +23,8 @@ class AnimeDetailsSerializer(ModelSerializer):
         model = Anime
         fields = (
             'id',
-            'title_en',
-            'title_ja_jp',
+            'title',
+            'title_jp',
             'poster_image',
             'studio',
             'description',

@@ -1,30 +1,34 @@
-from apps.anidb.models import Anime
-from rest_framework.viewsets import GenericViewSet
-from rest_framework import mixins
-from rest_framework.permissions import (AllowAny)
-from .api.serializers import (
-    AnimeListSerializer, 
-    AnimeDetailsSerializer,
-)
 from apps.anidb.api.filters import AnimeFilter
-from django_filters import rest_framework as filters
+from .api.serializers import AnimeListSerializer, AnimeDetailsSerializer
+from apps.anidb.api.filterset import AnimeListFilter
+
+from apps.anidb.models import Anime
+from rest_framework import mixins
+from rest_framework.permissions import AllowAny
+from rest_framework.viewsets import GenericViewSet
+
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class AnimeViewSet(mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
                    GenericViewSet):
+
                    
     # 1. As list - return id, title_en, title_ja_jp, poster_image, average_rating.
-    # By default, sorted by average_rating desc.
-
     # 2. As retrieve - return all of the model instance fields.
 
     
     # if i use get_queryset i can remove attribute queryset
     # but need to utilize param: router(basename='anime')
+    queryset = Anime.objects.all()
     permission_classes = [AllowAny]
-    filter_backends = (filters.DjangoFilterBackend,)
-    filterset_class = AnimeFilter
+    filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
+    filterset_class = AnimeListFilter
+    search_fields = ['title', '^title', 'year']
+    ordering_fields = ['title', 'year', '?']
+    ordering = ['-average_rating'] # default ordering
     
 
     def get_serializer_class(self):
@@ -33,6 +37,5 @@ class AnimeViewSet(mixins.RetrieveModelMixin,
         if self.action == 'retrieve':
             return AnimeDetailsSerializer
     
-    def get_queryset(self):
-        return Anime.objects.all().order_by('-average_rating')
+
     

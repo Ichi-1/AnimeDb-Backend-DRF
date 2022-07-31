@@ -18,8 +18,8 @@ class Anime(models.Model):
     staff = models.TextField(verbose_name='Staff Team', null=True)
     studio = models.CharField(max_length=50, verbose_name='Studio', null=True)
     tags = models.TextField(verbose_name='Genres Tags', null=True)
-    title_en = models.CharField(max_length=255, verbose_name='English title')
-    title_ja_jp = models.CharField(max_length=255, verbose_name='Japan title')
+    title = models.CharField(max_length=255, verbose_name='English title')
+    title_jp = models.CharField(max_length=255, verbose_name='Japan title')
     total_length = models.IntegerField(verbose_name='Total length')
     voice_actors = models.TextField(verbose_name='Voice Actors', null=True)
  
@@ -28,7 +28,7 @@ class Anime(models.Model):
         verbose_name_plural = 'Animes'
     
     def __str__(self):
-        return f'{self.title_en} / {self.title_ja_jp}'
+        return f'{self.title} / {self.title_jp}'
 
 
 

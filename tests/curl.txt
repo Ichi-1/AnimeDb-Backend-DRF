@@ -45,9 +45,24 @@ curl \
     | json
 
 
-# Anime List Filter Query Param Test
+# Anime List Filter Query Param Test. By default sorted by average_rating
 curl \
-    -X 'GET' 'http://127.0.0.1:8000/api/v1/animes/?kind=OVA%&kind=TV' \
+    -X 'GET' 'http://127.0.0.1:8000/api/v1/animes/?kind=TV,OVA' \
     -H 'accept: application/json' \
     -H 'X-CSRFToken: MknIrLeDzNW6GAok8tHoqyn93vw36bOPmzLvWgse1Dy6QomuXyJftPtYa0ODbdUq'\
     | json
+
+
+
+# Searching by: year, title
+curl \
+    -X 'GET' 'http://127.0.0.1:8000/api/v1/animes?search=hero'
+
+
+# Sort by: by default - average_rating, year ASC(year), randomly(?), alphabetic(title)
+curl \
+    -X 'GET' 'http://127.0.0.1:8000/api/v1/animes?ordering=?'
+
+
+# Filter by: tags, show kind, year range
+curl -X 'GET' 'http://127.0.0.1:8000/api/v1/animes?tags=Superheroes'

@@ -7,7 +7,11 @@ class CharFilterInFilter(filters.BaseInFilter, filters.CharFilter):
 
 class AnimeFilter(filters.FilterSet):
     year = filters.RangeFilter()
+    tags = filters.CharFilter(lookup_expr='in')
 
     class Meta:
         model = Anime
-        fields = ('kind', 'year')
+        fields = ['year', 'tags', 'kind']
+    
+
+
