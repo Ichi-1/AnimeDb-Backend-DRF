@@ -122,7 +122,7 @@ STATIC_URL = '/static/'
 
 # Media
 MEDIA_URL = '/media/'
-MEDIAR_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIAR_ROOT = BASE_DIR / 'media'
 
 
 # Permissions:

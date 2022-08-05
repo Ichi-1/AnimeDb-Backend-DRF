@@ -23,7 +23,7 @@ class AnimeViewSet(mixins.RetrieveModelMixin,
     # if i use get_queryset i can remove attribute queryset
     # but need to utilize param: router(basename='anime')
     queryset = Anime.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filterset_class = AnimeListFilter
     search_fields = ['title', '^title', 'year']
