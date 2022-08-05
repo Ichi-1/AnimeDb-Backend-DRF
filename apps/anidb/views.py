@@ -4,7 +4,7 @@ from apps.anidb.api.filterset import AnimeListFilter
 
 from apps.anidb.models import Anime
 from rest_framework import mixins
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -23,7 +23,7 @@ class AnimeViewSet(mixins.RetrieveModelMixin,
     # if i use get_queryset i can remove attribute queryset
     # but need to utilize param: router(basename='anime')
     queryset = Anime.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filterset_class = AnimeListFilter
     search_fields = ['title', '^title', 'year']

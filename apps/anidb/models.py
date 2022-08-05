@@ -1,4 +1,5 @@
 from django.db import models
+from apps.authentication.models import CustomUser
 
 
 #TODO Some poster_image links invalid, return 404. Maybe need to change cdn.
@@ -81,3 +82,16 @@ class Reviews(models.Model):
     
     def __str__(self):
         return f'{self.name} - {self.movie}'
+
+
+
+#* User lists
+
+class UserAnimeLists(models.Model):
+    anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    watching = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
+    on_hold = models.BooleanField(default=False)
+    dropped = models.BooleanField(default=False)
+    plan_to_watch = models.BooleanField(default=False)

@@ -2,7 +2,9 @@ docker-compose up -d --build
 
 docker-compose up -d 
 
-!TODO Auto copy_query.sql execution
+docker-compose -f docker-compose.dev.yml up # Need to specify path and name of .yml file after rename root dir
 
+
+!TODO Auto copy_query.sql execution
 docker cp ./dump.sql pg_test:/docker-entrypoint-initdb.d/dump.sql
 docker exec -u postgres pg_test psql postgres postgres -f docker-entrypoint-initdb.d/dump.sql
