@@ -126,7 +126,6 @@ MEDIA_URL = '/media/'
 MEDIAR_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-
 # Permissions:
 #   AllowAny
 #   IsAuthenticated
