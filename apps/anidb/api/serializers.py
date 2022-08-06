@@ -9,6 +9,7 @@ class AnimeListSerializer(ModelSerializer):
         fields = (
             'id',
             'title',
+            'poster_image',
             'kind',
             'year',
             'tags',
