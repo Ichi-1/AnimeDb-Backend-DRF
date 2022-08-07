@@ -1,7 +1,7 @@
 psql \
-    -h ec2-107-22-122-106.compute-1.amazonaws.com \
-    -U atdsnvycqwrqfv \
-    -d d6rt0k16f6eaa8 \ 
+    -h DB_HOST \
+    -U DB_USERNAME \
+    -d DB_NAME \ 
     -p 5432
 
 \copy anidb_anime(age_rating, age_rating_guide, average_rating, description, episode_count, episode_length, poster_image, year_end, season, year, kind, staff, studio, tags, title, title_jp, total_length, voice_actors) FROM '/home/mithrandir/dev/anime-app/backend/docker/csv/aggregated_db.csv'  WITH DELIMITER ',' CSV HEADER;
