@@ -12,6 +12,14 @@ from django.db import models
 from .managers import CustomManager
 
 
+AUTH_PROVIDER = {
+    'facebook': 'facebook',
+    'google': 'google',
+    'twtitter': 'twitter',
+    'email': 'email'
+}
+
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     Custom user model where nickname 
@@ -47,6 +55,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     # Permissions
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    auth_provider = models.CharField(
+        max_length=255, 
+        blank=False, 
+        null=False, 
+        default=AUTH_PROVIDER.get('email')
+    )
 
     class Meta:
         verbose_name = 'User'
@@ -55,31 +69,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.nickname
 
-
-
-# class Friend(models.Model):
-#     """
-#     Friends models
-#     """
-#     user = models.ForeignKey(
-#         AuthUser, on_delete=models.CASCADE, related_name='user'
-#     )
-#     friend = models.ForeignKey(
-#         AuthUser, on_delete=models.CASCADE, related_name='friends'
-#     )
-
-#     def __str__(self):
-#         return f'{self.friend} is friend with {self.user}'
-    
-
-# class SocialLinks(models.Model):
-#     """
-#     Social links belong to AuthUser
-#     """
-#     user = models.ForeignKey(
-#         AuthUser, on_delete=models.CASCADE, related_name='social_links'
-#     )
-#     link = models.URLField(max_length=100)
-
-#     def __str__(self):
-#         return f'{self.user}'

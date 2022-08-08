@@ -1,13 +1,9 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import generics
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny
-from rest_framework import mixins
-from rest_framework.viewsets import GenericViewSet
 from .serializers import SignUpSerializer
 from .models import CustomUser
+from rest_framework.response import Response
 
 
 class UserCreateView(ModelViewSet):

@@ -27,6 +27,3 @@ class SignUpSerializer(UserCreateSerializer):
     )
 
 
-   
-
-    

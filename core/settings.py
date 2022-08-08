@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # third-party apps
     'corsheaders',
     'djoser',
     'drf_yasg',
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'apps.anidb',
     'apps.blog',
     'apps.authentication',
+    'apps.social_auth',
 ]
 
 MIDDLEWARE = [
@@ -177,13 +179,15 @@ SIMPLE_JWT = {
     'ISSUER': None,
     'JWK_URL': None,
 
-    'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_HEADER_TYPES': ('JWT', 'Bearer'),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'AUTH_TOKEN_CLASSES': (
+        'rest_framework_simplejwt.tokens.AccessToken',
+    ),
     'TOKEN_TYPE_CLAIM': 'token_type',
     'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
 
@@ -212,6 +216,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 ALLOWED_HOSTS = [
+    "localhost",
     "127.0.0.1", 
     "anidb-api.herokuapp.com"
 ]

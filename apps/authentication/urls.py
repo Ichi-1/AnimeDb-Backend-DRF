@@ -20,6 +20,8 @@ urlpatterns = [
     path('jwt/refresh/', TokenRefreshView.as_view()),
     path('jwt/verify/', TokenVerifyView.as_view()),
 
+    # path('social/google/', )
+
     # path('reset-password/', UserViewSet.as_view({'post': 'reset_password'})),
     # path('reset-password-confirm/<str:uid>/<str:token>/',UserViewSet.as_view({'post': 'reset_password_confirm'})),
 ]
