@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .views import GoogleAuthAPIView
+from .views import GoogleLoginAPIView
 
 
 urlpatterns = [
-    path('google/', GoogleAuthAPIView.as_view())
+    path('google/', GoogleLoginAPIView.as_view())
 ]

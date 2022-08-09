@@ -8,14 +8,14 @@ from django.db import models
 class UserAdminConfig(UserAdmin):
     model = CustomUser
     
-    list_filter = ('nickname', 'is_active', 'is_staff')
-    list_display = ('nickname', 'email', 'is_active', 'is_staff')
+    list_filter = ('nickname', 'auth_provider', 'is_active', 'is_staff')
+    list_display = ('id','nickname', 'email', 'auth_provider','is_active', 'is_staff')
     search_fields = ('nickname',)
     ordering = ('-created_at',)
 
     #? fileds displaying on admin single entity detail page
     fieldsets = (
-        (None, {'fields': ('nickname', 'email', 'password')}),
+        (None, {'fields': ('nickname', 'email', 'auth_provider', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
         ('Personal', {'fields': ('about',)}),
     )
@@ -27,6 +27,7 @@ class UserAdminConfig(UserAdmin):
             'fields': ('nickname', 'email', 'password1', 'password2', 'is_active', 'is_staff')}
          ),
     )
+
 
 
 admin.site.register(CustomUser, UserAdminConfig)

@@ -1,5 +1,4 @@
 from datetime import timedelta
-import os
 from decouple import config
 from pathlib import Path
 
@@ -232,3 +231,7 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     X_FRAME_OPTIONS = "DENY"
+
+
+
+GOOGLE_OAUTH2_CLIEN_ID = config('GOOGLE_OAUTH2_CLIEN_ID')

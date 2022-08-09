@@ -1,53 +1,37 @@
-import os
-from django.contrib.auth import authenticate
-from rest_framework.exceptions import AuthenticationFailed
 from apps.authentication.models import CustomUser
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.core.management.utils import get_random_secret_key
+from apps.authentication.utils.tokens import get_tokens_for_user
+from .utils import silly_username_generator
+
+
+
+def create_social_account(provider, user_data):
+    userID = user_data['sub']
+    email = user_data['email']
+    silly_nickname = silly_username_generator()
+    silly_unique_username = f'{silly_nickname} {userID}'
+ 
+    social_user = CustomUser.objects.create_user(
+        nickname=silly_unique_username,
+        email=email,
+        auth_provider=provider,
+        password=get_random_secret_key(),
+    )
+    social_user.is_active = True
+    social_user.save()
+    tokens = get_tokens_for_user(social_user)
+    return tokens
+
+
+
+def grant_access_social_account(social_user):
+    tokens = get_tokens_for_user(social_user)
+    return tokens
 
 
 
 
-def create_social_account(provider, user_id, nickname, email):
-    candidate = CustomUser.objects.filter(nickname=nickname)
-    tokens = RefreshToken.for_user(user_id)
 
-    if candidate.exists():
 
-        if provider == candidate[0].auth_provider:
-            new_user = authenticate(
-                nickname=nickname,
-                password=os.environ.get('SECRET_KEY')
-            )
-        
-            return {
-                'nickname': new_user.nickname,
-                'email': new_user.email,
-                'tokens': tokens
-            }
-        
-        else:
-            raise AuthenticationFailed(
-                detail='Please continue your login using '.format(candidate[0].auth_provider)
-            )
-    
-    else:
-        new_user = CustomUser.objects.create_user(
-            nickname=nickname,
-            email=email,
-            password=os.environ.get('SECRET_KEY')
-        )
-        new_user.is_active = True
-        new_user.auth_provider = provider
-        new_user.save()
-        authenticate(
-            nickname=nickname,
-            email=email,
-            password=os.environ.get('SECRET_KEY')
-        )
 
-        return {
-            "nickname": nickname,
-            "email": email,
-            "tokens": tokens
-        }
-        
+
