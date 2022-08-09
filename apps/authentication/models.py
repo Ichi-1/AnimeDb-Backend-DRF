@@ -3,7 +3,7 @@ from .utils.utils import (
     validate_size_image,
 )
 from django.contrib.auth.models import (
-    AbstractBaseUser, 
+    AbstractBaseUser,
     PermissionsMixin
 )
 from django_countries.fields import CountryField
@@ -22,14 +22,14 @@ AUTH_PROVIDER = {
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
-    Custom user model where nickname 
+    Custom user model where nickname
     is the unique identifiers for authentication
     """
     genders = (('M', 'Male'), ('F', 'Female'))
 
     USERNAME_FIELD = 'nickname'
     REQUIRED_FIELDS = ['email']
-    
+
     objects = CustomManager()
 
     email = models.EmailField(max_length=150, unique=True, null=False)
@@ -56,9 +56,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     auth_provider = models.CharField(
-        max_length=255, 
-        blank=False, 
-        null=False, 
+        max_length=255,
+        blank=False,
+        null=False,
         default=AUTH_PROVIDER.get('email')
     )
 

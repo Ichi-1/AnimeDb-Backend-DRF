@@ -4,13 +4,12 @@ from apps.authentication.utils.tokens import get_tokens_for_user
 from .utils import silly_username_generator
 
 
-
 def create_social_account(provider, user_data):
-    userID = user_data['sub']
+    given_name = user_data['given_name']
     email = user_data['email']
     silly_nickname = silly_username_generator()
-    silly_unique_username = f'{silly_nickname} {userID}'
- 
+    silly_unique_username = f'{silly_nickname} {given_name}'
+
     social_user = CustomUser.objects.create_user(
         nickname=silly_unique_username,
         email=email,
@@ -23,15 +22,6 @@ def create_social_account(provider, user_data):
     return tokens
 
 
-
 def grant_access_social_account(social_user):
     tokens = get_tokens_for_user(social_user)
     return tokens
-
-
-
-
-
-
-
-

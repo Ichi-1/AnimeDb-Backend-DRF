@@ -1,9 +1,8 @@
-from apps.anidb.models import Anime
 from django_filters.constants import EMPTY_VALUES
 from django_filters import rest_framework as filters
 
 
-#TODO Tags filter doesnt work properly
+#   TODO Tags filter doesnt work properly
 
 class ListFilter(filters.Filter):
     def filter(self, qs, value):

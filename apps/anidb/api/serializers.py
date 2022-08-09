@@ -3,7 +3,7 @@ from ..models import Anime
 
 
 class AnimeListSerializer(ModelSerializer):
-    
+
     class Meta:
         model = Anime
         fields = (
@@ -40,4 +40,3 @@ class AnimeDetailsSerializer(ModelSerializer):
             'kind',
             'tags',
         )
-        

@@ -20,10 +20,8 @@ class SignUpSerializer(UserCreateSerializer):
         validators=[UniqueValidator(queryset=CustomUser.objects.all())]
     )
     password = serializers.CharField(
-        write_only=True, 
-        required=True, 
+        write_only=True,
+        required=True,
         validators=[validate_password],
         min_length=6
     )
-
-

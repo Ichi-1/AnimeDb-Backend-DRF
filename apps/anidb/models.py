@@ -2,11 +2,11 @@ from django.db import models
 from apps.authentication.models import CustomUser
 
 
-#TODO Some poster_image links invalid, return 404. Maybe need to change cdn.
+#   TODO Some poster_image links invalid, return 404. Maybe need to change cdn.
 
 class Anime(models.Model):
     age_rating = models.CharField(max_length=5, verbose_name='Age Rating')
-    age_rating_guide = models.CharField( max_length=50, verbose_name='Age Rating Guidence')
+    age_rating_guide = models.CharField(max_length=50, verbose_name='Age Rating Guidence')
     average_rating = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Average Rating')
     description = models.TextField(verbose_name='Description')
     episode_count = models.IntegerField(verbose_name='Episodes count')
@@ -23,17 +23,16 @@ class Anime(models.Model):
     title_jp = models.CharField(max_length=255, verbose_name='Japan title')
     total_length = models.IntegerField(verbose_name='Total length')
     voice_actors = models.TextField(verbose_name='Voice Actors', null=True)
- 
+
     class Meta:
         verbose_name = 'Anime'
         verbose_name_plural = 'Animes'
-    
+
     def __str__(self):
         return f'{self.title} / {self.title_jp}'
 
 
-
-#* Rating & Reviews System Models
+# * Rating & Reviews System Models
 
 class RatingStar(models.Model):
     values = models.PositiveSmallIntegerField(default=0)
@@ -47,13 +46,21 @@ class RatingStar(models.Model):
 
 
 class Rating(models.Model):
-    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name='star')
-    anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name='anime')
-    
+    star = models.ForeignKey(
+        RatingStar,
+        on_delete=models.CASCADE,
+        verbose_name='star'
+    )
+    anime = models.ForeignKey(
+        Anime,
+        on_delete=models.CASCADE,
+        verbose_name='anime'
+    )
+
     class Meta:
         verbose_name = 'Users rating'
         verbose_name_plural = 'Users'
-    
+
     def __str__(self):
         return f'{self.star} - {self.anime}'
 
@@ -63,29 +70,27 @@ class Reviews(models.Model):
     name = models.CharField(max_length=255)
     text = models.TextField(max_length=5000, verbose_name='Review')
     anime = models.ForeignKey(
-        Anime, 
-        verbose_name='Anime', 
+        Anime,
+        verbose_name='Anime',
         on_delete=models.CASCADE
     )
     parent = models.ForeignKey(
-        'self', 
-        verbose_name='parent', 
-        on_delete=models.SET_NULL, 
-        blank=True, 
+        'self',
+        verbose_name='parent',
+        on_delete=models.SET_NULL,
+        blank=True,
         null=True
     )
-    
+
     class Meta:
         verbose_name = 'Review'
         verbose_name_plural = 'Reviews'
-    
-    
+
     def __str__(self):
         return f'{self.name} - {self.movie}'
 
 
-
-#* User lists
+# * User lists
 
 class UserAnimeLists(models.Model):
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)

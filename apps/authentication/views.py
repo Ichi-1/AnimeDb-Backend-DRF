@@ -1,5 +1,4 @@
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from .serializers import SignUpSerializer
 from .models import CustomUser
@@ -11,6 +10,12 @@ class UserCreateView(ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = SignUpSerializer
 
+    """I refusede to use custom ModelViewSet because 
+    i dont want to handling all steps of activation process.
+    Instead use djoser package. 
+    View just for test example.
+    """ 
+
     def create(self, request):
         user = self.serializer_class(data=request.data)
         user.is_valid(raise_exception=True)
@@ -18,8 +23,7 @@ class UserCreateView(ModelViewSet):
 
         headers = self.get_success_headers(user.data)
         return Response(
-            {"succes":"Activation link was sended"}, 
-            status=status.HTTP_201_CREATED, 
+            {"succes": "Activation link was sended"},
+            status=status.HTTP_201_CREATED,
             headers=headers
         )
-

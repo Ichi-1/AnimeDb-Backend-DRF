@@ -6,14 +6,12 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-#* SECURITY WARNING: keep the secret key used in production secret!
-#* SECURITY WARNING: don't run with debug turned on in production!
+#   * SECURITY WARNING: keep the secret key used in production secret!
+#   * SECURITY WARNING: don't run with debug turned on in production!
 
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
-
-
 
 
 # Application definition
@@ -33,7 +31,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
-    
+
     # my apps
     'apps.anidb',
     'apps.blog',
@@ -133,8 +131,8 @@ MEDIAR_ROOT = BASE_DIR / 'media'
 #   IsAuthenticatedOrReadOnly
 
 REST_FRAMEWORK = {
-   'DEFAULT_PERMISSION_CLASSES': ( 
-        'rest_framework.permissions.AllowAny', 
+   'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -144,10 +142,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
- 
+
 }
-
-
 
 
 # Auth packages settings
@@ -160,7 +156,7 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
     'SERIALIZERS': {
-        'user_create':'apps.authentication.serializers.SignUpSerializer',
+        'user_create': 'apps.authentication.serializers.SignUpSerializer',
     },
 }
 
@@ -216,7 +212,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 ALLOWED_HOSTS = [
     "localhost",
-    "127.0.0.1", 
+    "127.0.0.1",
     "anidb-api.herokuapp.com"
 ]
 
@@ -231,7 +227,6 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     X_FRAME_OPTIONS = "DENY"
-
 
 
 GOOGLE_OAUTH2_CLIEN_ID = config('GOOGLE_OAUTH2_CLIEN_ID')
