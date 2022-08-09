@@ -15,7 +15,7 @@ class GoogleLoginAPIView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user_id_token = serializer.validated_data['id_token']
         id_token_valid = GoogleService.validate_id_token(user_id_token)
-        candidate = CustomUser.objects.filter(email=id_token_valid['email'])
+        
 
         if not id_token_valid:
             return Response(
@@ -24,6 +24,7 @@ class GoogleLoginAPIView(GenericAPIView):
             )
         
 
+        candidate = CustomUser.objects.filter(email=id_token_valid['email'])
         if candidate.exists():
             token_pair = grant_access_social_account(candidate.first())
             return Response({
