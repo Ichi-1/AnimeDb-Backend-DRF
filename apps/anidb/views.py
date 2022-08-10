@@ -1,14 +1,28 @@
 from .api.serializers import AnimeListSerializer, AnimeDetailsSerializer
 from apps.anidb.api.filterset import AnimeListFilter
-
 from apps.anidb.models import Anime
+
 from rest_framework import mixins
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
-
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+
 from django_filters.rest_framework import DjangoFilterBackend
+
+
+class TotalCountHeaderPagination(PageNumberPagination):
+
+    def get_paginated_response(self, data):
+        return Response({
+            "next": self.get_next_link(),
+            "previous": self.get_previous_link(),
+            "count": self.page.paginator.count,
+            "x-total-count": self.page.paginator.num_pages,
+            "result": data
+        })
+
 
 
 class AnimeViewSet(mixins.RetrieveModelMixin,
@@ -25,7 +39,7 @@ class AnimeViewSet(mixins.RetrieveModelMixin,
     filterset_class = AnimeListFilter
     search_fields = ['title', '^title', 'year']
     ordering_fields = ['title', 'year', '?']
-    pagination_class = PageNumberPagination
+    pagination_class = TotalCountHeaderPagination
     ordering = ['-average_rating']  # default ordering
 
     def get_serializer_class(self):
