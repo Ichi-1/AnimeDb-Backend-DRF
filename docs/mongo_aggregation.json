@@ -39,3 +39,14 @@
     "$out": "Hope_IT_FINAL"
   }
 ]
+
+
+db.Joined.updateMany({}, {$rename: { 
+        "release_start_year": "year", 
+        "release_end_year": "year_end" , 
+        "release_season": "season",
+        "show_type": "kind",
+        "title_ja_jp": "title_jp",
+        "title_en": "title",
+        "average_ratingr": "average_rating"
+}},)

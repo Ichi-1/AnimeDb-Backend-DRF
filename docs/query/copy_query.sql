@@ -5,20 +5,20 @@ COPY anidb_anime(
 	description, 
 	episode_count,
 	episode_length,
+	kind,
 	poster_image,
-    release_end_year,
-    release_season,
-    release_start_year,
-	show_type,
+    season,
     staff,
     studio,
     tags,
-	title_en,
-	title_ja_jp,
+	title,
+	title_jp,
 	total_length,
-    voice_actors
+    voice_actors,
+    year,
+    year_end
 )
-FROM '/data/aggregated_db.csv'
+FROM '/data/animeDB.csv'
 DELIMITER ','
 CSV HEADER;
 

@@ -11,11 +11,9 @@ class Anime(models.Model):
     description = models.TextField(verbose_name='Description')
     episode_count = models.IntegerField(verbose_name='Episodes count')
     episode_length = models.IntegerField(verbose_name='Episode length')
-    poster_image = models.URLField(max_length=255, verbose_name='Poster URL')
-    year = models.IntegerField(verbose_name='Release year', null=True)
-    year_end = models.IntegerField(verbose_name='Airing end year', null=True)
-    season = models.CharField(max_length=20, verbose_name='Realese season', null=True)
     kind = models.CharField(max_length=10, verbose_name='Show Type')
+    poster_image = models.URLField(max_length=255, verbose_name='Poster URL')
+    season = models.CharField(max_length=20, verbose_name='Realese season', null=True)
     staff = models.TextField(verbose_name='Staff Team', null=True)
     studio = models.CharField(max_length=50, verbose_name='Studio', null=True)
     tags = models.TextField(verbose_name='Genres Tags', null=True)
@@ -23,6 +21,10 @@ class Anime(models.Model):
     title_jp = models.CharField(max_length=255, verbose_name='Japan title')
     total_length = models.IntegerField(verbose_name='Total length')
     voice_actors = models.TextField(verbose_name='Voice Actors', null=True)
+    year = models.IntegerField(verbose_name='Release year', null=True)
+    year_end = models.IntegerField(verbose_name='Airing end year', null=True)
+
+    
 
     class Meta:
         verbose_name = 'Anime'

@@ -3,6 +3,7 @@
 /templates
 **/htmlcov/
 __pycache__/
+.vscode/
 
 
 # Unit test / coverage reports

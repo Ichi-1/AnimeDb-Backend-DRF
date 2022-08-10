@@ -36,17 +36,16 @@ curl \
 
 
 
-# Anime GET List. Access token needed
+# Anime GET List
 curl \
-    -X 'GET' http://127.0.0.1:8000/api/v1/animes/ \
+    -X 'GET' http://localhost:8000/api/v1/animes/ \
     -H "Accept: application/json" \
-    -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU5NzE0NTA5LCJqdGkiOiJhNzAxN2FlNGUwMzk0NTI3YWQ0OGI3MzlhNDJmODhhNCIsInVzZXJfaWQiOjEsIm5pY2tuYW1lIjoiYWRtaW4ifQ._hkGvluoA9WxC4q_NJnxkYY9gghuy5N0vlX2jqk-dSo" \
     | json
 
 
 # Anime List Filter Query Param Test. By default sorted by average_rating
 curl \
-    -X 'GET' 'http://127.0.0.1:8000/api/v1/animes/?kind=TV,OVA' \
+    -X 'GET' 'http://localhost:8000/api/v1/animes/?kind=TV,OVA&page=10' \
     -H 'accept: application/json' \
     -H 'X-CSRFToken: MknIrLeDzNW6GAok8tHoqyn93vw36bOPmzLvWgse1Dy6QomuXyJftPtYa0ODbdUq'\
     | json

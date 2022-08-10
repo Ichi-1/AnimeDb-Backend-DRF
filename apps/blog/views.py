@@ -1,20 +1,8 @@
 from apps.blog.models import Post
-from rest_framework.generics import (
-    ListCreateAPIView, 
-    ListAPIView,
-    RetrieveDestroyAPIView,
-    RetrieveUpdateAPIView,
-    RetrieveAPIView,
-    RetrieveUpdateDestroyAPIView,
-    CreateAPIView, 
-)
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from rest_framework.permissions import (
     BasePermission,
-    IsAdminUser, 
-    IsAuthenticatedOrReadOnly,
-    DjangoModelPermissionsOrAnonReadOnly,
     SAFE_METHODS,
 )
 from .api.serializers import PostSerializer
@@ -39,3 +27,4 @@ class PostViewSet(mixins.CreateModelMixin,
     serializer_class = PostSerializer
     queryset  = Post.objects.all()
     permission_classes = [PostUserWritePermission]
+

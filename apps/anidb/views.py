@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -24,6 +25,7 @@ class AnimeViewSet(mixins.RetrieveModelMixin,
     filterset_class = AnimeListFilter
     search_fields = ['title', '^title', 'year']
     ordering_fields = ['title', 'year', '?']
+    pagination_class = PageNumberPagination
     ordering = ['-average_rating']  # default ordering
 
     def get_serializer_class(self):
