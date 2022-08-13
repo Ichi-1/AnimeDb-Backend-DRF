@@ -18,8 +18,9 @@ class GoogleLoginAPIView(GenericAPIView):
         id_token_valid = GoogleService.validate_id_token(user_id_token)
 
         if not id_token_valid:
-            return Response(
-                {'detail': 'id_token is invalid. Could not verify token signature'},
+            return Response({
+                'detail': 'id_token is invalid. Could not verify token signature'
+                }, 
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
@@ -29,7 +30,7 @@ class GoogleLoginAPIView(GenericAPIView):
             return Response({
                     'username': id_token_valid['name'],
                     'tokens': token_pair
-                },
+                }, 
                 status=status.HTTP_201_CREATED
             )
 
@@ -42,7 +43,8 @@ class GoogleLoginAPIView(GenericAPIView):
                 status=status.HTTP_201_CREATED
             )
         except AuthenticationFailed:
-            return Response(
-                {"detail": "Social Account Creation Failed"},
+            return Response({
+                    "detail": "Social Account Creation Failed"
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )

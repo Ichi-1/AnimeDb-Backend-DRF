@@ -1,4 +1,5 @@
-from .views import AnimeViewSet
+from .views import AnimeViewSet, IndexAPIView
+from django.urls import path
 from rest_framework import routers
 
 
@@ -7,4 +8,12 @@ app_name = 'anime'
 router = routers.SimpleRouter()
 router.register(r'animes', AnimeViewSet, basename='animes')
 
-urlpatterns = router.urls
+
+urlpatterns = [
+    path('animes/index/', IndexAPIView.as_view()),
+]
+urlpatterns += router.urls
+
+
+
+

@@ -67,13 +67,6 @@ curl -X 'GET' 'http://127.0.0.1:8000/api/v1/animes?tags=Sci+Fi&tags=Comedy'
 
 
 
-curl \
-    -X 'GET' https://anidb-api.herokuapp.com/api/v1/animes/ \
-    -H "Accept: application/json" \
-    -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU5NzIyMDM3LCJqdGkiOiI1MTRlMGUzYWJiYzA0YjJhOGY5OTZkMGJmZTNjNTk3YiIsInVzZXJfaWQiOjEsIm5pY2tuYW1lIjoiYWRtaW4ifQ.nEvlmJpBszOAF9vHpHb4s2DKJ_zyxKLRpVPN1nAx2g8" \
-    | json
-
-
 
 curl \
     -X 'POST' https://anidb-api.herokuapp.com/api/v1/auth/sign-up/  \
@@ -90,3 +83,9 @@ curl -X 'POST' \
     -H 'X-CSRFToken: op5DdzqBulyfKtJPVkdXakumNWw8EvveaaKrJdFxmVEANpkNE0CwwgHfq3fuwx80' \
     -d '{"id_token": ""}' \
     | json
+
+
+
+#  Algolia curls
+
+curl -X 'GET' 'http://localhost:8000/api/v1/anime/?search=TV' | json

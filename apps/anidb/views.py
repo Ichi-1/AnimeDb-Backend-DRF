@@ -1,15 +1,19 @@
-from .api.serializers import AnimeListSerializer, AnimeDetailsSerializer
-from apps.anidb.api.filterset import AnimeListFilter
-from apps.anidb.models import Anime
-
-from rest_framework import mixins
-from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import GenericViewSet
+from .api.algolia import perform_serach
+from .api.filterset import AnimeListFilter
+from .models import Anime
+from .serializers import (
+    AnimeDetailsSerializer,
+    AnimeIndexSerializer,
+    AnimeListSerializer, 
+)
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import (
+    mixins, status, generics, 
+    permissions, viewsets
+)
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-
-from django_filters.rest_framework import DjangoFilterBackend
 
 
 class TotalCountHeaderPagination(PageNumberPagination):
@@ -27,14 +31,14 @@ class TotalCountHeaderPagination(PageNumberPagination):
 
 class AnimeViewSet(mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
-                   GenericViewSet):
+                   viewsets.GenericViewSet):
     # 1. As list - return id, title, title_jp, poster_image, average_rating
     # 2. As retrieve - return all of the model instance fields.
 
     # if i use get_queryset i can remove attribute queryset
     # but need to utilize param: router(basename='anime')
     queryset = Anime.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filterset_class = AnimeListFilter
     search_fields = ['title', '^title', 'year']
@@ -47,3 +51,15 @@ class AnimeViewSet(mixins.RetrieveModelMixin,
             return AnimeListSerializer
         if self.action == 'retrieve':
             return AnimeDetailsSerializer
+    
+
+
+class IndexAPIView(generics.GenericAPIView):
+    serializer_class = AnimeIndexSerializer
+    queryset = Anime
+    
+    def get(self, request):
+        query = request.GET.get('search')
+        tag = request.GET.get('tag')
+        search_result = perform_serach(query=query, tags=tag)
+        return Response(search_result)

@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
+    'algoliasearch_django',
 
     # my apps
     'apps.anidb',
@@ -230,3 +231,10 @@ if not DEBUG:
 
 
 GOOGLE_OAUTH2_CLIEN_ID = config('GOOGLE_OAUTH2_CLIEN_ID')
+
+
+ALGOLIA = {
+    'APPLICATION_ID': config('ALGOLIA_APPLICATION_ID'),
+    'API_KEY': config('ALGOLIA_API_KEY'),
+    'INDEX_PREFIX': 'anidb'
+}

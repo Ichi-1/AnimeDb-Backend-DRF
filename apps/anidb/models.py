@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from apps.authentication.models import CustomUser
 
 
@@ -25,13 +26,34 @@ class Anime(models.Model):
     year_end = models.IntegerField(verbose_name='Airing end year', null=True)
 
     
-
     class Meta:
         verbose_name = 'Anime'
         verbose_name_plural = 'Animes'
 
     def __str__(self):
         return f'{self.title} / {self.title_jp}'
+
+    def get_tags_list(self):
+
+        """ By now tags in model is text filed with enumaretiong of tag words. 
+        Search engin suppose that filed is array conaining only one string,
+        but it should be array of string, representig genres tags.
+        """
+        tags = self.tags
+
+        #WARNING: some filed is null 
+        if tags == None:
+            return [self.tags]
+        else:
+            return ''.join(self.tags).split()
+
+    
+
+    @property
+    def path(self):
+        return f'/animes/{self.pk}/'
+
+
 
 
 # * Rating & Reviews System Models

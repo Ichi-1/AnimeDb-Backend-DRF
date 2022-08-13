@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from ..models import Anime
+from .models import Anime
 
 
 class AnimeListSerializer(ModelSerializer):
@@ -14,6 +14,7 @@ class AnimeListSerializer(ModelSerializer):
             'year',
             'tags',
             'average_rating',
+            'path',
 
         )
 
@@ -39,4 +40,20 @@ class AnimeDetailsSerializer(ModelSerializer):
             'season',
             'kind',
             'tags',
+            'path',
         )
+
+
+class AnimeIndexSerializer(ModelSerializer):
+
+    class Meta:
+        model = Anime
+        fields = (
+        'title',
+        'poster_image',
+        'kind',
+        'average_rating',
+        'studio',
+        'year',
+        'episode_count',
+    )
