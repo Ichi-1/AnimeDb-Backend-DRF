@@ -9,6 +9,7 @@ from apps.anidb.models import Anime
 @register(Anime)
 class AnimeIndex(AlgoliaIndex):
     fields = [
+        'id',
         'title',
         'poster_image',
         'kind',
@@ -38,7 +39,7 @@ class AnimeIndex(AlgoliaIndex):
             'kind',
             'year',
             'episode_count',
-        ]
+        ],
 
     }
 
