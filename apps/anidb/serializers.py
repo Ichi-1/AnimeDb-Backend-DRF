@@ -49,6 +49,7 @@ class AnimeIndexSerializer(ModelSerializer):
     class Meta:
         model = Anime
         fields = (
+        'id',
         'title',
         'poster_image',
         'kind',

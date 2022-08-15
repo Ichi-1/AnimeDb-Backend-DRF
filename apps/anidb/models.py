@@ -6,6 +6,7 @@ from apps.authentication.models import CustomUser
 #   TODO Some poster_image links invalid, return 404. Maybe need to change cdn.
 
 class Anime(models.Model):
+    id = models.AutoField(primary_key=True)
     age_rating = models.CharField(max_length=5, verbose_name='Age Rating')
     age_rating_guide = models.CharField(max_length=50, verbose_name='Age Rating Guidence')
     average_rating = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Average Rating')

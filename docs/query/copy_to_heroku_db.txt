@@ -1,7 +1,8 @@
 psql \
-    -h DB_HOST \
-    -U DB_USERNAME \
-    -d DB_NAME \ 
-    -p 5432
+    -h db_host \
+    -U  db_user \
+    -d db_name \ 
+    -p 5432 \
 
-\copy anidb_anime(age_rating, age_rating_guide, average_rating, description, episode_count, episode_length, poster_image, year_end, season, year, kind, staff, studio, tags, title, title_jp, total_length, voice_actors) FROM '/home/mithrandir/dev/anime-app/backend/docker/csv/aggregated_db.csv'  WITH DELIMITER ',' CSV HEADER;
+    
+    \copy anidb_anime(age_rating, age_rating_guide, average_rating, description, episode_count, episode_length, kind, poster_image, season, staff, studio, tags, title, title_jp, total_length, voice_actors, year, year_end) FROM '/home/mithrandir/dev/anime-app/backend/docker/csv/animeDB.csv'  WITH DELIMITER ',' CSV HEADER;

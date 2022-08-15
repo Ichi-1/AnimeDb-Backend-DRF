@@ -8,8 +8,9 @@ from apps.anidb.models import Anime
 
 @register(Anime)
 class AnimeIndex(AlgoliaIndex):
+    # by default - model pk
+    # custom_objectID = 'title'
     fields = [
-        'id',
         'title',
         'poster_image',
         'kind',
