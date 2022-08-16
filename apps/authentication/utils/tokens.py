@@ -13,7 +13,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['nickname'] = user.nickname
-        token['avatar'] = f'{settings.CLOUDINARY_URL}{user.avatar}'
+        token['avatar'] = f'{settings.STORAGE_URL}{user.avatar}'
         # ...
         return token
 

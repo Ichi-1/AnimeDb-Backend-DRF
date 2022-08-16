@@ -252,4 +252,4 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': config('CLOUDINARY_API_SECRET')
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-CLOUDINARY_URL = config('CLOUDINARY_URL')
+STORAGE_URL = config('STORAGE_URL')
