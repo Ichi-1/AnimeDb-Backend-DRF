@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
     'algoliasearch_django',
+    'cloudinary_storage',
+    'cloudinary',
 
     # my apps
     'apps.anidb',
@@ -242,3 +244,12 @@ ALGOLIA = {
     'API_KEY': config('ALGOLIA_API_KEY'),
     'INDEX_PREFIX': 'anidb'
 }
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET')
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_URL = config('CLOUDINARY_URL')

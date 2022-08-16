@@ -1,3 +1,4 @@
+from email.policy import default
 from .utils.utils import (
     get_path_upload_avatar,
     validate_size_image,
@@ -40,10 +41,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         upload_to=get_path_upload_avatar,
         blank=True,
         null=True,
-        validators=[
-            FileExtensionValidator(allowed_extensions=['jpg', 'png']),
-            validate_size_image,
-        ]
+        default='media/user_avatar/default',
+        # validators=[
+        #     FileExtensionValidator(allowed_extensions=['jpg', 'png']),
+        # ],
     )
     birhdate = models.DateTimeField(help_text='User birthday', null=True)
     gender = models.CharField(choices=genders, max_length=10)
@@ -68,3 +69,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.nickname
+

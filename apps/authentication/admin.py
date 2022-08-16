@@ -18,7 +18,7 @@ class UserAdminConfig(UserAdmin):
     fieldsets = (
         (None, {'fields': ('nickname', 'email', 'auth_provider', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
-        ('Personal', {'fields': ('about',)}),
+        ('Personal', {'fields': ('avatar', 'about')}),
     )
 
     #   ? fileds displaying on admin creating entity form page

@@ -4,10 +4,9 @@ from django.core.exceptions import ValidationError
 def get_path_upload_avatar(user, file_name):
     """
     Creating path to user avatars dir.
-    Format: /media/avatar/user_id/photo.img
+    Format: f'/media/user_avatar/user_{self.pk}/{file_name}'
     """
-
-    return f'avatar/{user.id}/{file_name}'
+    return f'user_avatar/user_{user.id}/{file_name}'
 
 
 def validate_size_image(file_obj):
