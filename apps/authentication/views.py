@@ -6,7 +6,6 @@ from rest_framework.response import Response
 
 
 class UserCreateView(ModelViewSet):
-    http_method_names = ['post']
     queryset = CustomUser.objects.all()
     serializer_class = SignUpSerializer
 
@@ -27,3 +26,4 @@ class UserCreateView(ModelViewSet):
             status=status.HTTP_201_CREATED,
             headers=headers
         )
+

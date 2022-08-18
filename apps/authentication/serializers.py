@@ -6,6 +6,9 @@ from djoser.serializers import UserCreateSerializer
 
 
 class SignUpSerializer(UserCreateSerializer):
+    """
+    Used in Djoser as custom serializer
+    """
 
     class Meta:
         model = CustomUser

@@ -1,4 +1,3 @@
-from email.policy import default
 from .utils.utils import (
     get_path_upload_avatar,
     validate_size_image,
@@ -42,9 +41,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         blank=True,
         null=True,
         default='media/user_avatar/default',
-        # validators=[
-        #     FileExtensionValidator(allowed_extensions=['jpg', 'png']),
-        # ],
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'png']),
+        ],
     )
     birhdate = models.DateTimeField(help_text='User birthday', null=True)
     gender = models.CharField(choices=genders, max_length=10)

@@ -37,9 +37,9 @@ INSTALLED_APPS = [
 
     # my apps
     'apps.anidb',
-    'apps.blog',
     'apps.authentication',
     'apps.social_auth',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
@@ -156,6 +156,9 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'LOGIN_FIELD': 'nickname',
     'ACTIVATION_URL': 'api/v1/auth/activation/{uid}/{token}/',
+    # SEND_ACTIVATION_EMAIL True sent email after:
+    # -creating an account
+    # -updating their email
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
     'SERIALIZERS': {

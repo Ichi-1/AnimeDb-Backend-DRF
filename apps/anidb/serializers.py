@@ -15,7 +15,6 @@ class AnimeListSerializer(ModelSerializer):
             'tags',
             'average_rating',
             'path',
-
         )
 
 
@@ -23,25 +22,7 @@ class AnimeDetailsSerializer(ModelSerializer):
 
     class Meta:
         model = Anime
-        fields = (
-            'id',
-            'title',
-            'title_jp',
-            'poster_image',
-            'studio',
-            'description',
-            'age_rating',
-            'age_rating_guide',
-            'average_rating',
-            'episode_count',
-            'episode_length',
-            'year',
-            'year_end',
-            'season',
-            'kind',
-            'tags',
-            'path',
-        )
+        exclude = ('staff', 'voice_actors')
 
 
 class AnimeIndexSerializer(ModelSerializer):

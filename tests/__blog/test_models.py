@@ -1,7 +1,7 @@
 from unicodedata import category
 from django.test import TestCase
 from django.contrib.auth.models import User
-from apps.blog.models import Post, Category
+from apps.__blog.models import Post, Category
 
 class TestCreatePost(TestCase):
     

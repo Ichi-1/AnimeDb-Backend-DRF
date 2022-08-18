@@ -3,7 +3,7 @@ from django.urls import path
 from rest_framework import routers
 
 
-app_name = 'anime'
+app_name = 'animes'
 
 router = routers.SimpleRouter()
 router.register(r'animes', AnimeViewSet, basename='animes')
