@@ -99,3 +99,6 @@ curl -X 'PATCH' http://localhost:8000/api/v1/users/me/1/ \
     -H 'Content-Type: application/json' \
     -d '{"email":"admin@admin.com"}' \
     | json
+
+
+curl -H "Authorization: token d4405a7a5b7bb8100cb2" https://api.github.com/user | json

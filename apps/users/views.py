@@ -20,4 +20,4 @@ class UserViewSet(mixins.ListModelMixin,
         serializer = serializer_class(queryset, many=True)
 
         return Response(serializer.data)
-    
+        

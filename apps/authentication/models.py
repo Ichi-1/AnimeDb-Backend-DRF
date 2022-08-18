@@ -16,7 +16,8 @@ AUTH_PROVIDER = {
     'facebook': 'facebook',
     'google': 'google',
     'twtitter': 'twitter',
-    'email': 'email'
+    'github': 'github',
+    'email': 'email',
 }
 
 
