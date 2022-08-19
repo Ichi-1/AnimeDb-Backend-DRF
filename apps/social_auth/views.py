@@ -62,7 +62,10 @@ class GitHubLoginAPIView(GenericAPIView):
 
         if 'error' in response:
             return Response(
-                {'error': response.error},
+                {
+                    'error': response['error'], 
+                    'detail': response['error_description']
+                },
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
