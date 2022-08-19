@@ -48,6 +48,14 @@ class GoogleLoginAPIView(GenericAPIView):
 
 
 class GitHubLoginAPIView(GenericAPIView):
+    """
+    If code in POST request is valid - will signed up user 
+    with given social provider data (login, email), 
+    and then autorize him with jwt tokens pair
+    If user already registred with this email - 
+    autorize him in existed account with jwt tokens pair
+
+    """
     serializer_class = GitHubLoginSerializer
 
     def post(self, request):
@@ -80,7 +88,6 @@ class GitHubLoginAPIView(GenericAPIView):
 
         candidate = CustomUser.objects.filter(
             email=user_info["email"], 
-            nickname=user_info["login"],
         )
 
         if candidate.exists():
@@ -101,7 +108,3 @@ class GitHubLoginAPIView(GenericAPIView):
                 {"detail": "Social Account Creation Failed"},
                 status=status.HTTP_409_CONFLICT
             )
-            
-        
-
-        
