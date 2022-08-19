@@ -69,7 +69,7 @@ class GitHubLoginAPIView(GenericAPIView):
         access_token = response.get('access_token')
         user_info = GitHubService.get_user_info(access_token)
 
-        if user_info['email'] == None or not 'email' in user_info:
+        if user_info['email'] == None or 'email' not in user_info:
             return Response(
                 {'detail': 'Cannot create account without providing public email'},
                 status=status.HTTP_409_CONFLICT
