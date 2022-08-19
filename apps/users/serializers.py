@@ -12,7 +12,8 @@ class UserListSerializer(ModelSerializer):
             'id',
             'nickname',
             'avatar_url',
-            'last_login'
+            'last_login',
+            'created_at',
         )
 
     def get_avatar_url(self, user):
