@@ -1,4 +1,3 @@
-from os import access
 from apps.authentication.models import CustomUser
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
@@ -51,7 +50,7 @@ class GitHubLoginAPIView(GenericAPIView):
     """
     If code in POST request is valid - will signed up user 
     with given social provider data (login, email), 
-    and then autorize him with jwt tokens pair
+    and then autorize him with jwt tokens pair.
     If user already registred with this email - 
     autorize him in existed account with jwt tokens pair
 
@@ -86,10 +85,8 @@ class GitHubLoginAPIView(GenericAPIView):
                 status=status.HTTP_409_CONFLICT
             )
 
-        candidate = CustomUser.objects.filter(
-            email=user_info["email"], 
-        )
 
+        candidate = CustomUser.objects.filter(email=user_info["email"])
         if candidate.exists():
             token_pair = grant_access_social_account(candidate.first())
             return Response(

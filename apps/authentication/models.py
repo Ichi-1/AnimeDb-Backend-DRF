@@ -48,7 +48,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     birhdate = models.DateTimeField(help_text='User birthday', null=True)
     gender = models.CharField(choices=genders, max_length=10)
-    location = CountryField(blank_label='(select country)')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     read_only = models.BooleanField(default=False)
