@@ -21,7 +21,7 @@ class MixedPermissionModelViewSet(
 
     permission_classes_by_action = {
         'list': [permissions.AllowAny],
-        'update': [permissions.IsAuthenticated],
+        'partial_update': [permissions.IsAuthenticated],
         'retrieve': [permissions.AllowAny],
     }
 

@@ -6,7 +6,7 @@ app_name = 'users'
 
 urlpatterns = [
     path('', UserViewSet.as_view({'get':'list'})),
-    path('<int:pk>/', UserViewSet.as_view({'patch':'update', 'get':'retrieve'})),
+    path('<int:pk>/', UserViewSet.as_view({'patch':'partial_update', 'get':'retrieve'})),
 
     path('reset-password/', DjoserViewSet.as_view({'post': 'reset_password'})),
     path('reset-password-confirm/<str:uid>/<str:token>/',DjoserViewSet.as_view({'post': 'reset_password_confirm'})),
