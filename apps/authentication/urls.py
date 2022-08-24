@@ -11,11 +11,11 @@ urlpatterns = [
     path('activation/<str:uid>/<str:token>/', DjoserViewSet.as_view({'post': 'activation'})),
     path('activation-resend/', DjoserViewSet.as_view({'post': 'resend_activation'})),
 
+
     path('jwt/create/', MyTokenObtainPairView.as_view()),
     path('jwt/refresh/', TokenRefreshView.as_view()),
     path('jwt/verify/', TokenVerifyView.as_view()),
 
 
-    # path('reset-password/', UserViewSet.as_view({'post': 'reset_password'})),
-    # path('reset-password-confirm/<str:uid>/<str:token>/',UserViewSet.as_view({'post': 'reset_password_confirm'})),
+    
 ]

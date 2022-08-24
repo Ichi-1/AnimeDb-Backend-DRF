@@ -162,8 +162,6 @@ DJOSER = {
     'SEND_CONFIRMATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'apps.authentication.serializers.SignUpSerializer',
-        'user': 'apps.users.serializers.UserMeSerializer'
-
     },
 }
 

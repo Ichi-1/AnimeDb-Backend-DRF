@@ -1,10 +1,10 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework import serializers
 from apps.authentication.models import CustomUser
 
 
 
-class UserListSerializer(ModelSerializer):
-    avatar_url = SerializerMethodField()
+class UserListSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
@@ -24,8 +24,8 @@ class UserListSerializer(ModelSerializer):
 
 
 
-class UserMeSerializer(ModelSerializer):
-    avatar_url = SerializerMethodField()
+class UserMeRetrieveSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
@@ -35,7 +35,7 @@ class UserMeSerializer(ModelSerializer):
             'email',
             'avatar_url',
             'gender',
-            'birhdate',
+            'birthdate',
             'about'
         )
     
@@ -44,3 +44,15 @@ class UserMeSerializer(ModelSerializer):
             return user.avatar.url
         else:
             return "No image assigned to object"
+
+
+
+class UserMeUpdateSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField(required=False)
+    gender = serializers.CharField(required=False)
+    birthdate = serializers.DateField(required=False)
+    about = serializers.CharField(required=False)
+
+    class Meta:
+        model = CustomUser
+        fields = ('avatar', 'gender', 'birthdate', 'about')

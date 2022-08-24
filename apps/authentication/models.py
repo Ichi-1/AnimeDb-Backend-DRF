@@ -1,15 +1,11 @@
-from .utils.utils import (
-    get_path_upload_avatar,
-    validate_size_image,
-)
+from django.db import models
+from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin
 )
-from django_countries.fields import CountryField
-from django.core.validators import FileExtensionValidator
-from django.db import models
 from .managers import CustomManager
+from .utils.utils import get_path_upload_avatar
 
 
 AUTH_PROVIDER = {
@@ -46,7 +42,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             FileExtensionValidator(allowed_extensions=['jpg', 'png']),
         ],
     )
-    birhdate = models.DateTimeField(help_text='User birthday', null=True)
+    birthdate = models.DateField(help_text='User birthdate', null=True)
     gender = models.CharField(choices=genders, max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

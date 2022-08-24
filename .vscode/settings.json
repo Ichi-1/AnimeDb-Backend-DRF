@@ -1,9 +1,0 @@
-{
-    "python.linting.flake8Enabled": true,
-    "python.linting.pylintEnabled": false,
-    "python.linting.enabled": false,
-    "editor.bracketPairColorization.independentColorPoolPerBracketType": false,
-    "editor.guides.highlightActiveBracketPair": false,
-    "editor.bracketPairColorization.enabled": true,
-    "editor.guides.bracketPairsHorizontal": false
-}
