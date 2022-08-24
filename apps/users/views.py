@@ -34,7 +34,7 @@ class UserViewSet(MixedPermissionModelViewSet):
         
         if user_id != user_to_update:
             return Response(
-                {'detail' : 'Not own id'},
+                {'detail' : 'You are not authorized to this action'},
                 status=status.HTTP_403_FORBIDDEN
             )
         else:
