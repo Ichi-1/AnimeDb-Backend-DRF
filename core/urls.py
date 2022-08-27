@@ -7,7 +7,7 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Snippets API",
+      title="MyAniDB API",
       default_version='v1',
       description="Test description",
       terms_of_service="https://www.google.com/policies/terms/",
@@ -22,8 +22,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('api/v1/', include('apps.anidb.urls', namespace='animes')),
-    path('api/v1/oauth2/', include('apps.social_auth.urls', namespace='oauth2')),
+    path('api/v1/', include('apps.anime_db.urls', namespace='animes')),
     path('api/v1/auth/', include('apps.authentication.urls', namespace='auth')),
     path('api/v1/users/', include('apps.users.urls', namespace='users')),
 

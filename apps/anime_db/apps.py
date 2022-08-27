@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class AnimeListConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.anidb'
+    name = 'apps.anime_db'

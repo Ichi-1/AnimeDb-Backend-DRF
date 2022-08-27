@@ -16,6 +16,8 @@ django-cloudinary-storage==0.3.0
 django-cors-headers==3.13.0
 django-countries==7.3.2
 django-filter==22.1
+django-js-asset==2.0.0
+django-mptt==0.13.4
 django-templated-mail==1.1.1
 djangorestframework==3.13.1
 djangorestframework-simplejwt==4.8.0

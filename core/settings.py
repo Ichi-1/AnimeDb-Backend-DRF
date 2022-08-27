@@ -25,20 +25,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third-party apps
+    'algoliasearch_django',
+    'cloudinary',
     'corsheaders',
+    'cloudinary_storage',
     'djoser',
     'drf_yasg',
+    'django_filters',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'django_filters',
-    'algoliasearch_django',
-    'cloudinary_storage',
-    'cloudinary',
 
     # my apps
-    'apps.anidb',
     'apps.authentication',
-    'apps.social_auth',
+    'apps.anime_db',
     'apps.users',
 ]
 
@@ -251,9 +250,8 @@ if not DEBUG:
 GOOGLE_OAUTH2_CLIEN_ID = config('GOOGLE_OAUTH2_CLIEN_ID')
 
 # GitHub API
-GITHUB_OAUTH_CLIENT_ID=config('GITHUB_OAUTH_CLIENT_ID')
-GITHUB_OAUTH_CLIENT_SECRET=config('GITHUB_OAUTH_CLIENT_SECRET')
-
+GITHUB_OAUTH_CLIENT_ID = config('GITHUB_OAUTH_CLIENT_ID')
+GITHUB_OAUTH_CLIENT_SECRET = config('GITHUB_OAUTH_CLIENT_SECRET')
 
 
 ALGOLIA = {

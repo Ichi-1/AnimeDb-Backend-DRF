@@ -4,6 +4,7 @@ from django.conf import settings
 AUTH_URL = 'https://github.com/login/oauth/access_token'
 API_URL = 'https://api.github.com/user'
 
+
 class GitHubService:
 
     @staticmethod
@@ -20,10 +21,9 @@ class GitHubService:
 
         """
         Return only token.
-        Also contain: token type', 'scope'
+        Also contain: 'token type', 'scope'
         """
         return response.json()
-
 
     @staticmethod
     def get_user_info(access_token):
@@ -32,6 +32,3 @@ class GitHubService:
         }
         response = requests.post(API_URL, headers=headers)
         return response.json()
-
-        
-

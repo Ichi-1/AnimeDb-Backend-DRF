@@ -1,4 +1,4 @@
-from .views import AnimeViewSet, IndexAPIView
+from .views import AnimeViewSet, AlgoliaIndexAPIView
 from django.urls import path
 from rest_framework import routers
 
@@ -10,7 +10,8 @@ router.register(r'animes', AnimeViewSet, basename='animes')
 
 
 urlpatterns = [
-    path('animes/index/', IndexAPIView.as_view()),
+    path('animes/index/', AlgoliaIndexAPIView.as_view()),
+    # path('animes/comments/', CommentViewSet.as_view()),
 ]
 urlpatterns += router.urls
 

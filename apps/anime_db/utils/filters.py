@@ -1,6 +1,5 @@
-from apps.anidb.models import Anime
+from apps.anime_db.models import Anime
 from django_filters import rest_framework as filters
-
 
 
 class AnimeFilter(filters.FilterSet):

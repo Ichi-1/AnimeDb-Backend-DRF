@@ -2,7 +2,6 @@ from django_filters.constants import EMPTY_VALUES
 from django_filters import rest_framework as filters
 
 
-
 class ListFilter(filters.Filter):
     def filter(self, qs, value):
         if value in EMPTY_VALUES:

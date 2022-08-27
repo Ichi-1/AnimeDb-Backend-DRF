@@ -30,12 +30,12 @@ class AnimeIndexSerializer(ModelSerializer):
     class Meta:
         model = Anime
         fields = (
-        'id',
-        'title',
-        'poster_image',
-        'kind',
-        'average_rating',
-        'studio',
-        'year',
-        'episode_count',
-    )
+            'id',
+            'title',
+            'poster_image',
+            'kind',
+            'average_rating',
+            'studio',
+            'year',
+            'episode_count',
+        )

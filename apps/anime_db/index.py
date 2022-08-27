@@ -1,9 +1,7 @@
 from algoliasearch_django import AlgoliaIndex
 from algoliasearch_django.decorators import register
 
-from apps.anidb.models import Anime
-
-
+from apps.anime_db.models import Anime
 
 
 @register(Anime)
@@ -26,16 +24,16 @@ class AnimeIndex(AlgoliaIndex):
         ],
         'ranking': [
             'desc(average_rating)',
-            'desc(year)', 
+            'desc(year)',
             'asc(year)',
         ],
         'searchableAttributes': [
-            'title', 
+            'title',
             'studio',
-            'year', 
+            'year',
             'kind',
         ],
-        'attributesForFaceting':[
+        'attributesForFaceting': [
             'studio',
             'kind',
             'year',
@@ -45,6 +43,3 @@ class AnimeIndex(AlgoliaIndex):
     }
 
     tags = 'get_tags_list'
-
-
-

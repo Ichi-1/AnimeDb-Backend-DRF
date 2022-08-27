@@ -28,3 +28,11 @@ class SignUpSerializer(UserCreateSerializer):
         validators=[validate_password],
         min_length=6
     )
+
+
+class GoogleLoginSerializer(serializers.Serializer):
+    id_token = serializers.CharField()
+
+
+class GitHubLoginSerializer(serializers.Serializer):
+    code = serializers.CharField()
