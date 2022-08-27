@@ -22,7 +22,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('api/v1/', include('apps.anime_db.urls', namespace='animes')),
+    path('api/v1/', include('apps.anime_db.urls', namespace='anime_db')),
     path('api/v1/auth/', include('apps.authentication.urls', namespace='auth')),
     path('api/v1/users/', include('apps.users.urls', namespace='users')),
 

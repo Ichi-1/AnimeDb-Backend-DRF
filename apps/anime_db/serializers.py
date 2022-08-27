@@ -1,5 +1,21 @@
 from rest_framework.serializers import ModelSerializer
+
+from apps.content_activity.models import Comment
 from .models import Anime
+
+
+
+class AnimeCommentsSerializer(ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = (
+            'user_id', 
+            'commentable_id',
+            'body', 
+            'created_at', 
+            'updated_at'
+        )
 
 
 class AnimeListSerializer(ModelSerializer):
@@ -19,6 +35,7 @@ class AnimeListSerializer(ModelSerializer):
 
 
 class AnimeDetailsSerializer(ModelSerializer):
+    # comments = AnimeCommentsSerializer(many=True)
 
     class Meta:
         model = Anime
