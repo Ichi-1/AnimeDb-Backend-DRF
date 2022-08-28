@@ -37,8 +37,8 @@ INSTALLED_APPS = [
 
     # my apps
     'apps.anime_db',
+    'apps.activity',
     'apps.authentication',
-    'apps.content_activity',
     'apps.users',
 ]
 

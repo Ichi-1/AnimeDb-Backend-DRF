@@ -17,7 +17,6 @@ urlpatterns = [
             'post': 'create',
             'patch': 'partial_update',
             'delete': 'destroy',
-
         }
     )),
 ]

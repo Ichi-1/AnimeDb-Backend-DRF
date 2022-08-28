@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
-from apps.content_activity.models import Comment
+from apps.activity.models import Comment
 
 class Anime(models.Model):
     id = models.AutoField(primary_key=True)
@@ -22,9 +22,11 @@ class Anime(models.Model):
     voice_actors = models.TextField(verbose_name='Voice Actors', null=True)
     year = models.IntegerField(verbose_name='Release year', null=True)
     year_end = models.IntegerField(verbose_name='Airing end year', null=True)
-
-
-    # comments = GenericRelation(Comment)
+    #
+    comments = GenericRelation(
+        Comment, 
+        object_id_field='commentable_id',
+    )
 
     class Meta:
         verbose_name = 'Anime'

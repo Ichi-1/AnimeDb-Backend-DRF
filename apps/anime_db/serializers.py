@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from apps.content_activity.models import Comment
+from apps.activity.models import Comment
 from .models import Anime
 
 

@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from django.contrib.contenttypes.models import ContentType
 
-from apps.content_activity.models import Comment
+from apps.activity.models import Comment
 
 from .models import Anime
 from .utils.algolia import perform_serach
@@ -43,35 +43,33 @@ class AnimeViewSet(
 
 
 
-
 class AnimeCommentViewSet(
-    mixins.ListModelMixin,
     mixins.CreateModelMixin,
-    mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
     viewsets.GenericViewSet
 ):  
     queryset = Comment
     serializer_class = AnimeCommentsSerializer
+    pagination_class = TotalCountHeaderPagination
     lookup_field = 'commentable_id'
     
     def list(self, request, *args, **kwargs):
         """
         Retrieve list of all comments belonging to anime which id is passed in query. 
-        {commentable_id} - id of specific instance of Anime Model. 
+        {commentable_id} - id of specific instance of Anime Model.
+        Orber by: created_at
         """
-        content_type = ContentType.objects.get(app_label='anime_db')
         anime_id = kwargs.get('commentable_id')
-        qs = Comment.objects.filter(content_type=content_type, commentable_id=anime_id)\
-            .order_by('created_at')
-
-        serializer= self.get_serializer(qs, many=True)
+        commentable = Anime.objects.get(id=anime_id)
+        comments = commentable.comments.all().order_by('created_at')
+        serializer = self.get_serializer(comments, many=True)
 
         if not serializer.data:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
-        return Response(serializer.data)
 
+        return Response(serializer.data)
 
 
 

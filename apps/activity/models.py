@@ -11,17 +11,15 @@ class Comment(models.Model):
         -anime;
         -user profile;
     """
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    commentable_id = models.PositiveIntegerField()
-    commentable = GenericForeignKey('content_type', 'commentable_id')
-    
-
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='comments')
     body = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
+    #
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    commentable_id = models.PositiveIntegerField()
+    commentable = GenericForeignKey('content_type', 'commentable_id')
+    
     def __str__(self):
         return f'comment_id: {self.id}, commentable: {self.commentable}'
 
