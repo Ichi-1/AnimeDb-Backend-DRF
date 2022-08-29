@@ -11,12 +11,12 @@ router.register(r'anime', AnimeViewSet, basename='anime')
 
 urlpatterns = [
     path('anime/index/', AlgoliaIndexAPIView.as_view()),
-    path('anime/<int:commentable_id>/comments/', AnimeCommentViewSet.as_view(
+    path('anime/<int:id>/comments/', AnimeCommentViewSet.as_view(
         {
             'get': 'list', 
             'post': 'create',
-            'patch': 'partial_update',
-            'delete': 'destroy',
+            # 'patch': 'partial_update',
+            # 'delete': 'destroy',
         }
     )),
 ]

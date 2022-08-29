@@ -5,7 +5,7 @@ from .models import Comment
 class CommentAdminConfig(admin.ModelAdmin):
     list_display = (
         'id', 
-        'user_id', 
+        'author', 
         'content_type',
         'commentable',
         'commentable_id', 

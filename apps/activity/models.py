@@ -7,11 +7,9 @@ from django.contrib.contenttypes.models import ContentType
 class Comment(models.Model):
     """
     Entity represent comments of different commentable models:
-        -reviews;
-        -anime;
-        -user profile;
+    reviews, anime, users profile etc.;
     """
-    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='comments')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='comments')
     body = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -22,7 +20,6 @@ class Comment(models.Model):
     
     def __str__(self):
         return f'comment_id: {self.id}, commentable: {self.commentable}'
-
 
 
 # class Review(models.Model):

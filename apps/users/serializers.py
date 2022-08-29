@@ -53,3 +53,6 @@ class UserMeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('avatar', 'gender', 'birthdate', 'about')
+
+
+

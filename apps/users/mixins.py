@@ -22,8 +22,8 @@ class UserPermissionsViewSet(
 
     permission_classes_by_action = {
         'list': [permissions.AllowAny],
-        'partial_update': [permissions.IsAuthenticated],
         'retrieve': [permissions.AllowAny],
+        'partial_update': [permissions.IsAuthenticated],
     }
 
     def get_permissions(self):
