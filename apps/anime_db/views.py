@@ -1,7 +1,7 @@
 from apps.activity.models import Comment
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework import mixins, generics, permissions, viewsets
+from rest_framework import mixins, generics, permissions, viewsets, pagination
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
@@ -19,11 +19,12 @@ from apps.activity.serializers import (
     CommentsListSerializer
 )
 
+
 class AnimeViewSet(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet
-):  
+):
     """
     GET /anime/ - retrieve list of all anime contained in database;
     GET /anime/:id - retrieve instance of anime by id;
@@ -58,10 +59,10 @@ class AlgoliaIndexAPIView(generics.GenericAPIView):
         return Response(search_result)
 
 
-class AnimeCommentViewSet(viewsets.ModelViewSet):  
+class AnimeCommentViewSet(viewsets.ModelViewSet):
     queryset = Comment
-    pagination_class = TotalCountHeaderPagination
     lookup_field = 'id'
+    pagination_class = TotalCountHeaderPagination
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -75,42 +76,45 @@ class AnimeCommentViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]
+    
+    
 
     def list(self, request, *args, **kwargs):
         """
-        Retrieve list of all comments belonging to anime which id is passed in query. 
+        Query param - (id, int)
+        Retrieve list of all comments, related to anime instance
         Orber by: created_at
         """
         anime_id = kwargs.get('id')
         commentable = Anime.objects.get(id=anime_id)
         comments = commentable.comments.all().order_by('created_at')
-        serializer = self.get_serializer(comments, many=True)
+        pages = self.paginate_queryset(comments)
+        serializer = self.get_serializer(pages, many=True)
 
         if not serializer.data:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
 
     def create(self, request, *args, **kwargs):
         """
         Query param - (id, int)
         Request body - author(user_id, int), body(text, str)
-        Authorization header is required.
+        Authorization header required.
         """
         anime_id = kwargs.get('id')
         commentable = Anime.objects.filter(id=anime_id)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         if request.user.id != serializer.data.get('author'):
             return Response(
                 {'detail': 'You are not authorized to this action'},
                 status=status.HTTP_403_FORBIDDEN
             )
-        
+
         if not commentable.exists():
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
-        serializer.create_comment(serializer.data, anime_id)
-        return Response(status=status.HTTP_201_CREATED)
 
+        serializer.create(serializer.data, anime_id)
+        return Response(status=status.HTTP_201_CREATED)

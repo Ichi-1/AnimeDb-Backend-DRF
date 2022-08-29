@@ -127,11 +127,7 @@ MEDIA_URL = '/media/'
 MEDIAR_ROOT = BASE_DIR / 'media'
 
 
-# Permissions:
-#   AllowAny
-#   IsAuthenticated
-#   IsAdminUser
-#   IsAuthenticatedOrReadOnly
+
 
 REST_FRAMEWORK = {
    'DEFAULT_PERMISSION_CLASSES': (

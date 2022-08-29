@@ -14,7 +14,7 @@ class UserViewSet(UserPermissionsViewSet):
     """
     GET /users/ - retrieve list of registred users;
     GET /users/:id - retrieve users public profile;
-    PATCH /users/:id - partial updating of user profile. Authorization header is required.
+    PATCH /users/:id - partial updating of user profile. Authorization header required.
     """
     queryset = CustomUser.objects.all().order_by('-last_login')
     parser_classes = [FormParser, MultiPartParser]

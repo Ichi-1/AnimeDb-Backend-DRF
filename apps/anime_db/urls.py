@@ -13,7 +13,7 @@ urlpatterns = [
     path('anime/index/', AlgoliaIndexAPIView.as_view()),
     path('anime/<int:id>/comments/', AnimeCommentViewSet.as_view(
         {
-            'get': 'list', 
+            'get': 'list',
             'post': 'create',
             # 'patch': 'partial_update',
             # 'delete': 'destroy',
@@ -21,7 +21,3 @@ urlpatterns = [
     )),
 ]
 urlpatterns += router.urls
-
-
-
-

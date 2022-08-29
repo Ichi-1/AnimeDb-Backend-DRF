@@ -4,12 +4,12 @@ from .models import Comment
 
 class CommentAdminConfig(admin.ModelAdmin):
     list_display = (
-        'id', 
-        'author', 
+        'id',
+        'author',
         'content_type',
         'commentable',
-        'commentable_id', 
-        'created_at', 
+        'commentable_id',
+        'created_at',
     )
 
 
