@@ -1,11 +1,11 @@
 from apps.anime_db.models import Anime
 from apps.authentication.models import CustomUser
+from generic_relations.relations import GenericRelatedField
 from rest_framework.serializers import (
     ModelSerializer,
     SerializerMethodField,
     ValidationError
 )
-from generic_relations.relations import GenericRelatedField
 from .models import Comment
 
 
@@ -47,15 +47,9 @@ class CommentCreateSerializer(ModelSerializer):
                 "Error during comment creation. Area: serializer"
             )
 
-    def update(self, validated_data, comment):
-        body = validated_data['body']
-        comment.body = body
-        comment.save()
-
     class Meta:
         model = Comment
         fields = ('author', 'body')
-
 
 
 class CommentUpdateSerializer(ModelSerializer):
@@ -64,7 +58,7 @@ class CommentUpdateSerializer(ModelSerializer):
         body = validated_data['body']
         comment.body = body
         comment.save()
-    
+
     class Meta:
         model = Comment
         fields = ('body',)

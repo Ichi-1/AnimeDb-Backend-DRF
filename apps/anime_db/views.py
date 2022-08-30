@@ -1,8 +1,7 @@
 from apps.activity.models import Comment
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
-from rest_framework import mixins, generics, permissions, viewsets
+from django.shortcuts import get_object_or_404
+from rest_framework import mixins, generics, permissions, viewsets, status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
@@ -11,7 +10,7 @@ from .utils.algolia import perform_serach
 from .utils.filterset import AnimeListFilter
 from .utils.paginator import TotalCountHeaderPagination
 from .serializers import (
-    AnimeSerializer,
+    AnimeDetailSerializer,
     AnimeIndexSerializer,
     AnimeListSerializer,
 )
@@ -31,7 +30,7 @@ class AnimeViewSet(
     GET /anime/ - retrieve list of all anime contained in database;
     GET /anime/:id - retrieve instance of anime by id;
     """
-    queryset = Anime.objects.all()
+    queryset    = Anime.objects.all()
     permission_classes = [permissions.AllowAny]
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filterset_class = AnimeListFilter
@@ -44,7 +43,7 @@ class AnimeViewSet(
         if self.action == 'list':
             return AnimeListSerializer
         if self.action == 'retrieve':
-            return AnimeSerializer
+            return AnimeDetailSerializer
 
 
 class AlgoliaIndexAPIView(generics.GenericAPIView):
@@ -118,7 +117,7 @@ class AnimeCommentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        #* restriction from creating comment for another authors
+        # * restriction from creating comment for another authors
         if request.user.id != serializer.data.get('author'):
             return Response(
                 {'detail': 'You are not authorized to this action'},
@@ -154,7 +153,7 @@ class AnimeCommentViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         """
-        Allow to delete comment instance of specific anime;
+        Allow to delete comment instance for specific anime;
         Authorization header required.
         """
         anime_id = kwargs.get('id')

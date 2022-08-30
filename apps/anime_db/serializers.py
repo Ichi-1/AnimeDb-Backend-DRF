@@ -1,6 +1,11 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Anime
 
+class AnimeDetailSerializer(ModelSerializer):
+
+    class Meta:
+        model = Anime
+        exclude = ('staff', 'voice_actors')
 
 class AnimeListSerializer(ModelSerializer):
 
@@ -16,13 +21,6 @@ class AnimeListSerializer(ModelSerializer):
             'average_rating',
             'path',
         )
-
-
-class AnimeSerializer(ModelSerializer):
-
-    class Meta:
-        model = Anime
-        exclude = ('staff', 'voice_actors')
 
 
 class AnimeIndexSerializer(ModelSerializer):

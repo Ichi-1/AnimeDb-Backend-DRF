@@ -1,8 +1,8 @@
 psql \
-    -h db_host \
-    -U  db_user \
-    -d db_name \ 
+    -h ec2-54-204-241-136.compute-1.amazonaws.com \
+    -U edbkmgjtqttdhz \
+    -d d13f7busb43miv \ 
     -p 5432 \
 
     
-    \copy anidb_anime(age_rating, age_rating_guide, average_rating, description, episode_count, episode_length, kind, poster_image, season, staff, studio, tags, title, title_jp, total_length, voice_actors, year, year_end) FROM '/home/mithrandir/dev/anime-app/backend/docker/csv/animeDB.csv'  WITH DELIMITER ',' CSV HEADER;
+    \copy anime_db_anime(age_rating, age_rating_guide, average_rating, description, episode_count, episode_length, kind, poster_image, season, staff, studio, tags, title, title_jp, total_length, voice_actors, year, year_end) FROM '/home/mithrandir/dev/anime-app/backend/docker/csv/animeDB.csv'  WITH DELIMITER ',' CSV HEADER;

@@ -5,23 +5,27 @@ from rest_framework import routers
 
 app_name = 'anime_db'
 
-router = routers.SimpleRouter()
-router.register(r'anime', AnimeViewSet, basename='anime')
+#TODO В отдельный api_router выносятся вью содержащие более 1го метода в 1 роуте
+
+anime_list_or_detail = routers.SimpleRouter()
+anime_list_or_detail.register(r'anime', AnimeViewSet, basename='anime')
+
+comments_list_or_create = AnimeCommentViewSet.as_view({
+        'get': 'list',
+        'post': 'create'
+    }
+)
+
+comments_delete_or_update = AnimeCommentViewSet.as_view({
+        'delete': 'destroy',
+        'patch': 'partial_update',
+    }
+)
 
 
 urlpatterns = [
     path('anime/index/', AlgoliaIndexAPIView.as_view()),
-    path('anime/<int:id>/comments/', AnimeCommentViewSet.as_view(
-        {
-            'get': 'list',
-            'post': 'create'
-        }
-    )),
-    path('anime/<int:id>/comments/<int:comment_id>', AnimeCommentViewSet.as_view(
-        {
-            'patch': 'partial_update',
-            'delete': 'destroy'
-        }
-    ))
+    path('anime/<int:id>/comments/', comments_list_or_create),
+    path('anime/<int:id>/comments/<int:comment_id>', comments_delete_or_update)
 ]
-urlpatterns += router.urls
+urlpatterns += anime_list_or_detail.urls
