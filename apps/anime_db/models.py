@@ -31,7 +31,7 @@ class Anime(models.Model):
         verbose_name_plural = 'Animes'
 
     def __str__(self):
-        return f'{self.title} / {self.title_jp}'
+        return f'{self.title}'
 
     def get_tags_list(self):
 

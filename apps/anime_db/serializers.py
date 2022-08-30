@@ -1,8 +1,8 @@
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 from .models import Anime
 
 
-class AnimeListSerializer(serializers.ModelSerializer):
+class AnimeListSerializer(ModelSerializer):
 
     class Meta:
         model = Anime
@@ -18,14 +18,14 @@ class AnimeListSerializer(serializers.ModelSerializer):
         )
 
 
-class AnimeSerializer(serializers.ModelSerializer):
+class AnimeSerializer(ModelSerializer):
 
     class Meta:
         model = Anime
         exclude = ('staff', 'voice_actors')
 
 
-class AnimeIndexSerializer(serializers.ModelSerializer):
+class AnimeIndexSerializer(ModelSerializer):
 
     class Meta:
         model = Anime

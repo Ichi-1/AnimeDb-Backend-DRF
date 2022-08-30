@@ -30,13 +30,12 @@ class CommentsListSerializer(ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('author', 'body', 'created_at', 'updated_at')
+        fields = ('author', 'id', 'body', 'created_at', 'updated_at')
 
 
 class CommentCreateSerializer(ModelSerializer):
 
     def create(self, validated_data, anime_id):
-
         author = CustomUser.objects.get(id=validated_data['author'])
         commentable = Anime.objects.get(id=anime_id)
         body = validated_data['body']
@@ -48,6 +47,24 @@ class CommentCreateSerializer(ModelSerializer):
                 "Error during comment creation. Area: serializer"
             )
 
+    def update(self, validated_data, comment):
+        body = validated_data['body']
+        comment.body = body
+        comment.save()
+
     class Meta:
         model = Comment
         fields = ('author', 'body')
+
+
+
+class CommentUpdateSerializer(ModelSerializer):
+
+    def update(self, validated_data, comment):
+        body = validated_data['body']
+        comment.body = body
+        comment.save()
+    
+    class Meta:
+        model = Comment
+        fields = ('body',)

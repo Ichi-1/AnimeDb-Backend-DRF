@@ -14,10 +14,14 @@ urlpatterns = [
     path('anime/<int:id>/comments/', AnimeCommentViewSet.as_view(
         {
             'get': 'list',
-            'post': 'create',
-            # 'patch': 'partial_update',
-            # 'delete': 'destroy',
+            'post': 'create'
         }
     )),
+    path('anime/<int:id>/comments/<int:comment_id>', AnimeCommentViewSet.as_view(
+        {
+            'patch': 'partial_update',
+            'delete': 'destroy'
+        }
+    ))
 ]
 urlpatterns += router.urls
