@@ -19,7 +19,7 @@ class CommentAuthorSerializer(ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('nickname', 'avatar_url')
+        fields = ('id', 'nickname', 'avatar_url', )
 
 
 class CommentsListSerializer(ModelSerializer):

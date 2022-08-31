@@ -10,10 +10,6 @@ class SignUpSerializer(UserCreateSerializer):
     Used in Djoser as custom serializer
     """
 
-    class Meta:
-        model = CustomUser
-        fields = ('nickname', 'email', 'password')
-
     nickname = serializers.CharField(
         required=True,
         validators=[UniqueValidator(queryset=CustomUser.objects.all())]
@@ -28,6 +24,10 @@ class SignUpSerializer(UserCreateSerializer):
         validators=[validate_password],
         min_length=6
     )
+
+    class Meta:
+        model = CustomUser
+        fields = ('nickname', 'email', 'password')
 
 
 class GoogleLoginSerializer(serializers.Serializer):

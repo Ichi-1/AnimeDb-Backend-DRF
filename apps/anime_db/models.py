@@ -26,9 +26,6 @@ class Anime(models.Model):
     #
     comments = GenericRelation(Comment, object_id_field='commentable_id')
 
-    class Meta:
-        verbose_name = 'Anime'
-        verbose_name_plural = 'Animes'
 
     def __str__(self):
         return f'{self.title}'
@@ -50,3 +47,7 @@ class Anime(models.Model):
     @property
     def path(self):
         return f'/animes/{self.pk}/'
+
+    class Meta:
+        verbose_name = 'Anime'
+        verbose_name_plural = 'Animes'
