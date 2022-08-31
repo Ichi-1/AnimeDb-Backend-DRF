@@ -1,3 +1,5 @@
+![Build Status](https://github.com/Ichi-1/AnimeDb-Backend-DRF/actions/workflows/check.yml/badge.svg?branch=main)
+
 ## Overview
 
 This is backend API for my current full-stack project inspired by [@shikimori](https://github.com/shikimori)

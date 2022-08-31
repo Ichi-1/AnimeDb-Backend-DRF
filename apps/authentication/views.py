@@ -33,6 +33,9 @@ class UserCreateView(ModelViewSet):
             headers=headers
         )
 
+# TODO переработать вью социальны провайдеров. Слишком много return
+# TODO "post" has 5 returns that exceeds max allowed 3
+
 
 class GoogleLoginAPIView(GenericAPIView):
     serializer_class = GoogleLoginSerializer
