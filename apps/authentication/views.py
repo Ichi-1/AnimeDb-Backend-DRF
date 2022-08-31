@@ -38,7 +38,7 @@ class GoogleLoginAPIView(GenericAPIView):
     serializer_class = GoogleLoginSerializer
 
     def post(self, request):
-        UserModel = CustomUser.objects
+        user_model = CustomUser.objects
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user_id_token = serializer.validated_data["id_token"]
@@ -50,16 +50,16 @@ class GoogleLoginAPIView(GenericAPIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
-        candidate = UserModel.filter(email=id_token_valid["email"])
+        candidate = user_model.filter(email=id_token_valid["email"])
         if candidate.exists():
-            tokens = UserModel.get_tokens(candidate.first())
+            tokens = user_model.get_tokens(candidate.first())
             return Response(
                 {"tokens": tokens},
                 status=status.HTTP_201_CREATED
             )
 
         try:
-            social_user_tokens = UserModel.create_social_user(
+            social_user_tokens = user_model.create_social_user(
                 provider="google",
                 user_data=id_token_valid
             )
@@ -89,7 +89,7 @@ class GitHubLoginAPIView(GenericAPIView):
     serializer_class = GitHubLoginSerializer
 
     def post(self, request):
-        UserModel = CustomUser.objects
+        user_model = CustomUser.objects
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         code = serializer.validated_data["code"]
@@ -118,16 +118,16 @@ class GitHubLoginAPIView(GenericAPIView):
                 status=status.HTTP_409_CONFLICT
             )
 
-        candidate = UserModel.filter(email=user_info["email"])
+        candidate = user_model.filter(email=user_info["email"])
         if candidate.exists():
-            tokens = UserModel.get_tokens(candidate.first())
+            tokens = user_model.get_tokens(candidate.first())
             return Response(
                 {"tokens": tokens},
                 status=status.HTTP_201_CREATED
             )
 
         try:
-            social_user_tokens = UserModel.create_social_user(
+            social_user_tokens = user_model.create_social_user(
                 provider="github",
                 user_data=user_info
             )
