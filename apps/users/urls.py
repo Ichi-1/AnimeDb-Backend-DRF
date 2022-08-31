@@ -1,17 +1,11 @@
 from django.urls import path
 from djoser.views import UserViewSet as Djoser
 from .views import UserViewSet
+from .router import user_get_or_update
 
 app_name = 'users'
 
-# TODO В отдельный api_router выносятся вью содержащие более 1го метода в 1 роуте
-
-user_get_or_update = UserViewSet.as_view({
-        'get': 'retrieve',
-        'patch': 'partial_update',
-    }
-)
-
+#   TODO В router выносятся вью содержащие более 1го метода в роуте
 
 urlpatterns = [
     path('', UserViewSet.as_view({'get': 'list'})),
