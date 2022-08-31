@@ -5,7 +5,7 @@ from rest_framework import routers
 
 app_name = 'anime_db'
 
-#TODO В отдельный api_router выносятся вью содержащие более 1го метода в 1 роуте
+#   TODO В отдельный api_router выносятся вью содержащие более 1го метода в 1 роуте
 
 anime_list_or_detail = routers.SimpleRouter()
 anime_list_or_detail.register(r'anime', AnimeViewSet, basename='anime')

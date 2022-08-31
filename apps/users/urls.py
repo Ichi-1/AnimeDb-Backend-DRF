@@ -4,13 +4,13 @@ from .views import UserViewSet
 
 app_name = 'users'
 
-#TODO В отдельный api_router выносятся вью содержащие более 1го метода в 1 роуте
+# TODO В отдельный api_router выносятся вью содержащие более 1го метода в 1 роуте
 
 user_get_or_update = UserViewSet.as_view({
         'get': 'retrieve',
         'patch': 'partial_update',
     }
-)   
+)
 
 
 urlpatterns = [

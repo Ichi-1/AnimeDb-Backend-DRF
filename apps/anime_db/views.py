@@ -30,7 +30,7 @@ class AnimeViewSet(
     GET /anime/ - retrieve list of all anime contained in database;
     GET /anime/:id - retrieve instance of anime by id;
     """
-    queryset    = Anime.objects.all()
+    queryset = Anime.objects.all()
     permission_classes = [permissions.AllowAny]
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filterset_class = AnimeListFilter

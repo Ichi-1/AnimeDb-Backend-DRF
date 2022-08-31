@@ -6,7 +6,7 @@ from .views import GoogleLoginAPIView, GitHubLoginAPIView
 
 app_name = 'auth'
 
-#TODO В отдельный api_router выносятся вью содержащие более 1го метода в 1 роуте
+#   TODO В отдельный api_router выносятся вью содержащие более 1го метода в 1 роуте
 
 urlpatterns = [
     path('sign-up/', Djoser.as_view({'post': 'create'})),

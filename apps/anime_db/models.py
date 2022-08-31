@@ -26,7 +26,6 @@ class Anime(models.Model):
     #
     comments = GenericRelation(Comment, object_id_field='commentable_id')
 
-
     def __str__(self):
         return f'{self.title}'
 

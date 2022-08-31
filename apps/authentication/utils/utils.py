@@ -16,7 +16,6 @@ def validate_size_image(file_obj):
         raise ValidationError(f'Size limit: {mb_limit} Mb')
 
 
-
 def silly_username_generator():
     adjective = ["Tricky", "Lovely", "Chocolate", "Sloppy", "Firce", "Jolly", "Vengeful", "Outstanding", "Hungry", "Sleepy", "Blue", "Yellow", "Hidden", "Red", "Angry", "Charming", "Marvelous", "Amazing"]
     noun = ["Elephant", "Platypus", "Duck", "Chimpanzee", "Kangaroo", "Crocodile", "Camel", "Tiger", "Lion", "Bear", "Panda", "Cat", "Koala", "Lizard", "Bunny", "Dolphin", "Mamoth"]

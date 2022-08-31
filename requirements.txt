@@ -1,6 +1,7 @@
 algoliasearch==2.6.2
 algoliasearch-django==2.0.0
 asgiref==3.5.2
+attrs==22.1.0
 backports.zoneinfo;python_version<"3.9"
 cachetools==5.2.0
 certifi==2022.6.15
@@ -25,6 +26,7 @@ djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
 drf-yasg==1.21.3
 flake8==5.0.4
+flake8-bugbear==22.8.23
 flake8-functions==0.0.7
 flake8-variables-names==0.0.5
 google-auth==2.10.0
@@ -38,6 +40,7 @@ mccabe==0.7.0
 mr-proper==0.0.7
 oauthlib==3.2.0
 packaging==21.3
+pep8-naming==0.13.2
 Pillow==9.2.0
 psycopg2-binary==2.9.3
 pyasn1==0.4.8
