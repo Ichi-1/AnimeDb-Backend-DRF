@@ -1,13 +1,19 @@
-from apps.authentication.models import CustomUser
-from rest_framework import status
+from apps.authentication.models import User
+from apps.anime_db.utils.paginator import TotalCountHeaderPagination
+from apps.anime_db.models import Anime
+from rest_framework import status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from .serializers import (
     UserListSerializer,
     UserMeRetrieveSerializer,
-    UserMeUpdateSerializer
+    UserMeUpdateSerializer,
+    UserFavouritesAddOrRemoveSerializer
 )
 from .mixins import UserPermissionsViewSet
+from django.shortcuts import get_object_or_404
 
 
 class UserViewSet(UserPermissionsViewSet):
@@ -16,7 +22,7 @@ class UserViewSet(UserPermissionsViewSet):
     GET /users/:id - retrieve users public profile;
     PATCH /users/:id - partial updating of user profile. Authorization header required.
     """
-    queryset = CustomUser.objects.all().order_by('-last_login')
+    queryset = User.objects.all().order_by('-last_login')
     parser_classes = [FormParser, MultiPartParser]
 
     def get_serializer_class(self):
@@ -38,3 +44,65 @@ class UserViewSet(UserPermissionsViewSet):
             )
         else:
             return super().partial_update(request, args, kwargs)
+
+
+class UserFavoritesView(ModelViewSet):
+    queryset = User
+    serializer_class = UserFavouritesAddOrRemoveSerializer
+    lookup_field = 'id'
+    pagination_class = TotalCountHeaderPagination
+    permission_cls = {
+        'add': [permissions.IsAuthenticated],
+        'remove': [permissions.IsAuthenticated],
+        # 'list': [permissions.AllowAny],
+    }
+
+    def get_permissions(self):
+        try:
+            return [
+                permission() for permission in self.permission_cls[self.action]
+            ]
+        except KeyError:
+            return [
+                permission() for permission in self.permission_classes
+            ]
+    
+
+    @action(name='add', detail=False, methods=['post'])
+    def add(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        anime = get_object_or_404(Anime, id=serializer.data['anime_id'])
+        user_favourites = anime.user_favourites.filter(id=request.user.id)
+
+        if user_favourites.exists():
+            return Response(
+                {'detail': 'Already added to favourites. Use DELETE method to remove'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            anime.user_favourites.add(request.user)
+            return Response(
+                {'success': 'Anime was added to favourites'},
+                status=status.HTTP_200_OK
+            )
+
+    @action(name='remove', detail=False, methods=['delete'])
+    def remove(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        anime = get_object_or_404(Anime, id=serializer.data['anime_id'])
+        user_favourites = anime.user_favourites.filter(id=request.user.id)
+
+
+        if user_favourites.exists():
+            anime.user_favourites.remove(request.user)
+            return Response(
+                {'detail': 'Anime was removed from favourites'},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    def list(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)

@@ -1,10 +1,11 @@
+from apps.authentication.models import User
 from django.contrib import admin
-from .models import CustomUser
 from django.contrib.auth.admin import UserAdmin
 
 
+
 class UserAdminConfig(UserAdmin):
-    model = CustomUser
+    model = User
 
     list_filter = ('nickname', 'auth_provider', 'is_active', 'is_staff')
     list_display = (
@@ -33,4 +34,4 @@ class UserAdminConfig(UserAdmin):
     )
 
 
-admin.site.register(CustomUser, UserAdminConfig)
+admin.site.register(User, UserAdminConfig)

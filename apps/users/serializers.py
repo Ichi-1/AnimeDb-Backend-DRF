@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from apps.authentication.models import CustomUser
+from apps.authentication.models import User
 
 
 class UserListSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = (
             'id',
             'nickname',
@@ -26,7 +26,7 @@ class UserMeRetrieveSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = (
             'id',
             'nickname',
@@ -51,5 +51,9 @@ class UserMeUpdateSerializer(serializers.ModelSerializer):
     about = serializers.CharField(required=False)
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('avatar', 'gender', 'birthdate', 'about')
+
+
+class UserFavouritesAddOrRemoveSerializer(serializers.Serializer):
+    anime_id = serializers.IntegerField()

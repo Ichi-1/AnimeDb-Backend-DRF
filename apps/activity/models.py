@@ -1,7 +1,9 @@
-from apps.authentication.models import CustomUser
-from django.contrib.contenttypes.fields import GenericForeignKey
+from apps.authentication.models import User
+from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+
 
 
 class Comment(models.Model):
@@ -10,41 +12,66 @@ class Comment(models.Model):
     reviews, anime, users profile etc.;
     """
     author = models.ForeignKey(
-        CustomUser,
+        User,
         on_delete=models.DO_NOTHING,
         related_name='comments'
     )
-    body = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    body            = models.TextField(blank=True)
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)
     #
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    commentable_id = models.PositiveIntegerField()
-    commentable = GenericForeignKey('content_type', 'commentable_id')
+    content_type    = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    commentable     = GenericForeignKey('content_type', 'commentable_id')
+    commentable_id  = models.PositiveIntegerField()
 
     def __str__(self):
         return f'comment_id: {self.id}, commentable: {self.commentable}'
 
 
-# class Review(models.Model):
 
-#     SANTIMENT = (
-#         ('Positive', 'Positive')
-#         ('Neutral', 'Neutral')
-#         ('Negative', 'Negative')
-#     )
+class Review(models.Model):
+    """
+    Main different from comment is "santiment" field.
 
-#     anime = models.ForeignKey(
-#         Anime,
-#         related_name='review',
-#         on_delete=models.CASCADE
-#     )
-#     author = models.ForeignKey(
-#         CustomUser,
-#         related_name='review_author',
-#         on_delete=models.CASCADE
-#     )
-#     body = models.TextField()
-#     santiment = models.CharField(choices=SANTIMENT, max_length=10)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+    A review is a statement based on the expression of a personal 
+    emotional and evaluative attitude to a viewed or read title. 
+    (This is an opinion about the title, analysis, analysis, evaluation)
+    """
+
+    SANTIMENT = (
+        ('Positive', 'Positive'),
+        ('Neutral', 'Neutral'),
+        ('Negative', 'Negative'),
+    )
+
+    anime = models.ForeignKey(
+        'anime_db.Anime',
+        blank=True,
+        null=True,
+        related_name='anime_review',
+        on_delete=models.CASCADE,
+    )
+    manga = models.ForeignKey(
+        'manga_db.Manga',
+        blank=True,
+        null=True,
+        related_name='manga_review',
+        on_delete=models.CASCADE,
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='review_author',
+        on_delete=models.DO_NOTHING,
+    )
+    body              = models.TextField()
+    comments          = GenericRelation(Comment, object_id_field='commentable_id')
+    santiment         = models.CharField(choices=SANTIMENT, max_length=10)
+    votes_up_count    = models.IntegerField()
+    votes_down_count  = models.IntegerField()
+    created_at        = models.DateTimeField(auto_now_add=True)
+    updated_at        = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return (f"Author: {self.author.nickname}, "
+                f"Reviewable: {self.manga.title if self.manga != None else self.anime.title}")

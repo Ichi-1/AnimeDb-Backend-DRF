@@ -1,4 +1,4 @@
-from apps.activity.models import Comment
+from apps.activity.models import Comment, Review
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, generics, permissions, viewsets, status
@@ -17,7 +17,8 @@ from .serializers import (
 from apps.activity.serializers import (
     CommentCreateSerializer,
     CommentUpdateSerializer,
-    CommentsListSerializer
+    CommentsListSerializer,
+    ReviewListSerializer
 )
 
 
@@ -172,3 +173,32 @@ class AnimeCommentViewSet(viewsets.ModelViewSet):
 
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class AnimeReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review
+    permission_cls = {
+        'list': [permissions.AllowAny],
+        'create': [permissions.IsAuthenticated],
+        'partial_update': [permissions.IsAuthenticated],
+        'destroy': [permissions.IsAuthenticated],
+    }
+
+    def get_permissions(self):
+        try:
+            return [
+                permission() for permission in self.permission_cls[self.action]
+            ]
+        except KeyError:
+            return [
+                permission() for permission in self.permission_classes
+            ]
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ReviewListSerializer
+
+    def list(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        return Response(status=status.HTTP_100_CONTINUE)

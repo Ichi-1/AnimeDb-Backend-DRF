@@ -36,9 +36,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     # my apps
-    'apps.anime_db',
     'apps.activity',
     'apps.authentication',
+    'apps.anime_db',
+    'apps.manga_db',
     'apps.users',
 ]
 
@@ -89,7 +90,7 @@ DATABASES = {
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'authentication.CustomUser'
+AUTH_USER_MODEL = 'authentication.User'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

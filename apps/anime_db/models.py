@@ -1,7 +1,7 @@
 from apps.activity.models import Comment
+# from apps.authentication.models import CustomUser
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
-
 
 class Anime(models.Model):
     id               = models.AutoField(primary_key=True)
@@ -23,7 +23,9 @@ class Anime(models.Model):
     voice_actors     = models.TextField(verbose_name='Voice Actors', null=True)
     year             = models.IntegerField(verbose_name='Release year', null=True)
     year_end         = models.IntegerField(verbose_name='Airing end year', null=True)
-    #
+    # m2m user favourites anime
+    # user_favourites  = models.ManyToManyField(CustomUser, related_name='user_favourites', blank=True)
+    # generic comments table
     comments = GenericRelation(Comment, object_id_field='commentable_id')
 
     def __str__(self):

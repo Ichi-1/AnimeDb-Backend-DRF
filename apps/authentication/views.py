@@ -3,7 +3,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from .models import CustomUser
+from .models import User
 from .providers.google import GoogleService
 from .providers.github import GitHubService
 from .serializers import (
@@ -12,7 +12,7 @@ from .serializers import (
 
 
 class UserCreateView(ModelViewSet):
-    queryset = CustomUser.objects.all()
+    queryset = User.objects.all()
     serializer_class = SignUpSerializer
 
     """I refusede to use custom ModelViewSet because
@@ -24,7 +24,7 @@ class UserCreateView(ModelViewSet):
     def create(self, request):
         user = self.serializer_class(data=request.data)
         user.is_valid(raise_exception=True)
-        CustomUser.objects.create_user(**user.validated_data)
+        User.objects.create_user(**user.validated_data)
 
         headers = self.get_success_headers(user.data)
         return Response(
@@ -41,7 +41,7 @@ class GoogleLoginAPIView(GenericAPIView):
     serializer_class = GoogleLoginSerializer
 
     def post(self, request):
-        user_model = CustomUser.objects
+        user_model = User.objects
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user_id_token = serializer.validated_data["id_token"]
@@ -92,7 +92,7 @@ class GitHubLoginAPIView(GenericAPIView):
     serializer_class = GitHubLoginSerializer
 
     def post(self, request):
-        user_model = CustomUser.objects
+        user_model = User.objects
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         code = serializer.validated_data["code"]

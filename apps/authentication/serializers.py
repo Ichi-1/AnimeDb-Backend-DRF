@@ -1,4 +1,4 @@
-from apps.authentication.models import CustomUser
+from apps.authentication.models import User
 from django.contrib.auth.password_validation import validate_password
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
@@ -12,11 +12,11 @@ class SignUpSerializer(UserCreateSerializer):
 
     nickname = serializers.CharField(
         required=True,
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
+        validators=[UniqueValidator(queryset=User.objects.all())]
     )
     email = serializers.EmailField(
         required=True,
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
+        validators=[UniqueValidator(queryset=User.objects.all())]
     )
     password = serializers.CharField(
         write_only=True,
@@ -26,7 +26,7 @@ class SignUpSerializer(UserCreateSerializer):
     )
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('nickname', 'email', 'password')
 
 
