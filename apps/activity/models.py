@@ -66,8 +66,6 @@ class Review(models.Model):
     body              = models.TextField()
     comments          = GenericRelation(Comment, object_id_field='commentable_id')
     santiment         = models.CharField(choices=SANTIMENT, max_length=10)
-    votes_up_count    = models.IntegerField()
-    votes_down_count  = models.IntegerField()
     created_at        = models.DateTimeField(auto_now_add=True)
     updated_at        = models.DateTimeField(auto_now=True)
 
@@ -75,3 +73,22 @@ class Review(models.Model):
     def __str__(self):
         return (f"Author: {self.author.nickname}, "
                 f"Reviewable: {self.manga.title if self.manga != None else self.anime.title}")
+
+
+
+# class Favorites(models.Model):
+
+#     FAVORITES_TYPE = (
+#         ('manga', 'manga_db.Manga'),
+#         ('anime', 'anime_db.Anime')
+#     )
+
+#     user = models.ForeignKey(
+#         settings.AUTH_USER_MODEL,
+#         related_name='favorites',
+#         on_delete=models.CASCADE
+#     )
+#     favorites_type    = models.ForeignKey(choices=FAVORITES_TYPE, max_length=5, null=False, on_delete=)
+#     favorites_id      = models.IntegerField('self.favorites_type.pk', null=False)
+#     created_at        = models.DateTimeField(auto_now_add=True)
+#     updated_at        = models.DateTimeField(auto_now=True)

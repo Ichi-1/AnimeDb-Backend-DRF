@@ -1,16 +1,12 @@
 from apps.anime_db.models import Anime
 from apps.authentication.models import User
 from generic_relations.relations import GenericRelatedField
-from rest_framework.serializers import (
-    ModelSerializer,
-    SerializerMethodField,
-    ValidationError
-)
+from rest_framework import serializers
 from .models import Comment, Review
 
 
-class CommentAuthorSerializer(ModelSerializer):
-    avatar_url = SerializerMethodField()
+class CommentAuthorSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
 
     def get_avatar_url(self, user):
         if user.avatar:
@@ -22,7 +18,7 @@ class CommentAuthorSerializer(ModelSerializer):
         fields = ('id', 'nickname', 'avatar_url', )
 
 
-class CommentsListSerializer(ModelSerializer):
+class CommentsListSerializer(serializers.ModelSerializer):
 
     author = GenericRelatedField({
         User: CommentAuthorSerializer(),
@@ -33,7 +29,7 @@ class CommentsListSerializer(ModelSerializer):
         fields = ('author', 'id', 'body', 'created_at', 'updated_at')
 
 
-class CommentCreateSerializer(ModelSerializer):
+class CommentCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, anime_id):
         author = User.objects.get(id=validated_data['author'])
@@ -43,7 +39,7 @@ class CommentCreateSerializer(ModelSerializer):
         try:
             Comment(author=author, commentable=commentable, body=body).save()
         except Exception:
-            raise ValidationError(
+            raise serializers.ValidationError(
                 "Error during comment creation. Area: serializer"
             )
 
@@ -52,7 +48,7 @@ class CommentCreateSerializer(ModelSerializer):
         fields = ('author', 'body')
 
 
-class CommentUpdateSerializer(ModelSerializer):
+class CommentUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, validated_data, comment):
         body = validated_data['body']
@@ -67,7 +63,7 @@ class CommentUpdateSerializer(ModelSerializer):
 
 
 
-class ReviewListSerializer(ModelSerializer):
+class ReviewListSerializer(serializers.ModelSerializer):
 
     author = GenericRelatedField({
         User: CommentAuthorSerializer(),
@@ -80,8 +76,17 @@ class ReviewListSerializer(ModelSerializer):
             'id', 
             'body',
             'santiment',
-            'votes_up_count',
-            'votes_down_count',
             'created_at', 
             'updated_at'
         )
+
+
+class FavoritesSerializer(serializers.Serializer):
+    FAVORITES_TYPE = (
+        ('manga', 'manga_db.Manga'),
+        ('anime', 'anime_db.Anime')
+    )
+    
+    favorites_type = serializers.ChoiceField(choices=FAVORITES_TYPE)
+    favorites_id = serializers.IntegerField()
+

@@ -10,7 +10,7 @@ user_get_or_update = UserViewSet.as_view(
 
 user_favorites_router = UserFavoritesView.as_view(
     {
-        'post': 'add_or_remove',
+        'post': 'create',
         'get': 'list',
     }
 )

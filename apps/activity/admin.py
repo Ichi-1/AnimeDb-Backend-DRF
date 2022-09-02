@@ -18,8 +18,6 @@ class ReviewAdminConfig(admin.ModelAdmin):
         'author',
         'body',
         'santiment',
-        'votes_up_count',
-        'votes_down_count',
         'created_at',
         'updated_at',
     )

@@ -18,10 +18,9 @@ class AnimeListSerializer(ModelSerializer):
             'title',
             'poster_image',
             'kind',
+            'average_rating',
             'year',
             'tags',
-            'average_rating',
-            'path',
         )
 
 

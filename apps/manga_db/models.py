@@ -1,21 +1,33 @@
+from apps.activity.models import Comment
 from django.db import models
-# from apps.authentication.models import CustomUser
+from django.contrib.contenttypes.fields import GenericRelation
+
 
 class Manga(models.Model):
+
     STATUS = (
         ('Finished', 'Finished'),
         ('On Hiatus', 'On Hiatus'),
         ('Publishing', 'Publishing'),
+        ('Discontinued', 'Discontinued'),
     )
 
+    id               = models.AutoField(primary_key=True)
+    author           = models.TextField(verbose_name='Manga Author')
     average_rating   = models.FloatField(verbose_name='Average Rating')
+    chapters         = models.PositiveIntegerField(verbose_name='Chapters count')
     description      = models.TextField(verbose_name='Description')
+    media_type       = models.CharField(max_length=20)
+    picture_main     = models.URLField(max_length=255, verbose_name='Poster URL')
+    status           = models.CharField(choices=STATUS, max_length=20)
+    tags             = models.TextField(verbose_name='Genres Tags', null=True)
     title            = models.CharField(max_length=255, verbose_name='English title')
     title_jp         = models.CharField(max_length=255, verbose_name='Japan title')
-    picture_main     = models.URLField(max_length=255, verbose_name='Poster URL')
-    status           = models.CharField(choices=STATUS, max_length=10)
-    volumes          = models.PositiveIntegerField()
-    chapters         = models.PositiveIntegerField()
-    year_start       = models.IntegerField(verbose_name='Start year', null=True)
-    genre            = models.CharField(max_length=15, verbose_name='Essential genre')
-    # user_favourites  = models.ManyToManyField(CustomUser, related_name='favourites', blank=True)
+    volumes          = models.PositiveIntegerField(verbose_name='Volumes count')
+    year_end         = models.DateTimeField(verbose_name='End year', null=True)
+    year_start       = models.DateTimeField(verbose_name='Start year', null=True)
+    comments         = GenericRelation(Comment, object_id_field='commentable_id')
+
+
+    def __str__(self):
+        return self.title

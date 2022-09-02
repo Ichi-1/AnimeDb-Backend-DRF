@@ -22,3 +22,22 @@ FROM '/data/animeDB.csv'
 DELIMITER ','
 CSV HEADER;
 
+
+COPY manga_db_manga(
+    author,
+    average_rating,
+    chapters,
+    description,
+    media_type,
+    picture_main,
+    status,
+    tags,
+    title,
+    title_jp,
+    volumes,
+    year_end,
+    year_start
+)
+FROM '/data/mangaDB.csv'
+DELIMITER ','
+CSV HEADER;

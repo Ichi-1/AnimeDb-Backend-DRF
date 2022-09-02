@@ -50,3 +50,54 @@ db.Joined.updateMany({}, {$rename: {
         "title_en": "title",
         "average_ratingr": "average_rating"
 }},)
+
+
+
+{   
+
+    "_id": 0,
+    "author": "$linked.authors",
+    "averate_rating": "$linked.mean",
+    "chapters": "$linked.num_chapters",
+    "Synopsis": 1,
+    "media_type": "$linked.media_type",
+    "picture_main": "$linked.main_picture",
+    "Status": 1,
+    "tags": "$linked.genres",
+    "Title": 1,
+    "Title_Japanese": 1,
+    "volumes": "$linked.num_volumes",
+    "year_start": "$linked.start_date",
+    "year_end": "$linked.end_date",
+
+}
+
+db.manga_joined.updateMany({}, {$rename: {
+    "Synopsis": "description",
+    "Status": "status",
+    "Title": "title",
+    "Title_Japanese": "title_jp",
+
+}},)
+
+
+//  Flatter nested object
+
+{   
+
+    "_id": 0,
+    "author": 1,
+    "averate_rating": 1,
+    "chapters": 1,
+    "description": 1,
+    "media_type": 1,
+    "picture_main": 1,
+    "status": "$linked.Status",
+    "tags": 1,
+    "title": 1,
+    "title_jp": 1,
+    "volumes": 1,
+    "year_start": 1,
+    "year_end": 1,
+
+}

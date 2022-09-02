@@ -28,7 +28,7 @@ class AnimeViewSet(
     viewsets.GenericViewSet
 ):
     """
-    GET /anime/ - retrieve list of all anime contained in database;
+    GET /anime/ - retrieve list of all anime contained in database; Order by: average_rating
     GET /anime/:id - retrieve instance of anime by id;
     """
     queryset = Anime.objects.all()
