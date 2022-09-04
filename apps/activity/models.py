@@ -27,6 +27,7 @@ class Comment(models.Model):
     def __str__(self):
         return f'comment_id: {self.id}, commentable: {self.commentable}'
 
+    
 
 
 class Review(models.Model):

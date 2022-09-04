@@ -21,13 +21,12 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
     path('api/v1/auth/', include('apps.authentication.urls', namespace='auth')),
     path('api/v1/users/', include('apps.users.urls', namespace='users')),
     #
     path('api/v1/', include('apps.anime_db.urls', namespace='anime_db')),
     path('api/v1/', include('apps.manga_db.urls', namespace='manga_db')),
-
-    # swagger documentating
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/v1/', include('apps.activity.urls', namespace='activity')),
 ]

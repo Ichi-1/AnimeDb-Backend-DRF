@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, Serializer, IntegerField
+from rest_framework.serializers import ModelSerializer
 from .models import Anime
 
 

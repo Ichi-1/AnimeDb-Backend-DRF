@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from djoser.views import UserViewSet as Djoser
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from .utils.tokens import MyTokenObtainPairView
@@ -19,4 +19,5 @@ urlpatterns = [
 
     path('social/google/', GoogleLoginAPIView.as_view()),
     path('social/github/', GitHubLoginAPIView.as_view()),
+    # path('djoser/', include('djoser.urls'))
 ]

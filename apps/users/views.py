@@ -1,20 +1,14 @@
-from apps.activity.serializers import FavoritesSerializer
 from apps.authentication.models import User
-from apps.anime_db.utils.paginator import TotalCountHeaderPagination
-from apps.anime_db.models import Anime
-from rest_framework import status, permissions
+from apps.anime_db.utils.paging import TotalCountHeaderPagination
+from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework.decorators import action
 from .serializers import (
     UserListSerializer,
     UserMeRetrieveSerializer,
     UserMeUpdateSerializer,
-    UserFavouritesAddOrRemoveSerializer
 )
 from .mixins import UserPermissionsViewSet
-from django.shortcuts import get_object_or_404
 
 
 class UserViewSet(UserPermissionsViewSet):
@@ -47,24 +41,27 @@ class UserViewSet(UserPermissionsViewSet):
             return super().partial_update(request, args, kwargs)
 
 
-class UserFavoritesView(ModelViewSet):
-    queryset = User
-    serializer_class = FavoritesSerializer
-    lookup_field = 'id'
-    pagination_class = TotalCountHeaderPagination
-    # permission_cls = {
-    #     'add': [permissions.IsAuthenticated],
-    #     'remove': [permissions.IsAuthenticated],
-    #     # 'list': [permissions.AllowAny],
-    # }
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user_id = kwargs.get('id')
-        favorites_type = serializer.data['favorites_type']
-        user = get_object_or_404(User, id=user_id)
-        print(user.favourites_anime.all())
+
+
+# class UserFavoritesView(ModelViewSet):
+#     queryset = User
+#     serializer_class = FavoritesSerializer
+#     lookup_field = 'id'
+#     pagination_class = TotalCountHeaderPagination
+#     # permission_cls = {
+#     #     'add': [permissions.IsAuthenticated],
+#     #     'remove': [permissions.IsAuthenticated],
+#     #     # 'list': [permissions.AllowAny],
+#     # }
+
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user_id = kwargs.get('id')
+#         favorites_type = serializer.data['favorites_type']
+#         user = get_object_or_404(User, id=user_id)
+#         print(user.favourites_anime.all())
         
         # ? Может использовать switch case ?
 

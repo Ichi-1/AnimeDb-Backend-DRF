@@ -1,4 +1,5 @@
-from .views import UserViewSet, UserFavoritesView
+from .views import UserViewSet
+
 
 user_get_or_update = UserViewSet.as_view(
     {
@@ -6,12 +7,3 @@ user_get_or_update = UserViewSet.as_view(
         'patch': 'partial_update',
     }
 )
-
-
-user_favorites_router = UserFavoritesView.as_view(
-    {
-        'post': 'create',
-        'get': 'list',
-    }
-)
-
