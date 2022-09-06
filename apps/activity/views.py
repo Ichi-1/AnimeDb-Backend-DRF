@@ -3,12 +3,13 @@ from apps.manga_db.models import Manga
 from apps.authentication.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.response import Response
-from .models import Comment
+from .models import Comment, Review
 from .serializers import (
     CommentCreateSerializer,
     CommentUpdateSerializer,
+    ReviewPolymorhicSerializer
 )
 
 
@@ -83,3 +84,11 @@ class CommentViewSet(ModelViewSet):
 
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    
+class ReviewViewSet(ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewPolymorhicSerializer
+
+    def list(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)

@@ -2,7 +2,8 @@ from apps.authentication.models import User
 from generic_relations.relations import GenericRelatedField
 from rest_framework import serializers, status
 from rest_framework.response import Response
-from .models import Comment, Review
+from rest_polymorphic.serializers import PolymorphicSerializer
+from .models import Comment, Review, MangaReview, AnimeReview
 from django.core.validators import MinLengthValidator
 
 
@@ -72,32 +73,45 @@ class CommentUpdateSerializer(serializers.ModelSerializer):
 
 
 
+class ReviewSerializer(serializers.ModelSerializer):
+
+    author = AuthorSerializer()
+    body = serializers.CharField(validators=[MinLengthValidator(100)])
+
+    class Meta:
+        model = Review
+        fields = ("author", "body", "santiment")
 
 
-# class ReviewListSerializer(serializers.ModelSerializer):
+class AnimeReviewSerialize(serializers.ModelSerializer):
 
-#     author = GenericRelatedField({
-#         User: AuthorSerializer(),
-#     })
+    author = AuthorSerializer()
+    body = serializers.CharField(validators=[MinLengthValidator(100)])
 
-#     class Meta:
-#         model = Review
-#         fields = (
-#             'author', 
-#             'id', 
-#             'body',
-#             'santiment',
-#             'created_at', 
-#             'updated_at'
-#         )
+    class Meta:
+        model = AnimeReview
+        fields = ("anime", "author", "body", "santiment")
 
 
-# class FavoritesSerializer(serializers.Serializer):
-#     FAVORITES_TYPE = (
-#         ('manga', 'manga_db.Manga'),
-#         ('anime', 'anime_db.Anime')
-#     )
+class MangaReviewSerialize(serializers.ModelSerializer):
+
+    author = AuthorSerializer()
+    body = serializers.CharField(validators=[MinLengthValidator(100)])
+
+    class Meta:
+        model = MangaReview
+        fields = ("manga", "author", "body", "santiment")
     
-#     favorites_type = serializers.ChoiceField(choices=FAVORITES_TYPE)
-#     favorites_id = serializers.IntegerField()
 
+class ReviewPolymorhicSerializer(PolymorphicSerializer):
+    resource_type_field_name = "review_type"
+
+    model_serializer_mapping = {
+        Review: ReviewSerializer,
+        AnimeReview: AnimeReviewSerialize,
+        MangaReview: MangaReviewSerialize
+    }
+
+
+    def to_resource_type(self, model_or_instance):
+        return model_or_instance._meta.object_name.lower()
