@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Comment, Review, AnimeReview, MangaReview
 from polymorphic.admin import (
-    PolymorphicParentModelAdmin, 
+    PolymorphicParentModelAdmin,
     PolymorphicChildModelAdmin
 )
 
@@ -16,12 +16,13 @@ class CommentAdminConfig(admin.ModelAdmin):
         'created_at',
     )
 
+
 admin.site.register(Comment, CommentAdminConfig)
+
 
 class ReviewChildAdmin(PolymorphicChildModelAdmin):
     """ Base admin class for all child models """
-    base_model = Review # Optional, explicitly set here.
-
+    base_model = Review  # Optional, explicitly set here.
 
 
 @admin.register(AnimeReview)
@@ -35,9 +36,8 @@ class MangaReview(AnimeReviewAdmin):
     base_model = MangaReview
 
 
-
 @admin.register(Review)
 class ReviewParentAdmin(PolymorphicParentModelAdmin):
     """ The parent model admin """
-    base_model = Review # Optional, explicitly set here.
+    base_model = Review  # Optional, explicitly set here.
     child_models = [AnimeReview, MangaReview]

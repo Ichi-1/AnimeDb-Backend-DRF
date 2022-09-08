@@ -1,5 +1,4 @@
 from apps.authentication.models import User
-from apps.anime_db.utils.paging import TotalCountHeaderPagination
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
@@ -41,9 +40,6 @@ class UserViewSet(UserPermissionsViewSet):
             return super().partial_update(request, args, kwargs)
 
 
-
-
-
 # class UserFavoritesView(ModelViewSet):
 #     queryset = User
 #     serializer_class = FavoritesSerializer
@@ -62,10 +58,8 @@ class UserViewSet(UserPermissionsViewSet):
 #         favorites_type = serializer.data['favorites_type']
 #         user = get_object_or_404(User, id=user_id)
 #         print(user.favourites_anime.all())
-        
+
         # ? Может использовать switch case ?
-
-
 
     # def get_permissions(self):
     #     try:
@@ -76,7 +70,6 @@ class UserViewSet(UserPermissionsViewSet):
     #         return [
     #             permission() for permission in self.permission_classes
     #         ]
-    
 
     # @action(name='add', detail=False, methods=['post'])
     # def add(self, request, *args, **kwargs):
@@ -104,7 +97,6 @@ class UserViewSet(UserPermissionsViewSet):
     #     anime = get_object_or_404(Anime, id=serializer.data['anime_id'])
     #     user_favourites = anime.user_favourites.filter(id=request.user.id)
 
-
     #     if user_favourites.exists():
     #         anime.user_favourites.remove(request.user)
     #         return Response(
@@ -113,6 +105,6 @@ class UserViewSet(UserPermissionsViewSet):
     #         )
     #     else:
     #         return Response(status=status.HTTP_404_NOT_FOUND)
-    
+
     # def list(self, request, *args, **kwargs):
     #     serializer = self.get_serializer(data=request.data)

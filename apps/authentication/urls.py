@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from djoser.views import UserViewSet as Djoser
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from .utils.tokens import MyTokenObtainPairView

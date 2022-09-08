@@ -17,7 +17,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'nickname'
     REQUIRED_FIELDS = ['email']
     GENDERS = (('M', 'Male'), ('F', 'Female'))
-    
+
     objects = CustomManager()
 
     avatar = models.ImageField(
@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active         = models.BooleanField(default=False)
     is_staff          = models.BooleanField(default=False)
     read_only         = models.BooleanField(default=False)
-    # favouires  
+    # favouires
     favourites_anime  = models.ManyToManyField('anime_db.Anime', related_name='favourites_anime', blank=True)
     favourites_manga  = models.ManyToManyField('manga_db.Manga', related_name='favourites_anime', blank=True)
 

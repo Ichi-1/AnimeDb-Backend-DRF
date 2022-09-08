@@ -17,7 +17,7 @@ class MangaViewSet(
     viewsets.GenericViewSet
 ):
     """
-    GET /manga/ - retrieve list of all manga contained in database; 
+    GET /manga/ - retrieve list of all manga contained in database;
     GET /manga/:id - retrieve instance of manga by id;
     orderBy: average_rating
     """

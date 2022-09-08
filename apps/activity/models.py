@@ -1,4 +1,3 @@
-from weakref import proxy
 from apps.authentication.models import User
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -28,15 +27,13 @@ class Comment(models.Model):
     def __str__(self):
         return f'comment_id: {self.id}, commentable: {self.commentable}'
 
-    
-
 
 class Review(PolymorphicModel):
     """
     Main difference from comment is "santiment" field.
 
-    A review is a statement based on the expression of a personal 
-    emotional and evaluative attitude to a viewed or read title. 
+    A review is a statement based on the expression of a personal
+    emotional and evaluative attitude to a viewed or read title.
     (This is an opinion about the title, analysis, analysis, evaluation)
     """
     SANTIMENT = (
@@ -79,9 +76,6 @@ class MangaReview(Review):
         related_name='manga_review',
         on_delete=models.CASCADE,
     )
-
-
-
 
 
 # class Favorites(models.Model):

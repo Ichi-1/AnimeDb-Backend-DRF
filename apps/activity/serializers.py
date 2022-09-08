@@ -57,7 +57,6 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         fields = ('author', 'body', 'commentable_type', 'commentable_id')
 
 
-
 class CommentUpdateSerializer(serializers.ModelSerializer):
 
     body = serializers.CharField(max_length=500, validators=[MinLengthValidator(20)])
@@ -70,7 +69,6 @@ class CommentUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('body',)
-
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -101,7 +99,7 @@ class MangaReviewSerialize(serializers.ModelSerializer):
     class Meta:
         model = MangaReview
         fields = ("manga", "author", "body", "santiment")
-    
+
 
 class ReviewPolymorhicSerializer(PolymorphicSerializer):
     resource_type_field_name = "review_type"
@@ -111,7 +109,6 @@ class ReviewPolymorhicSerializer(PolymorphicSerializer):
         AnimeReview: AnimeReviewSerialize,
         MangaReview: MangaReviewSerialize
     }
-
 
     def to_resource_type(self, model_or_instance):
         return model_or_instance._meta.object_name.lower()

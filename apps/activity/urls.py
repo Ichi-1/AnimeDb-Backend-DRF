@@ -19,6 +19,6 @@ urlpatterns = [
     # path('reviews/anime') GET list POST
     # path('reviews/manga') GET list POST
     # path('reviews/:id) GET retrieve PUT DELETE
-    # path('reviews/:id/comments) GET list POST 
-    # path('reviews/:id/comments/:id) GET list POST 
+    # path('reviews/:id/comments) GET list POST
+    # path('reviews/:id/comments/:id) GET list POST
 ]

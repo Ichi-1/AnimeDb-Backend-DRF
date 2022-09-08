@@ -79,4 +79,3 @@ class AnimeCommentsViewSet(viewsets.ModelViewSet):
         if not serializer.data:
             return Response(status=status.HTTP_404_NOT_FOUND)
         return self.get_paginated_response(serializer.data)
-

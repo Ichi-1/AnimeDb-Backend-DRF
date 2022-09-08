@@ -3,6 +3,7 @@ from rest_framework.response import Response
 
 # TODO Customize reponse params. Add "commentable": commetnable.title
 
+
 class CommentListPaginator(PageNumberPagination):
 
     def get_paginated_response(self, data):

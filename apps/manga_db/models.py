@@ -28,6 +28,5 @@ class Manga(models.Model):
     year_start       = models.DateTimeField(verbose_name='Start year', null=True)
     comments         = GenericRelation(Comment, object_id_field='commentable_id')
 
-
     def __str__(self):
         return self.title

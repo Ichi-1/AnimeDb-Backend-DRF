@@ -1,7 +1,8 @@
 from django.urls import path
 from djoser.views import UserViewSet as Djoser
 from .views import UserViewSet
-from .router import user_get_or_update # user_favorites_router
+from .router import user_get_or_update
+# user_favorites_router
 
 app_name = 'users'
 
