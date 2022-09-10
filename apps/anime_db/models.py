@@ -22,8 +22,8 @@ class Anime(models.Model):
     title_jp         = models.CharField(max_length=255, verbose_name='Japan title')
     total_length     = models.IntegerField(verbose_name='Total length')
     voice_actors     = models.TextField(verbose_name='Voice Actors', null=True)
-    year             = models.IntegerField(verbose_name='Release year', null=True)
-    year_end         = models.IntegerField(verbose_name='Airing end year', null=True)
+    year             = models.PositiveIntegerField(verbose_name='Release year', null=True)
+    year_end         = models.PositiveIntegerField(verbose_name='Airing end year', null=True)
     # m2m user favourites anime
     # user_favourites  = models.ManyToManyField(CustomUser, related_name='user_favourites', blank=True)
     # generic comments table

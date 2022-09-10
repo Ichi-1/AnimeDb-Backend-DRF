@@ -9,29 +9,8 @@ from .providers.github import GitHubService
 from .serializers import (
     GoogleLoginSerializer, GitHubLoginSerializer, SignUpSerializer
 )
+from drf_spectacular.utils import extend_schema
 
-
-class UserCreateView(ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = SignUpSerializer
-
-    """I refusede to use custom ModelViewSet because
-    i dont want to handling all steps of activation process.
-    Instead use Djoser package.
-    View just for test example.
-    """
-
-    def create(self, request):
-        user = self.serializer_class(data=request.data)
-        user.is_valid(raise_exception=True)
-        User.objects.create_user(**user.validated_data)
-
-        headers = self.get_success_headers(user.data)
-        return Response(
-            {"succes": "Activation link was sended"},
-            status=status.HTTP_201_CREATED,
-            headers=headers
-        )
 
 # TODO переработать вью социальны провайдеров. Слишком много return
 # TODO "post" has 5 returns that exceeds max allowed 3

@@ -8,6 +8,7 @@ from .router import (
 
 app_name = 'activity'
 
+#   TODO роутинг ModelViewSet выносится в отдельный router.py
 
 urlpatterns = [
     path("comments/", comment_create),

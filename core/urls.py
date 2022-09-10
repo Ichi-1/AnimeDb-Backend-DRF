@@ -3,7 +3,7 @@ from django.urls import include, path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -21,12 +21,20 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    # path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
-    path('api/v1/auth/', include('apps.authentication.urls', namespace='auth')),
-    path('api/v1/users/', include('apps.users.urls', namespace='users')),
+
+    # Spectacular
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
+
+    path('api/auth/', include('apps.authentication.urls', namespace='auth')),
+    path('api/users/', include('apps.users.urls', namespace='users')),
     #
-    path('api/v1/', include('apps.anime_db.urls', namespace='anime_db')),
-    path('api/v1/', include('apps.manga_db.urls', namespace='manga_db')),
-    path('api/v1/', include('apps.activity.urls', namespace='activity')),
+    path('api/', include('apps.anime_db.urls', namespace='anime_db')),
+    path('api/', include('apps.manga_db.urls', namespace='manga_db')),
+    path('api/', include('apps.activity.urls', namespace='activity')),
 ]

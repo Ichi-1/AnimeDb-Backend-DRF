@@ -3,7 +3,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.conf import settings
 from django.contrib.auth.models import update_last_login
 
-
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     @classmethod

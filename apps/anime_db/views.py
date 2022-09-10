@@ -2,9 +2,11 @@ from apps.activity.serializers import CommentsListSerializer
 from apps.activity.models import Comment
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from rest_framework import mixins, generics, permissions, viewsets, status
+from rest_framework import generics, permissions, viewsets, status
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from .models import Anime
 from .utils.algolia import perform_serach
@@ -18,15 +20,15 @@ from .serializers import (
 from apps.activity.paging import CommentListPaginator
 
 
-class AnimeViewSet(
-    mixins.RetrieveModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet
-):
-    """
-    GET /anime/ - retrieve list of all anime contained in database; Order by: average_rating
-    GET /anime/:id - retrieve instance of anime by id;
-    """
+@extend_schema_view(
+    list=extend_schema(
+        summary='Get anime list'
+    ),
+    retrieve=extend_schema(
+        summary='Get anime details'
+    )
+)
+class AnimeViewSet(ModelViewSet):
     queryset = Anime.objects.all()
     permission_classes = [permissions.AllowAny]
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
@@ -47,6 +49,10 @@ class AlgoliaIndexAPIView(generics.GenericAPIView):
     serializer_class = AnimeIndexSerializer
     queryset = Anime.objects.all()
 
+    @extend_schema(
+        summary='JSON example of Algolia Search Index Result',
+        description='Not for public use. Schema is not appropriate'
+    )
     def get(self, request):
         """
         Algolia index API for Anime Model
@@ -64,12 +70,10 @@ class AnimeCommentsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = CommentsListSerializer
 
+    @extend_schema(
+        summary='Get list of anime comments'
+    )
     def list(self, request, *args, **kwargs):
-        """
-        Query param - id of anime;
-        Retrieve list of all comments, related to anime instance;
-        orderBy: created_at;
-        """
         anime_id = kwargs.get('id')
         commentable_anime = get_object_or_404(Anime, id=anime_id)
         comments = commentable_anime.comments.all().order_by('created_at')

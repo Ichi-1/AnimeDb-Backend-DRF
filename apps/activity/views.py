@@ -8,16 +8,17 @@ from .models import Comment, Review
 from .serializers import (
     CommentCreateSerializer,
     CommentUpdateSerializer,
-    ReviewPolymorhicSerializer
+    ReviewPolymorhicSerializer,
 )
+
+from drf_spectacular.utils import extend_schema  # PolymorphicProxySerializer
 
 
 class CommentViewSet(ModelViewSet):
     """
-    Attention! Look for possible commentable_type in request params
     Availiable commentable_type: "Manga", "Anime"
     """
-    queryset = Comment
+    queryset = Comment.objects.all()
     lookup_field = "id"
     permission_classes = [permissions.IsAuthenticated]
 
@@ -26,9 +27,14 @@ class CommentViewSet(ModelViewSet):
             return CommentCreateSerializer
         if self.action == 'partial_update':
             return CommentUpdateSerializer
+        else:
+            return CommentCreateSerializer
 
+    @extend_schema(
+        summary='Create comment. Authorized Only',
+        description='Appropriate commentable type must be set responsibly and explicitly'
+    )
     def create(self, request, *args, **kwargs):
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -44,13 +50,13 @@ class CommentViewSet(ModelViewSet):
             commentable = get_object_or_404(Anime, id=commentable_id)
             serializer.create(commentable)
             return Response(status=status.HTTP_201_CREATED)
-
         return Response(status=status.HTTP_418_IM_A_TEAPOT)
 
+    @extend_schema(
+        summary='Update comment. Authorized Only',
+        description='User can update comment which he is the author'
+    )
     def partial_update(self, request, *args, **kwargs):
-        """
-         Authorization header required.
-        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -65,10 +71,11 @@ class CommentViewSet(ModelViewSet):
         serializer.update(comment)
         return Response(status=status.HTTP_200_OK)
 
+    @extend_schema(
+        summary='Delete comment. Authorized Only',
+        description='User can delete comment which he is the author'
+    )
     def destroy(self, request, *args, **kwargs):
-        """
-        Authorization header required.
-        """
         comment_id = kwargs.get('id')
         comment = get_object_or_404(Comment, id=comment_id)
 
@@ -83,9 +90,21 @@ class CommentViewSet(ModelViewSet):
 
 
 class ReviewViewSet(ModelViewSet):
+    """
+    Availiable review_type: "manga", "anime"
+    """
     queryset = Review.objects.all()
+    lookup_field = "id"
     serializer_class = ReviewPolymorhicSerializer
 
-    def list(self, request, *args, **kwargs):
-        pass
-        # serializer = self.get_serializer(data=request.data)
+    # @extend_schema(
+    #     request=PolymorphicProxySerializer(
+    #         component_name='review_type',
+    #         serializers=[
+    #             AnimeReviewSerializer, MangaReviewSerializer
+    #         ],
+    #         resource_type_field_name='review_type',
+    #     ),
+    # )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)

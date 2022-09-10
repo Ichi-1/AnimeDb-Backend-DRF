@@ -2,6 +2,7 @@ from apps.authentication.models import User
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from .serializers import (
     UserListSerializer,
     UserMeRetrieveSerializer,
@@ -10,12 +11,18 @@ from .serializers import (
 from .mixins import UserPermissionsViewSet
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary='Get users list'
+    ),
+    retrieve=extend_schema(
+        summary='Get user public profile'
+    ),
+    partial_update=extend_schema(
+        summary='Patch user profile. Authorized Only'
+    )
+)
 class UserViewSet(UserPermissionsViewSet):
-    """
-    GET /users/ - retrieve list of registred users;
-    GET /users/:id - retrieve users public profile;
-    PATCH /users/:id - partial updating of user profile. Authorization header required.
-    """
     queryset = User.objects.all().order_by('-last_login')
     parser_classes = [FormParser, MultiPartParser]
 

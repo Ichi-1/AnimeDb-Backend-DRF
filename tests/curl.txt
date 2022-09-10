@@ -107,3 +107,5 @@ curl -H "Authorization: token d4405a7a5b7bb8100cb2" https://api.github.com/user 
 
 
 
+curl -X 'POST' 'http://localhost:8000/api/v1/reviews/' \
+  -d '{ "anime": '1', "author": '1', "santiment": "Positive", "resourcetype": "animereview"}' | json

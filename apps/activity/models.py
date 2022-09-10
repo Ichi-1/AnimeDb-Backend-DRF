@@ -6,6 +6,13 @@ from django.db import models
 from polymorphic.models import PolymorphicModel
 
 
+SANTIMENT = (
+    ('Positive', 'Positive'),
+    ('Neutral', 'Neutral'),
+    ('Negative', 'Negative'),
+)
+
+
 class Comment(models.Model):
     """
     Entity represent comments of different commentable models:
@@ -36,11 +43,6 @@ class Review(PolymorphicModel):
     emotional and evaluative attitude to a viewed or read title.
     (This is an opinion about the title, analysis, analysis, evaluation)
     """
-    SANTIMENT = (
-        ('Positive', 'Positive'),
-        ('Neutral', 'Neutral'),
-        ('Negative', 'Negative'),
-    )
 
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -55,7 +57,14 @@ class Review(PolymorphicModel):
 
     def __str__(self):
         return (f"Author: {self.author.nickname}, "
-                f"Reviewable: {self.manga.title if self.manga != None else self.anime.title}")
+                f"Reviewable: {self.polymorphic_ctype}")
+
+    def get_reviewable_type(self):
+        """
+        Возвращает тип reviewable объекта
+        Варианты - anime, manga
+        """
+        return self.polymorphic_ctype
 
 
 class AnimeReview(Review):
@@ -94,3 +103,6 @@ class MangaReview(Review):
 #     favorites_id      = models.IntegerField('self.favorites_type.pk', null=False)
 #     created_at        = models.DateTimeField(auto_now_add=True)
 #     updated_at        = models.DateTimeField(auto_now=True)
+
+
+

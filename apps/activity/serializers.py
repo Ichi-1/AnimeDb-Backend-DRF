@@ -1,16 +1,20 @@
 from apps.authentication.models import User
-from generic_relations.relations import GenericRelatedField
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .models import Comment, Review, MangaReview, AnimeReview
 from django.core.validators import MinLengthValidator
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
+
+# from generic_relations.relations import GenericRelatedField
 
 
 class AuthorSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
 
-    def get_avatar_url(self, user):
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_avatar_url(self, user: dict) -> str:
         if user.avatar:
             return user.avatar.url
         return "No image assigned to object"
@@ -21,10 +25,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class CommentsListSerializer(serializers.ModelSerializer):
-
-    author = GenericRelatedField({
-        User: AuthorSerializer(),
-    })
+    author = AuthorSerializer()
 
     class Meta:
         model = Comment
@@ -71,44 +72,48 @@ class CommentUpdateSerializer(serializers.ModelSerializer):
         fields = ('body',)
 
 
-class ReviewSerializer(serializers.ModelSerializer):
-
-    author = AuthorSerializer()
-    body = serializers.CharField(validators=[MinLengthValidator(100)])
-
+class ReviewSerializer(serializers.Serializer):
+    """
+    Parent Review Serializer Schema
+    """
     class Meta:
         model = Review
-        fields = ("author", "body", "santiment")
+        fields = "__all__"
 
 
-class AnimeReviewSerialize(serializers.ModelSerializer):
-
-    author = AuthorSerializer()
+class AnimeReviewSerializer (serializers.ModelSerializer):
     body = serializers.CharField(validators=[MinLengthValidator(100)])
+    # child serializes should include resource_type_field_name to correct validation
+    review_type = serializers.CharField()
 
     class Meta:
         model = AnimeReview
-        fields = ("anime", "author", "body", "santiment")
+        fields = (
+            "review_type", "anime", "author", "body", "santiment", "created_at", "updated_at"
+        )
 
 
-class MangaReviewSerialize(serializers.ModelSerializer):
-
-    author = AuthorSerializer()
+class MangaReviewSerializer(serializers.ModelSerializer):
     body = serializers.CharField(validators=[MinLengthValidator(100)])
+    # child serializes should include resource_type_field_name to correct validation
+    review_type = serializers.CharField()
 
     class Meta:
         model = MangaReview
-        fields = ("manga", "author", "body", "santiment")
+        fields = (
+            "review_type", "manga", "author", "body", "santiment", "created_at", "updated_at"
+        )
 
 
 class ReviewPolymorhicSerializer(PolymorphicSerializer):
-    resource_type_field_name = "review_type"
+
+    resource_type_field_name = 'review_type'
 
     model_serializer_mapping = {
         Review: ReviewSerializer,
-        AnimeReview: AnimeReviewSerialize,
-        MangaReview: MangaReviewSerialize
+        AnimeReview: AnimeReviewSerializer,
+        MangaReview: MangaReviewSerializer,
     }
 
     def to_resource_type(self, model_or_instance):
-        return model_or_instance._meta.object_name.lower()
+        return super().to_resource_type(model_or_instance).lower()[:5]

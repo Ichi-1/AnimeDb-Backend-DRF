@@ -6,7 +6,7 @@ from .router import user_get_or_update
 
 app_name = 'users'
 
-#   TODO В router выносятся вью содержащие более 1го метода в роуте
+#   TODO роутинг ModelViewSet выносится в отдельный router.py
 
 urlpatterns = [
     path('', UserViewSet.as_view({'get': 'list'})),
