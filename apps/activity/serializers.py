@@ -81,39 +81,56 @@ class ReviewSerializer(serializers.Serializer):
         fields = "__all__"
 
 
-class AnimeReviewSerializer (serializers.ModelSerializer):
+class AnimeReviewCreateSerializer(serializers.ModelSerializer):
     body = serializers.CharField(validators=[MinLengthValidator(100)])
     # child serializes should include resource_type_field_name to correct validation
-    review_type = serializers.CharField()
 
     class Meta:
         model = AnimeReview
-        fields = (
-            "review_type", "anime", "author", "body", "santiment", "created_at", "updated_at"
-        )
+        fields = ("anime", "author", "body", "santiment")
 
 
-class MangaReviewSerializer(serializers.ModelSerializer):
+class MangaReviewCreateSerializer(serializers.ModelSerializer):
     body = serializers.CharField(validators=[MinLengthValidator(100)])
     # child serializes should include resource_type_field_name to correct validation
-    review_type = serializers.CharField()
 
     class Meta:
         model = MangaReview
-        fields = (
-            "review_type", "manga", "author", "body", "santiment", "created_at", "updated_at"
-        )
+        fields = ( "manga", "author", "body", "santiment")
+
+
+class AnimeReviewListSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer()
+
+    class Meta:
+        model = AnimeReview
+        exclude = ("polymorphic_ctype", )
+
+
+class MangaReviewListSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer()
+
+    class Meta:
+        model = MangaReview
+        exclude = ("polymorphic_ctype", )
+
+
+class ReviewUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Review
+        fields = ("body", "santiment")
 
 
 class ReviewPolymorhicSerializer(PolymorphicSerializer):
-
-    resource_type_field_name = 'review_type'
+    resource_type_field_name = 'reviewable_type'
 
     model_serializer_mapping = {
         Review: ReviewSerializer,
-        AnimeReview: AnimeReviewSerializer,
-        MangaReview: MangaReviewSerializer,
+        AnimeReview: AnimeReviewCreateSerializer,
+        MangaReview: MangaReviewCreateSerializer,
     }
 
     def to_resource_type(self, model_or_instance):
         return super().to_resource_type(model_or_instance).lower()[:5]
+    

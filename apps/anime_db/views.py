@@ -1,8 +1,8 @@
-from apps.activity.serializers import CommentsListSerializer
-from apps.activity.models import Comment
+from apps.activity.serializers import CommentsListSerializer, AnimeReviewListSerializer
+from apps.activity.models import AnimeReview, Comment
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, viewsets, status
+from rest_framework import generics, permissions, status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
@@ -18,6 +18,7 @@ from .serializers import (
     AnimeListSerializer,
 )
 from apps.activity.paging import CommentListPaginator
+
 
 
 @extend_schema_view(
@@ -63,7 +64,7 @@ class AlgoliaIndexAPIView(generics.GenericAPIView):
         return Response(search_result)
 
 
-class AnimeCommentsViewSet(viewsets.ModelViewSet):
+class AnimeCommentsViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     lookup_field = 'id'
     pagination_class = CommentListPaginator
@@ -83,3 +84,13 @@ class AnimeCommentsViewSet(viewsets.ModelViewSet):
         if not serializer.data:
             return Response(status=status.HTTP_404_NOT_FOUND)
         return self.get_paginated_response(serializer.data)
+
+
+@extend_schema_view(
+    list=extend_schema(
+        summary='Get list of anime reviews'
+    )
+)
+class AnimeReviewViewSet(ModelViewSet):
+    queryset = AnimeReview.objects.all()
+    serializer_class = AnimeReviewListSerializer

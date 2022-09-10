@@ -177,7 +177,7 @@ SIMPLE_JWT = {
     'AUDIENCE': None,
     'ISSUER': None,
     'JWK_URL': None,
-    
+
     # DRF-Spectacular warning - only one type of token should be used
     # So i remove Bearer
     'AUTH_HEADER_TYPES': ('JWT',),
@@ -200,22 +200,13 @@ SIMPLE_JWT = {
 }
 
 
-# SWAGGER_SETTINGS = {
-#     'SECURITY_DEFINITIONS': {
-#         'JWT': {
-#             'type': 'apiKey',
-#             'in': 'header',
-#             'name': 'Authorization'
-#         }
-#     },
-#     'USE_SESSION_AUTH': False
-# }
+
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
+    'TITLE': 'AniDB',
     'DESCRIPTION': 'Your project description',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    # OTHER SETTINGS
+    'REDOC_DIST': 'https://cdn.jsdelivr.net/npm/redoc@latest',
 }
 
 # smtp settings

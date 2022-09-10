@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Anime
-
+from apps.activity.serializers import AnimeReviewCreateSerializer
 
 class AnimeDetailSerializer(ModelSerializer):
 
@@ -38,3 +38,5 @@ class AnimeIndexSerializer(ModelSerializer):
             'year',
             'episode_count',
         )
+
+

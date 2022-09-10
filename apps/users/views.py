@@ -39,12 +39,9 @@ class UserViewSet(UserPermissionsViewSet):
         user_to_update = kwargs['pk']
 
         if user_id != user_to_update:
-            return Response(
-                {'detail': 'You are not authorized to this action'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        else:
-            return super().partial_update(request, args, kwargs)
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        
+        return super().partial_update(request, args, kwargs)
 
 
 # class UserFavoritesView(ModelViewSet):

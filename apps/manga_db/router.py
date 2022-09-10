@@ -1,11 +1,25 @@
-from rest_framework.routers import SimpleRouter
-from .views import MangaViewSet, MangaCommentsViewSet
+from .views import MangaViewSet, MangaCommentsViewSet, MangaReviewsViewSet
 
-manga_list_or_detail = SimpleRouter()
-manga_list_or_detail.register(r'manga', MangaViewSet, basename="manga")
+manga_list = MangaViewSet.as_view(
+    {
+        "get": "list"
+    }
+)
+
+manga_detail = MangaViewSet.as_view(
+    {
+        "get": "retrieve"
+    }
+)
 
 manga_comments_list = MangaCommentsViewSet.as_view(
     {
         "get": "list",
+    }
+)
+
+manga_review_list = MangaReviewsViewSet.as_view(
+    {
+        "get": "list"
     }
 )

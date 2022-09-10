@@ -6,12 +6,19 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from .models import Comment, Review
 from .serializers import (
+    AnimeReviewCreateSerializer,
     CommentCreateSerializer,
     CommentUpdateSerializer,
+    MangaReviewCreateSerializer,
     ReviewPolymorhicSerializer,
+    ReviewUpdateSerializer
 )
 
-from drf_spectacular.utils import extend_schema  # PolymorphicProxySerializer
+from drf_spectacular.utils import (
+    extend_schema, 
+    extend_schema_view,  
+    OpenApiExample
+)
 
 
 class CommentViewSet(ModelViewSet):
@@ -27,8 +34,8 @@ class CommentViewSet(ModelViewSet):
             return CommentCreateSerializer
         if self.action == 'partial_update':
             return CommentUpdateSerializer
-        else:
-            return CommentCreateSerializer
+        
+        return CommentCreateSerializer
 
     @extend_schema(
         summary='Create comment. Authorized Only',
@@ -89,22 +96,60 @@ class CommentViewSet(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+
+@extend_schema_view(
+    create=extend_schema(
+        summary='Create review',
+        examples=[
+        OpenApiExample(
+            name='AnimeReview',
+            value={
+                "reviewable_type": "anime",
+                "anime": 1,
+                "author": 1,
+                "body": "Oh my god! This show is ridiculous!",
+                "santiment": "Negative"
+            },
+        ),
+        OpenApiExample(
+            name='MangaReview',
+            value={
+                "reviewable_type": "manga",
+                "manga": 1,
+                "author": 1,
+                "body": "Gosh! Cannot stop to read this masterpiece",
+                "santiment": "Positive"
+            },
+        )]
+    ),
+    partial_update=extend_schema(summary='Update review'),
+    destroy=extend_schema(summary='Delete review')
+)
 class ReviewViewSet(ModelViewSet):
     """
-    Availiable review_type: "manga", "anime"
+    Availiable reviewable_type: manga, anime.
+    Authorized Only.
     """
     queryset = Review.objects.all()
     lookup_field = "id"
     serializer_class = ReviewPolymorhicSerializer
 
-    # @extend_schema(
-    #     request=PolymorphicProxySerializer(
-    #         component_name='review_type',
-    #         serializers=[
-    #             AnimeReviewSerializer, MangaReviewSerializer
-    #         ],
-    #         resource_type_field_name='review_type',
-    #     ),
-    # )
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+    def get_serializer_class(self):
+        if self.action == 'partial_update':
+            return ReviewUpdateSerializer
+        return ReviewPolymorhicSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        review_id = kwargs.get('id')
+        review = get_object_or_404(Review, pk=id)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if request.user.id != review.author:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        
+        return super().partial_update(request, args, kwargs)
+
+
+
+
