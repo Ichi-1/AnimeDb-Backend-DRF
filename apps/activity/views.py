@@ -6,10 +6,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from .models import Comment, Review
 from .serializers import (
-    AnimeReviewCreateSerializer,
     CommentCreateSerializer,
     CommentUpdateSerializer,
-    MangaReviewCreateSerializer,
     ReviewPolymorhicSerializer,
     ReviewUpdateSerializer
 )
@@ -20,6 +18,8 @@ from drf_spectacular.utils import (
     OpenApiExample
 )
 
+
+# TODO.Bug. Поле reviewable_type не отображается в сериализаторе по-умолчанию
 
 class CommentViewSet(ModelViewSet):
     """
