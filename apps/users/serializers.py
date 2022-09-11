@@ -25,7 +25,7 @@ class UserListSerializer(serializers.ModelSerializer):
             return "No image assigned to object"
 
 
-class UserMeRetrieveSerializer(serializers.ModelSerializer):
+class UserDetailSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.URI)
@@ -48,16 +48,8 @@ class UserMeRetrieveSerializer(serializers.ModelSerializer):
         )
 
 
-class UserMeUpdateSerializer(serializers.ModelSerializer):
-    avatar = serializers.ImageField(required=False)
-    gender = serializers.CharField(required=False)
+class UserUpdateSerializer(serializers.Serializer):
+    avatar    = serializers.ImageField(required=False)
+    gender    = serializers.CharField(required=False)
     birthdate = serializers.DateField(required=False)
-    about = serializers.CharField(required=False)
-
-    class Meta:
-        model = User
-        fields = ('avatar', 'gender', 'birthdate', 'about')
-
-
-class UserFavouritesAddOrRemoveSerializer(serializers.Serializer):
-    anime_id = serializers.IntegerField()
+    about     = serializers.CharField(required=False)

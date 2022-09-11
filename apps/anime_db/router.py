@@ -1,25 +1,25 @@
-from .views import AnimeViewSet, AnimeCommentsViewSet, AnimeReviewViewSet
+from .views import AnimeView, AnimeCommentsView, AnimeReviewView
 
 
-anime_list = AnimeViewSet.as_view(
+anime_list = AnimeView.as_view(
     {
         "get": "list"
     }
 )
 
-anime_detail = AnimeViewSet.as_view(
+anime_detail = AnimeView.as_view(
     {
         "get": "retrieve"
     }
 )
 
-anime_comments_list = AnimeCommentsViewSet.as_view(
+anime_comments_list = AnimeCommentsView.as_view(
     {
         "get": "list"
     }
 )
 
-anime_review_list = AnimeReviewViewSet.as_view(
+anime_review_list = AnimeReviewView.as_view(
     {
         "get": "list"
     }

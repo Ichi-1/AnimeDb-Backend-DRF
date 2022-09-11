@@ -7,7 +7,6 @@ from .router import (
     anime_review_list
 )
 
-app_name = 'anime_db'
 
 #   TODO роутинг ModelViewSet выносится в отдельный router.py
 

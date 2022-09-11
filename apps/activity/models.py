@@ -43,7 +43,6 @@ class Review(PolymorphicModel):
     emotional and evaluative attitude to a viewed or read title.
     (This is an opinion about the title, analysis, analysis, evaluation)
     """
-
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='review_author',
@@ -54,10 +53,10 @@ class Review(PolymorphicModel):
     santiment         = models.CharField(choices=SANTIMENT, max_length=10)
     created_at        = models.DateTimeField(auto_now_add=True)
     updated_at        = models.DateTimeField(auto_now=True)
+    comments          = GenericRelation(Comment, object_id_field='commentable_id')
 
     def __str__(self):
-        return (f"Author: {self.author.nickname}, "
-                f"Reviewable: {self.polymorphic_ctype}")
+        return "Review"
 
     def get_reviewable_type(self):
         """

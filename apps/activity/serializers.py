@@ -1,13 +1,11 @@
 from apps.authentication.models import User
+from django.core.validators import MinLengthValidator
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_polymorphic.serializers import PolymorphicSerializer
 from .models import Comment, Review, MangaReview, AnimeReview
-from django.core.validators import MinLengthValidator
-from drf_spectacular.utils import extend_schema_field
-from drf_spectacular.types import OpenApiTypes
-
-# from generic_relations.relations import GenericRelatedField
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -21,7 +19,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'nickname', 'avatar_url', )
+        fields = ('id', 'nickname', 'avatar_url')
 
 
 class CommentsListSerializer(serializers.ModelSerializer):
@@ -32,44 +30,35 @@ class CommentsListSerializer(serializers.ModelSerializer):
         fields = ('author', 'id', 'body', 'created_at', 'updated_at')
 
 
-class CommentCreateSerializer(serializers.ModelSerializer):
+class CommentCreateSerializer(serializers.Serializer):
     COMMENTABLE_TYPES = (
-        ('Manga', 'Manga'),
-        ('Anime', 'Anime'),
+        ('manga', 'manga'),
+        ('anime', 'anime'),
+        ('review', 'review')
     )
-    commentable_type = serializers.ChoiceField(choices=COMMENTABLE_TYPES)
+    author = serializers.IntegerField()
     body = serializers.CharField(max_length=500, validators=[MinLengthValidator(20)])
+    commentable_type = serializers.ChoiceField(choices=COMMENTABLE_TYPES)
     commentable_id = serializers.IntegerField()
 
-    def create(self, commentalbe):
-        author = self.validated_data['author']
+    def create(self, commentalbe, author):
         body = self.validated_data['body']
-
+        
         try:
             Comment(author=author, body=body, commentable=commentalbe).save()
-        except Exception:
-            return Response(
-                {"error": "Error during comment creation. Area: serializer"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-    class Meta:
-        model = Comment
-        fields = ('author', 'body', 'commentable_type', 'commentable_id')
+            return Response(status=status.HTTP_201_CREATED)
+        except BaseException:
+            return Response(status=status.HTTP_418_IM_A_TEAPOT)
 
 
-class CommentUpdateSerializer(serializers.ModelSerializer):
 
+class CommentUpdateSerializer(serializers.Serializer):
     body = serializers.CharField(max_length=500, validators=[MinLengthValidator(20)])
 
     def update(self, comment):
         body = self.validated_data['body']
         comment.body = body
         comment.save()
-
-    class Meta:
-        model = Comment
-        fields = ('body',)
 
 
 class ReviewSerializer(serializers.Serializer):
@@ -133,4 +122,5 @@ class ReviewPolymorhicSerializer(PolymorphicSerializer):
 
     def to_resource_type(self, model_or_instance):
         return super().to_resource_type(model_or_instance).lower()[:5]
+    
     

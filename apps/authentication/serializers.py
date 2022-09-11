@@ -9,7 +9,6 @@ class SignUpSerializer(UserCreateSerializer):
     """
     Used in Djoser as custom serializer
     """
-
     nickname = serializers.CharField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]

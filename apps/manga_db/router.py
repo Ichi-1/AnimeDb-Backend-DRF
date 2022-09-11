@@ -1,24 +1,24 @@
-from .views import MangaViewSet, MangaCommentsViewSet, MangaReviewsViewSet
+from .views import MangaView, MangaCommentsView, MangaReviewsView
 
-manga_list = MangaViewSet.as_view(
+manga_list = MangaView.as_view(
     {
         "get": "list"
     }
 )
 
-manga_detail = MangaViewSet.as_view(
+manga_detail = MangaView.as_view(
     {
         "get": "retrieve"
     }
 )
 
-manga_comments_list = MangaCommentsViewSet.as_view(
+manga_comments_list = MangaCommentsView.as_view(
     {
         "get": "list",
     }
 )
 
-manga_review_list = MangaReviewsViewSet.as_view(
+manga_review_list = MangaReviewsView.as_view(
     {
         "get": "list"
     }

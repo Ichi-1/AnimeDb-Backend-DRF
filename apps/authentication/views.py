@@ -2,12 +2,11 @@ from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 from .models import User
 from .providers.google import GoogleService
 from .providers.github import GitHubService
 from .serializers import (
-    GoogleLoginSerializer, GitHubLoginSerializer, SignUpSerializer
+    GoogleLoginSerializer, GitHubLoginSerializer
 )
 from drf_spectacular.utils import extend_schema
 
@@ -19,6 +18,7 @@ from drf_spectacular.utils import extend_schema
 class GoogleLoginAPIView(GenericAPIView):
     serializer_class = GoogleLoginSerializer
 
+    @extend_schema(summary='Sign Up with Google OAuth2')
     def post(self, request):
         user_model = User.objects
         serializer = self.serializer_class(data=request.data)
@@ -70,6 +70,7 @@ class GitHubLoginAPIView(GenericAPIView):
     """
     serializer_class = GitHubLoginSerializer
 
+    @extend_schema(summary="Sign Up with GitHub OAuth2")
     def post(self, request):
         user_model = User.objects
         serializer = self.serializer_class(data=request.data)

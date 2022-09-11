@@ -1,23 +1,16 @@
-from rest_framework import viewsets, permissions, mixins
+from rest_framework import permissions
+from rest_framework.viewsets import ModelViewSet
 
+"""
+Mixed permission base model allowing for action level
+permission control. Subclasses may define their permissions
+by creating a 'permission_classes_by_action' variable.
 
-class UserPermissionsViewSet(
-    mixins.ListModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet,
-):
+Example:
+permission_cls = {'list': [AllowAny], 'create': [IsAdminUser]}
+"""
 
-    '''
-    Mixed permission base model allowing for action level
-    permission control. Subclasses may define their permissions
-    by creating a 'permission_classes_by_action' variable.
-
-    Example:
-    permission_classes_by_action = {'list': [AllowAny],
-                                    'create': [IsAdminUser]}
-    '''
-
+class UserPermissionsViewSet(ModelViewSet):
     permission_cls = {
         'list': [permissions.AllowAny],
         'retrieve': [permissions.AllowAny],

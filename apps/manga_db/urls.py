@@ -6,7 +6,6 @@ from .router import (
     manga_review_list
 )
 
-app_name = "manga_db"
 
 #   TODO роутинг ModelViewSet выносится в отдельный router.py
 

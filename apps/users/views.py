@@ -5,22 +5,16 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from .serializers import (
     UserListSerializer,
-    UserMeRetrieveSerializer,
-    UserMeUpdateSerializer,
+    UserDetailSerializer,
+    UserUpdateSerializer
 )
 from .mixins import UserPermissionsViewSet
 
 
 @extend_schema_view(
-    list=extend_schema(
-        summary='Get users list'
-    ),
-    retrieve=extend_schema(
-        summary='Get user public profile'
-    ),
-    partial_update=extend_schema(
-        summary='Patch user profile. Authorized Only'
-    )
+    list=extend_schema(summary='Get users list'),
+    retrieve=extend_schema(summary='Get user public profile'),
+    partial_update=extend_schema(summary='Patch user profile. Authorized Only')
 )
 class UserViewSet(UserPermissionsViewSet):
     queryset = User.objects.all().order_by('-last_login')
@@ -30,9 +24,9 @@ class UserViewSet(UserPermissionsViewSet):
         if self.action == 'list':
             return UserListSerializer
         if self.action == 'partial_update':
-            return UserMeUpdateSerializer
+            return UserUpdateSerializer
         if self.action == 'retrieve':
-            return UserMeRetrieveSerializer
+            return UserDetailSerializer
 
     def partial_update(self, request, *args, **kwargs):
         user_id = request.user.id
@@ -40,7 +34,6 @@ class UserViewSet(UserPermissionsViewSet):
 
         if user_id != user_to_update:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        
         return super().partial_update(request, args, kwargs)
 
 
@@ -63,7 +56,7 @@ class UserViewSet(UserPermissionsViewSet):
 #         user = get_object_or_404(User, id=user_id)
 #         print(user.favourites_anime.all())
 
-        # ? Может использовать switch case ?
+        # ? Может использовать match case ?
 
     # def get_permissions(self):
     #     try:
