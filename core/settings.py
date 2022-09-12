@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'cloudinary_storage',
     'djoser',
-    'drf_yasg',
     'drf_spectacular',
     'django_filters',
     'rest_framework',
@@ -157,7 +156,8 @@ DJOSER = {
     # SEND_ACTIVATION_EMAIL True sent email after:
     # -creating an account
     # -updating their email
-    'SEND_ACTIVATION_EMAIL': True,
+
+    # 'SEND_ACTIVATION_EMAIL': True,  # If true - default is_activte = False
     'SEND_CONFIRMATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'apps.authentication.serializers.SignUpSerializer',

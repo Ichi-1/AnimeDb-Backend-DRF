@@ -15,5 +15,5 @@ urlpatterns = [
     path('anime/<int:id>/', anime_detail),
     path('anime/index/', AlgoliaIndexAPIView.as_view()),
     path('anime/<int:id>/comments/', anime_comments_list),
-    path('anime/<int:id>/reviews', anime_review_list),
+    path('anime/<int:id>/reviews/', anime_review_list),
 ]

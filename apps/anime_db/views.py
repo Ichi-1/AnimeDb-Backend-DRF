@@ -22,24 +22,24 @@ from apps.activity.paging import CommentListPaginator
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Get anime list'),
-    retrieve=extend_schema(summary='Get anime details')
+    list=extend_schema(summary="Get anime list"),
+    retrieve=extend_schema(summary="Get anime details")
 )
 class AnimeView(ModelViewSet):
     queryset = Anime.objects.all()
     permission_classes = [permissions.AllowAny]
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filterset_class = AnimeListFilter
-    search_fields = ['title', '^title', 'year']
-    ordering_fields = ['title', 'year', '?']
+    search_fields = ["title", "^title", "year"]
+    ordering_fields = ["title", "year", "?"]
     pagination_class = TotalCountHeaderPagination
-    ordering = ['-average_rating']  # default ordering
+    ordering = ["-average_rating"]  # default ordering
     lookup_field = "id"
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
             return AnimeListSerializer
-        if self.action == 'retrieve':
+        if self.action == "retrieve":
             return AnimeDetailSerializer
 
 
@@ -48,12 +48,12 @@ class AlgoliaIndexAPIView(generics.GenericAPIView):
     serializer_class = AnimeIndexSerializer
 
     @extend_schema(
-        summary='JSON example of Algolia Search Index Result',
-        description='Not for public use. Schema is not appropriate'
+        summary="JSON example of Algolia Search Index Result",
+        description="Not for public use. Schema is not appropriate"
     )
     def get(self, request):
-        query = request.GET.get('search')
-        tag = request.GET.get('tag')
+        query = request.GET.get("search")
+        tag = request.GET.get("tag")
         search_result = perform_serach(query=query, tags=tag)
         return Response(search_result)
 
@@ -66,13 +66,13 @@ class AnimeCommentsView(ModelViewSet):
     lookup_field = "id"
 
     @extend_schema(
-        summary="Get list of anime comments",
+        summary="Get anime comments list",
         description="If commentable resource has no comments empty list would returned"
     )
     def list(self, request, *args, **kwargs):
-        anime_id = kwargs.get('id')
+        anime_id = kwargs.get("id")
         commentable_anime = get_object_or_404(Anime, id=anime_id)
-        comments = commentable_anime.comments.all().order_by('created_at')
+        comments = commentable_anime.comments.all().order_by("created_at")
         page = self.paginate_queryset(comments)
         serializer = self.get_serializer(page, many=True)
         # TODO Если комментариев к ресурсу нет - возвращается пустой массив
@@ -80,7 +80,7 @@ class AnimeCommentsView(ModelViewSet):
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Get list of anime reviews')
+    list=extend_schema(summary="Get anime reviews list")
 )
 class AnimeReviewView(ModelViewSet):
     queryset = AnimeReview.objects.all()

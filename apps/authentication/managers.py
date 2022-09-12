@@ -43,7 +43,7 @@ class CustomManager(BaseUserManager):
 
         email = self.normalize_email(email)
         user = self.model(
-            nickname=nickname, email=email, is_activte=True, **extra_fields
+            nickname=nickname, email=email, **extra_fields
         )
         user.set_password(password)
         user.save()

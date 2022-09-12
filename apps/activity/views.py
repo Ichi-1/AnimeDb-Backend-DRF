@@ -47,7 +47,7 @@ class CommentView(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        author = get_object_or_404(User, id=serializer.data["author"])
+        author = get_object_or_404(User, id=request.user.id)
         commentable_type = serializer.data["commentable_type"]
         commentable_id = serializer.data["commentable_id"]
 
@@ -141,7 +141,7 @@ class ReviewView(ModelViewSet):
     """
     queryset = Review.objects.all().order_by("created_at")
     serializer_class = ReviewPolymorhicSerializer
-    pagination_class = TotalCountHeaderPagination
+    permission_classes = [permissions.IsAuthenticated]
     lookup_field = "id"
 
     def get_serializer_class(self):

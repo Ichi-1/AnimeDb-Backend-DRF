@@ -36,7 +36,6 @@ class CommentCreateSerializer(serializers.Serializer):
         ('anime', 'anime'),
         ('review', 'review')
     )
-    author = serializers.IntegerField()
     body = serializers.CharField(max_length=500, validators=[MinLengthValidator(20)])
     commentable_type = serializers.ChoiceField(choices=COMMENTABLE_TYPES)
     commentable_id = serializers.IntegerField()
@@ -49,7 +48,6 @@ class CommentCreateSerializer(serializers.Serializer):
             return Response(status=status.HTTP_201_CREATED)
         except BaseException:
             return Response(status=status.HTTP_418_IM_A_TEAPOT)
-
 
 
 class CommentUpdateSerializer(serializers.Serializer):
