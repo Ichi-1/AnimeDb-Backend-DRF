@@ -15,4 +15,3 @@ urlpatterns = [
     path("manga/<int:id>/comments/", manga_comments_list),
     path("manga/<int:id>/reviews/", manga_review_list),
 ]
-

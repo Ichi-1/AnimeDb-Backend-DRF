@@ -10,6 +10,7 @@ Example:
 permission_cls = {'list': [AllowAny], 'create': [IsAdminUser]}
 """
 
+
 class UserPermissionsViewSet(ModelViewSet):
     permission_cls = {
         'list': [permissions.AllowAny],

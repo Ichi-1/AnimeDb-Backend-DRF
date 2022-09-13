@@ -1,14 +1,20 @@
 from apps.authentication.models import User
 from django.core.validators import MinLengthValidator
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
 from rest_framework import serializers, status
 from rest_framework.response import Response
-from rest_polymorphic.serializers import PolymorphicSerializer
-from .models import Comment, Review, MangaReview, AnimeReview
+from .models import SANTIMENT, Comment, Review, MangaReview, AnimeReview
+from apps.anime_db.models import Anime
+from apps.manga_db.models import Manga
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'nickname', 'avatar_url')
+
     avatar_url = serializers.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.URI)
@@ -17,17 +23,13 @@ class AuthorSerializer(serializers.ModelSerializer):
             return user.avatar.url
         return "No image assigned to object"
 
-    class Meta:
-        model = User
-        fields = ('id', 'nickname', 'avatar_url')
-
 
 class CommentsListSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer()
-
     class Meta:
         model = Comment
         fields = ('author', 'id', 'body', 'created_at', 'updated_at')
+
+    author = AuthorSerializer()
 
 
 class CommentCreateSerializer(serializers.Serializer):
@@ -42,7 +44,7 @@ class CommentCreateSerializer(serializers.Serializer):
 
     def create(self, commentalbe, author):
         body = self.validated_data['body']
-        
+
         try:
             Comment(author=author, body=body, commentable=commentalbe).save()
             return Response(status=status.HTTP_201_CREATED)
@@ -59,66 +61,69 @@ class CommentUpdateSerializer(serializers.Serializer):
         comment.save()
 
 
-class ReviewSerializer(serializers.Serializer):
+class ReviewCreateSerializer(serializers.Serializer):
     """
     Parent Review Serializer Schema
+    Provide polymorhic creation for different type of reviewable object
     """
-    class Meta:
-        model = Review
-        fields = "__all__"
-
-
-class AnimeReviewCreateSerializer(serializers.ModelSerializer):
+    REVIEWABLE_TYPES = (
+        ("anime", "anime"),
+        ("manga", "manga")
+    )
+    reviewable_type = serializers.ChoiceField(choices=REVIEWABLE_TYPES)
+    reviewable_id = serializers.IntegerField()
     body = serializers.CharField(validators=[MinLengthValidator(100)])
-    # child serializes should include resource_type_field_name to correct validation
+    santiment = serializers.ChoiceField(choices=SANTIMENT)
 
-    class Meta:
-        model = AnimeReview
-        fields = ("anime", "author", "body", "santiment")
+    def polymorhic_create(self, validated_data, author):
+        reviewable_type = validated_data["reviewable_type"]
+        reviewable_id = validated_data["reviewable_id"]
 
+        if reviewable_type == "anime":
+            anime = get_object_or_404(Anime, id=reviewable_id)
+            try:
+                AnimeReview(
+                    anime=anime,
+                    author=author,
+                    body=validated_data["body"],
+                    santiment=validated_data["santiment"]
+                ).save()
+                return Response(status=status.HTTP_201_CREATED)
+            except ValueError:
+                return Response(status=status.HTTP_418_IM_A_TEAPOT)
 
-class MangaReviewCreateSerializer(serializers.ModelSerializer):
-    body = serializers.CharField(validators=[MinLengthValidator(100)])
-    # child serializes should include resource_type_field_name to correct validation
-
-    class Meta:
-        model = MangaReview
-        fields = ( "manga", "author", "body", "santiment")
-
-
-class AnimeReviewListSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer()
-
-    class Meta:
-        model = AnimeReview
-        exclude = ("polymorphic_ctype", )
-
-
-class MangaReviewListSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer()
-
-    class Meta:
-        model = MangaReview
-        exclude = ("polymorphic_ctype", )
+        if reviewable_type == "manga":
+            manga = get_object_or_404(Manga, id=reviewable_id)
+            try:
+                review = MangaReview(
+                    manga=manga,
+                    author=author,
+                    body=validated_data["body"],
+                    santiment=validated_data["santiment"]
+                )
+                review.save()
+                return Response(status=status.HTTP_201_CREATED)
+            except ValueError:
+                return Response(status=status.HTTP_418_IM_A_TEAPOT)
 
 
 class ReviewUpdateSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Review
         fields = ("body", "santiment")
 
 
-class ReviewPolymorhicSerializer(PolymorphicSerializer):
-    resource_type_field_name = 'reviewable_type'
+class AnimeReviewListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnimeReview
+        exclude = ("polymorphic_ctype", )
 
-    model_serializer_mapping = {
-        Review: ReviewSerializer,
-        AnimeReview: AnimeReviewCreateSerializer,
-        MangaReview: MangaReviewCreateSerializer,
-    }
+    author = AuthorSerializer()
 
-    def to_resource_type(self, model_or_instance):
-        return super().to_resource_type(model_or_instance).lower()[:5]
-    
-    
+
+class MangaReviewListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MangaReview
+        exclude = ("polymorphic_ctype", )
+
+    author = AuthorSerializer()

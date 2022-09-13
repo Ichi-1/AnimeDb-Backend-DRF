@@ -35,7 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at        = models.DateTimeField(auto_now_add=True)
     updated_at        = models.DateTimeField(auto_now=True)
     # Permissions
-    is_active         = models.BooleanField(default=True) # true for development, false for prod
+    is_active         = models.BooleanField(default=True)   # true for development, false for prod
     is_staff          = models.BooleanField(default=False)
     read_only         = models.BooleanField(default=False)
     # favouires

@@ -2,7 +2,7 @@ from apps.activity.serializers import CommentsListSerializer, AnimeReviewListSer
 from apps.activity.models import AnimeReview, Comment
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
@@ -18,7 +18,6 @@ from .serializers import (
     AnimeListSerializer,
 )
 from apps.activity.paging import CommentListPaginator
-
 
 
 @extend_schema_view(

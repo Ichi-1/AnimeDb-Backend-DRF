@@ -5,8 +5,6 @@ from drf_spectacular.types import OpenApiTypes
 
 
 class UserListSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
-
     class Meta:
         model = User
         fields = (
@@ -17,15 +15,6 @@ class UserListSerializer(serializers.ModelSerializer):
             'created_at',
         )
 
-    @extend_schema_field(OpenApiTypes.URI)
-    def get_avatar_url(self, user: dict) -> str:
-        if user.avatar:
-            return user.avatar.url
-        else:
-            return "No image assigned to object"
-
-
-class UserDetailSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.URI)
@@ -35,6 +24,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
         else:
             return "No image assigned to object"
 
+
+class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -46,6 +37,15 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'birthdate',
             'about'
         )
+
+    avatar_url = serializers.SerializerMethodField()
+
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_avatar_url(self, user: dict) -> str:
+        if user.avatar:
+            return user.avatar.url
+        else:
+            return "No image assigned to object"
 
 
 class UserUpdateSerializer(serializers.Serializer):

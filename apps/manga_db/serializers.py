@@ -3,14 +3,12 @@ from .models import Manga
 
 
 class MangaDetailSerializer(ModelSerializer):
-
     class Meta:
         model = Manga
         fields = '__all__'
 
 
 class MangaListSerializer(ModelSerializer):
-
     class Meta:
         model = Manga
         fields = (

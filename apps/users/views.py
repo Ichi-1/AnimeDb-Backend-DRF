@@ -1,5 +1,5 @@
 from apps.authentication.models import User
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view, extend_schema
@@ -8,7 +8,8 @@ from .serializers import (
     UserDetailSerializer,
     UserUpdateSerializer
 )
-from .mixins import UserPermissionsViewSet
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import permission_classes
 
 
 @extend_schema_view(
@@ -16,7 +17,7 @@ from .mixins import UserPermissionsViewSet
     retrieve=extend_schema(summary='Get user public profile'),
     partial_update=extend_schema(summary='Patch user profile. Authorized Only')
 )
-class UserViewSet(UserPermissionsViewSet):
+class UserViewSet(ModelViewSet):
     queryset = User.objects.all().order_by('-last_login')
     parser_classes = [FormParser, MultiPartParser]
 
@@ -28,6 +29,7 @@ class UserViewSet(UserPermissionsViewSet):
         if self.action == 'retrieve':
             return UserDetailSerializer
 
+    @permission_classes([permissions.IsAuthenticated])
     def partial_update(self, request, *args, **kwargs):
         user_id = request.user.id
         user_to_update = kwargs['pk']

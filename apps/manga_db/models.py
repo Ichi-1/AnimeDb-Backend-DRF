@@ -4,7 +4,6 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Manga(models.Model):
-
     STATUS = (
         ('Finished', 'Finished'),
         ('On Hiatus', 'On Hiatus'),

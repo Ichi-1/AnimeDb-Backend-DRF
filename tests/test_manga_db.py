@@ -3,6 +3,7 @@ import requests
 URL = "http://localhost:8000/api/manga/"
 berserk_id = "1/"
 
+
 def test_get_manga_list():
     response = requests.get(url=URL)
     assert response.status_code == 200

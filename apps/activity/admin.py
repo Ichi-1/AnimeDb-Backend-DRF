@@ -15,6 +15,8 @@ class CommentAdminConfig(admin.ModelAdmin):
         'commentable_id',
         'created_at',
     )
+
+
 admin.site.register(Comment, CommentAdminConfig)
 
 
@@ -35,11 +37,9 @@ class MangaReviewAdmin(ReviewChildAdmin):
     list_display = ['id', 'author', 'manga', 'santiment', 'created_at']
 
 
-
 @admin.register(Review)
 class ReviewParentAdmin(PolymorphicParentModelAdmin):
     """ The parent model admin """
     base_model = Review  # Optional, explicitly set here.
     child_models = [AnimeReview, MangaReview]
     list_display = ['id', 'author', 'polymorphic_ctype', 'santiment', 'created_at']
-

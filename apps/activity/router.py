@@ -1,8 +1,5 @@
 
-from rest_framework.routers import Route, SimpleRouter
 from .views import CommentView, ReviewView, ReviewCommentListView
-
-from rest_framework.routers import Route, DynamicRoute, SimpleRouter
 
 
 comment_create = CommentView.as_view(

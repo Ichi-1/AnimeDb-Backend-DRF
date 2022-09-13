@@ -3,8 +3,8 @@ from django.urls import include, path
 from rest_framework.reverse import reverse
 from rest_framework import views, response
 from drf_spectacular.views import (
-    SpectacularAPIView, 
-    SpectacularRedocView, 
+    SpectacularAPIView,
+    SpectacularRedocView,
     SpectacularSwaggerView
 )
 from drf_spectacular.utils import extend_schema
@@ -33,7 +33,7 @@ urlpatterns = [
     # my api
     path("api/auth/", include("apps.authentication.urls", namespace="auth")),
     path("api/users/", include("apps.users.urls", namespace="users")),
-    # 
+    #
     path("api/", include("apps.anime_db.urls")),
     path("api/", include("apps.manga_db.urls")),
     path("api/", include("apps.activity.urls")),

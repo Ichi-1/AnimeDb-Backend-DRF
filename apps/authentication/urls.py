@@ -13,7 +13,7 @@ urlpatterns = [
     path('activation/<str:uid>/<str:token>/', Djoser.as_view({'post': 'activation'})),
     path('activation-resend/', Djoser.as_view({'post': 'resend_activation'})),
 
-    path('jwt/create/', MyTokenObtainPairView.as_view()),
+    path('jwt/create/', MyTokenObtainPairView.as_view(), name='jwt_create_pair'),
     path('jwt/refresh/', TokenRefreshView.as_view()),
     path('jwt/verify/', TokenVerifyView.as_view()),
 

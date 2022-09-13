@@ -1,27 +1,24 @@
 import factory
 from faker import Faker
-from apps.activity.models import Comment
 from apps.anime_db.models import Anime
 from apps.manga_db.models import Manga
+from apps.activity.models import MangaReview
 from apps.authentication.models import User
 from datetime import datetime
-from django.contrib.contenttypes.models import ContentType
+
 
 fake = Faker()
+
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
-    
-    id = 15
-    nickname = "marcus"
-    email = "marcus@example.com"
-    is_active = True
+
 
 class AnimeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Anime
-    
+
     id = 1
     age_rating = "R+"
     age_rating_guide = "Adult Only"
@@ -41,11 +38,12 @@ class AnimeFactory(factory.django.DjangoModelFactory):
     voice_actors = fake.text()
     year = 1999
     year_end = 2001
-      
+
+
 class MangaFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Manga
-    
+
     id = 15
     author = fake.name()
     average_rating = 98
@@ -62,24 +60,13 @@ class MangaFactory(factory.django.DjangoModelFactory):
     year_start = datetime.now()
 
 
-class CommentFactory(factory.django.DjangoModelFactory):
+class MangaReviewFactory(factory.django.DjangoModelFactory):
     class Meta:
-        exclude = ["commentable"]
-        abstract = True
-    
-    
-    author_id = 16
+        model = MangaReview
+
+    author = factory.SubFactory(UserFactory)
     body = fake.text()
+    santiment = 'Positive'
     created_at = datetime.now()
     updated_at = datetime.now()
-
-    commentable_id = factory.SelfAttribute('commentable.id')
-    content_type = factory.LazyAttribute(
-        lambda o: ContentType.objects.get_for_model(o.commentable)
-    )
-
-class CommentMangaFactory(CommentFactory):
-    class Meta:
-        model = Comment
-
-    commentable = factory.SubFactory(MangaFactory)
+    manga = factory.SubFactory(MangaFactory)

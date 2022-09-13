@@ -1,16 +1,14 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Anime
-from apps.activity.serializers import AnimeReviewCreateSerializer
+
 
 class AnimeDetailSerializer(ModelSerializer):
-
     class Meta:
         model = Anime
         exclude = ('staff', 'voice_actors')
 
 
 class AnimeListSerializer(ModelSerializer):
-
     class Meta:
         model = Anime
         fields = (
@@ -25,7 +23,6 @@ class AnimeListSerializer(ModelSerializer):
 
 
 class AnimeIndexSerializer(ModelSerializer):
-
     class Meta:
         model = Anime
         fields = (
@@ -38,5 +35,3 @@ class AnimeIndexSerializer(ModelSerializer):
             'year',
             'episode_count',
         )
-
-
