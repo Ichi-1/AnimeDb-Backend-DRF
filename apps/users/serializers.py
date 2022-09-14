@@ -2,7 +2,8 @@ from rest_framework import serializers
 from apps.authentication.models import User
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
-
+from apps.anime_db.models import Anime
+from apps.manga_db.models import Manga
 
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,11 +56,18 @@ class UserUpdateSerializer(serializers.Serializer):
     about     = serializers.CharField(required=False)
 
 
-class UserFavoritesSerializer(serializers.Serializer):
-    FAVORITES_TYPE = (
-        ("manga", "manga"),
-        ("anime", "anime")
-    )
+class FavoritesAnimeSchema(serializers.ModelSerializer):
+    class Meta:
+        model = Anime
+        fields = ("id", "title", "poster_image")
 
-    id = serializers.IntegerField()
-    favorites_type = serializers.ChoiceField(choices=FAVORITES_TYPE)
+
+class FavoritesMangaSchema(serializers.ModelSerializer):
+    class Meta:
+        model = Manga
+        fields = ("id", "title", "picture_main")
+
+
+class UserFavoritesSchema(serializers.Serializer):
+    favorites_anime = FavoritesAnimeSchema(many=True)
+    favorites_manga = FavoritesMangaSchema(many=True)
