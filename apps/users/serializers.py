@@ -53,3 +53,13 @@ class UserUpdateSerializer(serializers.Serializer):
     gender    = serializers.CharField(required=False)
     birthdate = serializers.DateField(required=False)
     about     = serializers.CharField(required=False)
+
+
+class UserFavoritesSerializer(serializers.Serializer):
+    FAVORITES_TYPE = (
+        ("manga", "manga"),
+        ("anime", "anime")
+    )
+
+    id = serializers.IntegerField()
+    favorites_type = serializers.ChoiceField(choices=FAVORITES_TYPE)

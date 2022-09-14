@@ -38,9 +38,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active         = models.BooleanField(default=True)   # true for development, false for prod
     is_staff          = models.BooleanField(default=False)
     read_only         = models.BooleanField(default=False)
-    # favouires
-    favourites_anime  = models.ManyToManyField('anime_db.Anime', related_name='favourites_anime', blank=True)
-    favourites_manga  = models.ManyToManyField('manga_db.Manga', related_name='favourites_anime', blank=True)
 
     def __str__(self):
         return self.nickname

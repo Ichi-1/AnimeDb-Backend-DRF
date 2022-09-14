@@ -1,19 +1,19 @@
 from django.urls import path
 from .router import (
-    comment_create,
-    comment_update_or_delete,
-    review_create,
-    review_update_or_delete,
-    review_comment_list
+    create_comment,
+    create_review,
+    patch_or_delete_comment,
+    patch_or_delete_review,
+    get_review_comments_list,
 )
 
 
 #   TODO роутинг ModelViewSet выносится в отдельный router.py
 
 urlpatterns = [
-    path("comments/", comment_create),
-    path("comments/<int:id>/", comment_update_or_delete),
-    path("reviews/", review_create),
-    path("reviews/<int:id>/", review_update_or_delete),
-    path("reviews/<int:id>/comments/", review_comment_list)
+    path("comments/", create_comment),
+    path("reviews/", create_review),
+    path("comments/<int:id>/", patch_or_delete_comment),
+    path("reviews/<int:id>/", patch_or_delete_review),
+    path("reviews/<int:id>/comments/", get_review_comments_list)
 ]

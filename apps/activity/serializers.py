@@ -45,11 +45,8 @@ class CommentCreateSerializer(serializers.Serializer):
     def create(self, commentalbe, author):
         body = self.validated_data['body']
 
-        try:
-            Comment(author=author, body=body, commentable=commentalbe).save()
-            return Response(status=status.HTTP_201_CREATED)
-        except BaseException:
-            return Response(status=status.HTTP_418_IM_A_TEAPOT)
+        Comment(author=author, body=body, commentable=commentalbe).save()
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class CommentUpdateSerializer(serializers.Serializer):
@@ -81,30 +78,23 @@ class ReviewCreateSerializer(serializers.Serializer):
 
         if reviewable_type == "anime":
             anime = get_object_or_404(Anime, id=reviewable_id)
-            try:
-                AnimeReview(
-                    anime=anime,
-                    author=author,
-                    body=validated_data["body"],
-                    santiment=validated_data["santiment"]
-                ).save()
-                return Response(status=status.HTTP_201_CREATED)
-            except ValueError:
-                return Response(status=status.HTTP_418_IM_A_TEAPOT)
+            AnimeReview(
+                anime=anime,
+                author=author,
+                body=validated_data["body"],
+                santiment=validated_data["santiment"]
+            ).save()
+            return Response(status=status.HTTP_201_CREATED)
 
         if reviewable_type == "manga":
             manga = get_object_or_404(Manga, id=reviewable_id)
-            try:
-                review = MangaReview(
-                    manga=manga,
-                    author=author,
-                    body=validated_data["body"],
-                    santiment=validated_data["santiment"]
-                )
-                review.save()
-                return Response(status=status.HTTP_201_CREATED)
-            except ValueError:
-                return Response(status=status.HTTP_418_IM_A_TEAPOT)
+            MangaReview(
+                manga=manga,
+                author=author,
+                body=validated_data["body"],
+                santiment=validated_data["santiment"]
+            ).save()
+            return Response(status=status.HTTP_201_CREATED)
 
 
 class ReviewUpdateSerializer(serializers.ModelSerializer):

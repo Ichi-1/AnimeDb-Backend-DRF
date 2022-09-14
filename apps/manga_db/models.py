@@ -25,7 +25,14 @@ class Manga(models.Model):
     volumes          = models.PositiveIntegerField(verbose_name='Volumes count')
     year_end         = models.DateTimeField(verbose_name='End year', null=True)
     year_start       = models.DateTimeField(verbose_name='Start year', null=True)
+    # generic relation with comments, make manga commentable
     comments         = GenericRelation(Comment, object_id_field='commentable_id')
+    # user favorites m2m
+    user_favorites   = models.ManyToManyField(
+        'authentication.User',
+        related_name='favorites_manga',
+        blank=True
+    )
 
     def __str__(self):
         return self.title

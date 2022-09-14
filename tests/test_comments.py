@@ -40,6 +40,16 @@ def test_comment_manga_create(manga, api_client):
     assert create_comment.status_code == 404
 
 
+def test_comment_review_create(manga_review, api_client):
+    comment_body = {
+        "commentable_type": "review",
+        "commentable_id": manga_review.id,
+        "body": fake.text()
+    }
+    create_comment = api_client.post(path=URL, data=comment_body)
+    assert create_comment.status_code == 201
+
+
 def test_commentable_type_invalid(api_client):
     comment_body = {
         "commentable_type": "movie",
@@ -96,6 +106,7 @@ def test_update_my_comment(api_client, auth_user, manga, anime):
         path=URL + str(my_comment_anime.id) + "/",
         data={"body": fake.text()}
     )
+
     update_comment_404 = api_client.patch(
         path=URL + '23232' + "/",
         data={"body": fake.text()}

@@ -21,8 +21,6 @@ from drf_spectacular.utils import (
 )
 
 
-# TODO.Bug. Поле reviewable_type не отображается в сериализаторе по-умолчанию
-
 class CommentView(ModelViewSet):
     """
     Availiable commentable_type: "manga", "anime", "review"
@@ -100,6 +98,9 @@ class CommentView(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# TODO seiralizer.data['author'] = request.user.id
+# TODO serializer.create()
+
 class ReviewView(ModelViewSet):
     """
     Availiable reviewable_type: manga, anime.
@@ -114,6 +115,7 @@ class ReviewView(ModelViewSet):
             return ReviewCreateSerializer
         if self.action == "partial_update":
             return ReviewUpdateSerializer
+        return ReviewCreateSerializer
 
     @extend_schema(
         summary="Create review",
@@ -168,7 +170,7 @@ class ReviewView(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ReviewCommentListView(ModelViewSet):
+class ReviewCommentsListView(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentsListSerializer
     pagination_class = TotalCountHeaderPagination

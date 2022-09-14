@@ -32,18 +32,18 @@ def auth_user(db, user_factory):
 @pytest.fixture(scope='function')
 def someone(db, user_factory):
     """
-    Simulate someone else users, who held resources
+    Simulates someone else users, who held resources
     """
     return user_factory.create(
         nickname=fake.name(),
-        email=f'{fake.name()}@{fake.domain_name()}'
+        email=f'{fake.name()}@{fake.domain_name()}',
     )
 
 
 @pytest.fixture
 def anime(db, anime_factory):
     """
-    Simulate instacne of Anime
+    Simulates instacne of Anime
     """
     return anime_factory.create()
 
@@ -51,7 +51,7 @@ def anime(db, anime_factory):
 @pytest.fixture
 def manga(db, manga_factory):
     """
-    Simulate instance of Manga
+    Simulates instance of Manga
     """
     return manga_factory.create()
 
@@ -59,7 +59,7 @@ def manga(db, manga_factory):
 @pytest.fixture
 def manga_review(db, manga_review_factory, auth_user):
     """
-    Simulate review of "Berserk" manga created by "admin"
+    Simulates review of "Berserk" manga created by "admin"
     """
     return manga_review_factory.create(
         author=auth_user
@@ -69,7 +69,7 @@ def manga_review(db, manga_review_factory, auth_user):
 @pytest.fixture
 def someone_review(db, manga_review_factory, someone):
     """
-    Simulate review of "Berserk" manga created by someone
+    Simulates review of "Berserk" manga created by someone
     """
     return manga_review_factory.create(
         author=someone

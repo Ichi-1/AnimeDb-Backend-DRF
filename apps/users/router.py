@@ -1,9 +1,7 @@
-from .views import UserViewSet
+from .views import UserView
 
 
-user_get_or_update = UserViewSet.as_view(
-    {
-        'get': 'retrieve',
-        'patch': 'partial_update',
-    }
-)
+get_or_patch_user = UserView.as_view({
+    "get": "retrieve",
+    "patch": "partial_update",
+})

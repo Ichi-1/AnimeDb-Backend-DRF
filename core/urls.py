@@ -32,7 +32,7 @@ urlpatterns = [
     path("api/schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     # my api
     path("api/auth/", include("apps.authentication.urls", namespace="auth")),
-    path("api/users/", include("apps.users.urls", namespace="users")),
+    path("api/", include("apps.users.urls", namespace="users")),
     #
     path("api/", include("apps.anime_db.urls")),
     path("api/", include("apps.manga_db.urls")),

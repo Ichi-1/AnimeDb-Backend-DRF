@@ -1,12 +1,18 @@
-from apps.activity.serializers import CommentsListSerializer, AnimeReviewListSerializer
+from apps.activity.paging import CommentListPaginator
+from apps.activity.serializers import (
+    CommentsListSerializer, AnimeReviewListSerializer
+)
 from apps.activity.models import AnimeReview, Comment
+from core.serializers import EmptySerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import generics, permissions, status
+from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema, extend_schema_view
+
 
 from .models import Anime
 from .utils.algolia import perform_serach
@@ -17,7 +23,6 @@ from .serializers import (
     AnimeIndexSerializer,
     AnimeListSerializer,
 )
-from apps.activity.paging import CommentListPaginator
 
 
 @extend_schema_view(
@@ -84,3 +89,53 @@ class AnimeCommentsView(ModelViewSet):
 class AnimeReviewView(ModelViewSet):
     queryset = AnimeReview.objects.all()
     serializer_class = AnimeReviewListSerializer
+
+
+class AnimeFavoritesView(GenericAPIView):
+    http_method_names = ["put", "delete"]
+    queryset = Anime.objects.all()
+    serializer_class = EmptySerializer
+    lookup_field = "id"
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Update my favorites anime",
+        description=(
+            "Add specific anime to my favorites list. "
+            "If anime already added to user favorites"
+            "this endpoint does nothing and returns ```409 Conflict```"
+        ),
+    )
+    def put(self, request, *args, **kwargs):
+        anime_id = kwargs.get("id")
+        anime = get_object_or_404(Anime, id=anime_id)
+        user_favorites = anime.user_favorites.filter(id=request.user.id)
+
+        if user_favorites.exists():
+            return Response(
+                {"detail": f"'{anime.title}' already added to favorites"},
+                status=status.HTTP_409_CONFLICT
+            )
+        anime.user_favorites.add(request.user)
+        return Response(status=status.HTTP_200_OK)
+
+    @extend_schema(
+        summary="Delete my favorites anime",
+        description=(
+            "If the specified anime does not exist in user's anime list"
+            "this endpoint does nothing and returns ```404 Not Found```."
+        ),
+        request=None,
+    )
+    def delete(self, request, *args, **kwargs):
+        anime_id = kwargs.get("id")
+        anime = get_object_or_404(Anime, id=anime_id)
+        user_favorites = anime.user_favorites.filter(id=request.user.id)
+
+        if not user_favorites.exists():
+            return Response(
+                {"detail": f"'{anime.title}' not added to favorites"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        anime.user_favorites.remove(request.user)
+        return Response(status=status.HTTP_200_OK)
