@@ -19,6 +19,7 @@ DEBUG = config('DEBUG', cast=bool)
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'polymorphic',
+    'actstream',
 
     # my apps
     'apps.activity',
@@ -284,3 +286,5 @@ STORAGE_URL = config('STORAGE_URL')
 #         },
 #     }
 # }
+
+SITE_ID = 1

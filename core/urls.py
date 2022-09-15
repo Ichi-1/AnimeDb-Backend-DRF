@@ -25,6 +25,7 @@ class DocsView(views.APIView):
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("activity/", include('actstream.urls')),
     # path("root/", DocsView.as_view()),
     # Spectacular
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),

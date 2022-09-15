@@ -61,7 +61,7 @@ class AnimeCommentsListView(ModelViewSet):
     lookup_field = "id"
 
     def list(self, request, *args, **kwargs):
-        commentable_anime = get_object_or_404(Anime, id=kwargs.get("anime_id"))
+        commentable_anime = get_object_or_404(Anime, id=kwargs.get("id"))
         comments = commentable_anime.comments.all().order_by("created_at")
         page = self.paginate_queryset(comments)
         serializer = self.get_serializer(page, many=True)
@@ -81,6 +81,7 @@ class AnimeCommentsListView(ModelViewSet):
 class AnimeReviewsListView(ModelViewSet):
     queryset = AnimeReview.objects.all().order_by("created_at")
     serializer_class = AnimeReviewListSerializer
+    pagination_class = TotalCountHeaderPagination
     lookup_field = "anime_id"
 
 
@@ -132,7 +133,7 @@ class AnimeFavoritesView(GenericAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         anime.user_favorites.remove(request.user)
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @extend_schema_view(

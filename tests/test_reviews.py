@@ -32,7 +32,7 @@ def test_reviewable_404(api_client):
     review = {
         "reviewable_type": "manga",
         "reviewable_id": 15555,
-        "body": fake.text(),
+        "body": fake.text() * 2,
         "santiment": "Negative"
     }
     reviewable_404 = api_client.post(path=URL, data=review)

@@ -122,4 +122,4 @@ class MangaFavoritesView(GenericAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         manga.user_favorites.remove(request.user)
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
