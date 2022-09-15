@@ -1,4 +1,4 @@
-from apps.authentication.models import User
+from apps.users.models import User
 from apps.anime_db.models import Anime
 from apps.anime_db.utils.paging import TotalCountHeaderPagination
 from apps.manga_db.models import Manga
@@ -17,14 +17,26 @@ from .serializers import (
 )
 from drf_spectacular.utils import (
     extend_schema,
+    extend_schema_view,
     OpenApiExample,
 )
 
 
+@extend_schema_view(
+    create=extend_schema(
+        summary="Create comment. Authorized Only",
+        description="Appropriate commentable type: 'manga', 'anime', 'review'"
+    ),
+    partial_update=extend_schema(
+        summary="Update my comment. Authorized Only",
+        description="User can update comment if he is author of"
+    ),
+    destroy=extend_schema(
+        summary="Delete my comment. Authorized Only",
+        description="User can delete comment if he is author of"
+    )
+)
 class CommentView(ModelViewSet):
-    """
-    Availiable commentable_type: "manga", "anime", "review"
-    """
     queryset = Comment.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "id"
@@ -37,10 +49,6 @@ class CommentView(ModelViewSet):
 
         return CommentCreateSerializer
 
-    @extend_schema(
-        summary="Create comment. Authorized Only",
-        description="Appropriate commentable type must be set responsibly and explicitly"
-    )
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -61,10 +69,6 @@ class CommentView(ModelViewSet):
             commentable = get_object_or_404(Review, id=commentable_id)
             return serializer.create(commentable, author)
 
-    @extend_schema(
-        summary="Update comment. Authorized Only",
-        description="User can update comment which he is the author"
-    )
     def partial_update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -80,10 +84,6 @@ class CommentView(ModelViewSet):
         serializer.update(comment)
         return Response(status=status.HTTP_200_OK)
 
-    @extend_schema(
-        summary="Delete comment. Authorized Only",
-        description="User can delete comment which he is the author"
-    )
     def destroy(self, request, *args, **kwargs):
         comment_id = kwargs.get("id")
         comment = get_object_or_404(Comment, id=comment_id)
@@ -101,24 +101,9 @@ class CommentView(ModelViewSet):
 # TODO seiralizer.data['author'] = request.user.id
 # TODO serializer.create()
 
-class ReviewView(ModelViewSet):
-    """
-    Availiable reviewable_type: manga, anime.
-    Authorized Only.
-    """
-    queryset = Review.objects.all().order_by("created_at")
-    permission_classes = [permissions.IsAuthenticated]
-    lookup_field = "id"
-
-    def get_serializer_class(self):
-        if self.action == "create":
-            return ReviewCreateSerializer
-        if self.action == "partial_update":
-            return ReviewUpdateSerializer
-        return ReviewCreateSerializer
-
-    @extend_schema(
-        summary="Create review",
+@extend_schema_view(
+    create=extend_schema(
+        summary="Create review. Authorized Only.",
         examples=[
             OpenApiExample(
                 name="Anime Review",
@@ -139,14 +124,34 @@ class ReviewView(ModelViewSet):
                 }
             )
         ]
+    ),
+    partial_update=extend_schema(
+        summary="Update my review",
+        description="User can update review if he is author of"
+    ),
+    destory=extend_schema(
+        summary="Delete my review",
+        description="User can delete review if he is the author of"
     )
+)
+class ReviewView(ModelViewSet):
+    queryset = Review.objects.all().order_by("created_at")
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = "id"
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return ReviewCreateSerializer
+        if self.action == "partial_update":
+            return ReviewUpdateSerializer
+        return ReviewCreateSerializer
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         author = get_object_or_404(User, id=request.user.id)
         return serializer.polymorhic_create(serializer.data, author=author)
 
-    @extend_schema(summary="Update my review")
     def partial_update(self, request, *args, **kwargs):
         review_id = kwargs.get("id")
         review = get_object_or_404(Review, pk=review_id)
@@ -158,7 +163,6 @@ class ReviewView(ModelViewSet):
             return Response(status=status.HTTP_403_FORBIDDEN)
         return super().partial_update(request, args, kwargs)
 
-    @extend_schema(summary="Delete my review")
     def destroy(self, request, *args, **kwargs):
         review_id = kwargs.get("id")
         review = get_object_or_404(Review, pk=review_id)
@@ -170,16 +174,21 @@ class ReviewView(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Get review comments list",
+        description=(
+            "If commentable resource has no comments"
+            "empty list would returned ```200```"
+        )
+    )
+)
 class ReviewCommentsListView(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentsListSerializer
     pagination_class = TotalCountHeaderPagination
     lookup_field = "id"
 
-    @extend_schema(
-        summary="Get review comments list",
-        description="If commentable resource has no comments empty list would returned"
-    )
     def list(self, request, *args, **kwargs):
         review_id = kwargs.get("id")
         review = get_object_or_404(Review, pk=review_id)

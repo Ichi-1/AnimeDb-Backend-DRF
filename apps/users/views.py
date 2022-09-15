@@ -1,23 +1,22 @@
-from apps.anime_db.models import Anime
-from apps.manga_db.models import Manga
-from apps.authentication.models import User
+from apps.users.models import User
+from drf_spectacular.utils import (
+    extend_schema_view, extend_schema
+)
 from rest_framework import status, permissions
+from rest_framework.decorators import permission_classes
+from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
-from rest_framework.generics import GenericAPIView
-from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiExample
+from rest_framework.viewsets import ModelViewSet
 from .serializers import (
     UserListSerializer,
     UserDetailSerializer,
     UserUpdateSerializer,
-    UserFavoritesSchema,
-    FavoritesAnimeSchema,
-    FavoritesMangaSchema
-
+    UserFavoritesSerializer,
+    FavoritesAnimeSerializer,
+    FavoritesMangaSerializer
 )
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import permission_classes
-from typing import List
+
 
 @extend_schema_view(
     list=extend_schema(summary='Get users list'),
@@ -46,30 +45,26 @@ class UserView(ModelViewSet):
         return super().partial_update(request, args, kwargs)
 
 
-
+@extend_schema_view(
+    get=extend_schema("Get user favorites lists")
+)
 class UserFavoritesView(GenericAPIView):
-    http_method_names: List[str] = ["get"]
+    http_method_names = ["get"]
     queryset = User.objects.all()
+    serializer_class = UserFavoritesSerializer
     permission_classes = [permissions.AllowAny]
     lookup_field = "id"
 
-    def get_serializer_class(self):
-        return UserFavoritesSchema
-
-    @extend_schema(summary="Get user favorites lists")
     def get(self, request, *args, **kwargs):
         user_id = kwargs.get("id")
         user = User.objects.only("id").get(id=user_id)
         favorites_anime = user.favorites_anime.only("id", "title", "poster_image").all()
         favorites_manga = user.favorites_manga.only("id", "title", "picture_main").all()
 
-        serializer_manga = FavoritesMangaSchema(favorites_manga, many=True)
-        serializer_anime = FavoritesAnimeSchema(favorites_anime, many=True)
-        
-        
+        serializer_manga = FavoritesMangaSerializer(favorites_manga, many=True)
+        serializer_anime = FavoritesAnimeSerializer(favorites_anime, many=True)
+
         return Response({
-                "favorites_anime": serializer_anime.data, 
-                "favorites_manga": serializer_manga.data
-            },
-            status=status.HTTP_418_IM_A_TEAPOT
-        )
+            "favorites_anime": serializer_anime.data,
+            "favorites_manga": serializer_manga.data
+        })

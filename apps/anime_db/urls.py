@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AnimeFavoritesView
+from .views import AnimeFavoritesView, MyAnimeListView
 from .router import (
     get_anime_list,
     get_anime_detail,
@@ -14,6 +14,6 @@ urlpatterns = [
     path('anime/<int:id>/', get_anime_detail),
     path('anime/<int:id>/comments/', get_anime_comments_list),
     path('anime/<int:id>/reviews/', get_anime_reviews_list),
-    path("anime/<int:id>/favorites/", AnimeFavoritesView.as_view())
-    # path('anime/index/', AlgoliaIndexAPIView.as_view()),
+    path("anime/<int:id>/favorites/", AnimeFavoritesView.as_view()),
+    path("anime/<int:id>/my_list/", MyAnimeListView.as_view())
 ]

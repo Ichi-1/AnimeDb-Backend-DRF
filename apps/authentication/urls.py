@@ -1,7 +1,7 @@
 from django.urls import path
 from djoser.views import UserViewSet as Djoser
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
-from .utils.tokens import MyTokenObtainPairView
+from .tokens import MyTokenObtainPairView
 from .views import GoogleLoginAPIView, GitHubLoginAPIView
 
 app_name = 'auth'

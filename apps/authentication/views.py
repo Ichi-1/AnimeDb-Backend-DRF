@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from .models import User
+from ..users.models import User
 from .providers.google import GoogleService
 from .providers.github import GitHubService
 from .serializers import (

@@ -1,9 +1,13 @@
-from apps.activity.models import Comment
 from django.db import models
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Manga(models.Model):
+    class Meta:
+        verbose_name = "Manga"
+        verbose_name_plural = "Manga"
+
     STATUS = (
         ('Finished', 'Finished'),
         ('On Hiatus', 'On Hiatus'),
@@ -26,10 +30,10 @@ class Manga(models.Model):
     year_end         = models.DateTimeField(verbose_name='End year', null=True)
     year_start       = models.DateTimeField(verbose_name='Start year', null=True)
     # generic relation with comments, make manga commentable
-    comments         = GenericRelation(Comment, object_id_field='commentable_id')
+    comments         = GenericRelation("activity.Comment", object_id_field='commentable_id')
     # user favorites m2m
     user_favorites   = models.ManyToManyField(
-        'authentication.User',
+        settings.AUTH_USER_MODEL,
         related_name='favorites_manga',
         blank=True
     )

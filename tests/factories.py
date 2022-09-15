@@ -3,7 +3,7 @@ from faker import Faker
 from apps.anime_db.models import Anime
 from apps.manga_db.models import Manga
 from apps.activity.models import MangaReview
-from apps.authentication.models import User
+from apps.users.models import User
 from datetime import datetime
 
 

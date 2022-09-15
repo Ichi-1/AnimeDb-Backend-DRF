@@ -34,17 +34,22 @@ class MangaView(ModelViewSet):
             return MangaDetailSerializer
 
 
-class MangaCommentsView(ModelViewSet):
+@extend_schema_view(
+    list=extend_schema(
+        summary="Get manga comments list",
+        description=(
+            "If commentable resource has no comments, "
+            "return empty list ```200 Ok```"
+        )
+    )
+)
+class MangaCommentsListView(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentsListSerializer
     permission_classes = [permissions.AllowAny]
     pagination_class = TotalCountHeaderPagination
     lookup_field = "id"
 
-    @extend_schema(
-        summary="Get manga comments list",
-        description="If commentable resource has no comments empty list would returned"
-    )
     def list(self, request, *args, **kwargs):
         manga_id = kwargs.get('id')
         commentable_manga = get_object_or_404(Manga, id=manga_id)
@@ -55,26 +60,44 @@ class MangaCommentsView(ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
 
-@extend_schema_view(list=extend_schema(summary="Get manga reviews list"))
-class MangaReviewsView(ModelViewSet):
+@extend_schema_view(
+    list=extend_schema(
+        summary="Get manga reviews list",
+        description=(
+            "If reviewable resource has no review, "
+            "return empty list ```200 Ok```"
+        )
+    )
+)
+class MangaReviewsListView(ModelViewSet):
     queryset = MangaReview.objects.all()
     serializer_class = MangaReviewListSerializer
     http_method_names = ["get"]
 
 
-class MangaFavoritesView(GenericAPIView):
-    http_method_names = ["put", "delete"]
-    serializer_class = EmptySerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    @extend_schema(
+@extend_schema_view(
+    put=extend_schema(
         summary="Update my favorites manga",
         description=(
             "Add specific manga to my favorites list. "
             "If manga alreadyt added to user favorites"
             "this endpoint does nothing and returns ```409 Conflict```"
         )
-    )
+    ),
+    delete=extend_schema(
+        summary="Delete my favorites manga",
+        description=(
+            "If the specified anime does not exist in user's anime list"
+            "this endpoint does nothing and returns ```404 Not Found```."
+        ),
+    ),
+
+)
+class MangaFavoritesView(GenericAPIView):
+    http_method_names = ["put", "delete"]
+    serializer_class = EmptySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
     def put(self, request, *args, **kwargs):
         manga_id = kwargs.get("id")
         manga = get_object_or_404(Manga, id=manga_id)
@@ -88,13 +111,6 @@ class MangaFavoritesView(GenericAPIView):
         manga.user_favorites.add(request.user)
         return Response(status=status.HTTP_200_OK)
 
-    @extend_schema(
-        summary="Delete my favorites manga",
-        description=(
-            "If the specified anime does not exist in user's anime list"
-            "this endpoint does nothing and returns ```404 Not Found```."
-        ),
-    )
     def delete(self, request, *args, **kwargs):
         manga_id = kwargs.get("id")
         manga = get_object_or_404(Manga, id=manga_id)

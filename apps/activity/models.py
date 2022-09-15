@@ -1,9 +1,14 @@
-from apps.authentication.models import User
+from apps.anime_db.models import Anime
+from apps.manga_db.models import Manga
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from polymorphic.models import PolymorphicModel
+from django.core.validators import (
+    MaxValueValidator as MaxInt,
+    MinLengthValidator as MinStr,
+)
 
 
 SANTIMENT = (
@@ -19,11 +24,11 @@ class Comment(models.Model):
     reviews, anime, users profile etc.;
     """
     author = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.DO_NOTHING,
         related_name='comments'
     )
-    body            = models.TextField(blank=True)
+    body            = models.TextField(validators=[MinStr(20)])
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
     #
@@ -34,6 +39,8 @@ class Comment(models.Model):
     def __str__(self):
         return f'comment_id: {self.id}, commentable: {self.commentable}'
 
+
+# Reviews
 
 class Review(PolymorphicModel):
     """
@@ -48,7 +55,7 @@ class Review(PolymorphicModel):
         related_name='review_author',
         on_delete=models.DO_NOTHING,
     )
-    body              = models.TextField()
+    body              = models.TextField(validators=[MinStr(200)])
     santiment         = models.CharField(choices=SANTIMENT, max_length=10)
     created_at        = models.DateTimeField(auto_now_add=True)
     updated_at        = models.DateTimeField(auto_now=True)
@@ -82,4 +89,65 @@ class MangaReview(Review):
         null=True,
         related_name='manga_review',
         on_delete=models.CASCADE,
+    )
+
+
+# My List
+
+class MyList(models.Model):
+    class Meta:
+        abstract = True
+
+    class Score(models.IntegerChoices):
+        AWFUL       = 1
+        PRETTY_BAD  = 2
+        SO_SO       = 3
+        GOOD        = 4
+        MASTERPIECE = 5
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="%(class)s",
+    )
+    score = models.PositiveIntegerField(
+        choices=Score.choices,
+        verbose_name="Item score in list",
+        default=0
+    )
+    note       = models.TextField(max_length=300, verbose_name="My note about item")
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class MyAnimeList(MyList):
+
+    class ListStatus(models.Choices):
+        watching      = "Watching"
+        plan_to_watch = "Plan to watch"
+        completed     = "Completed"
+        dropped       = "Dropped"
+
+    anime  = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    status = models.CharField(choices=ListStatus.choices, max_length=15)
+    num_episodes_watched = models.PositiveIntegerField(
+        validators=[MaxInt(100)],
+        default=0,
+        verbose_name="Number of watched episodes"
+    )
+
+
+class MyMangaList(MyList):
+
+    class ListStatus(models.Choices):
+        reading      = "Reading"
+        plat_to_read = "Plan to read"
+        completed    = "Completed"
+        dropped      = "Dropped"
+
+    manga  = models.ForeignKey(Manga, on_delete=models.CASCADE)
+    status = models.CharField(choices=ListStatus.choices, max_length=15)
+    num_chapters_read = models.PositiveIntegerField(
+        validators=[MaxInt(7774)],
+        default=0,
+        verbose_name="Number of readed chapters"
     )

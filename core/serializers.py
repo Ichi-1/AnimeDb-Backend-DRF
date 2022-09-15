@@ -1,5 +1,5 @@
-from rest_marshmallow import Schema
+from rest_framework.serializers import Serializer
 
 
-class EmptySerializer(Schema):
+class EmptySerializer(Serializer):
     pass

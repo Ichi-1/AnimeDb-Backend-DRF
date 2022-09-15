@@ -1,9 +1,13 @@
-from apps.activity.models import Comment
 from django.db import models
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Anime(models.Model):
+    class Meta:
+        verbose_name = 'Anime'
+        verbose_name_plural = 'Anime'
+
     id               = models.AutoField(primary_key=True)
     age_rating       = models.CharField(max_length=5, verbose_name='Age Rating')
     age_rating_guide = models.CharField(max_length=50, verbose_name='Age Rating Guidence')
@@ -24,10 +28,10 @@ class Anime(models.Model):
     year             = models.PositiveIntegerField(verbose_name='Release year', null=True)
     year_end         = models.PositiveIntegerField(verbose_name='Airing end year', null=True)
     # generic comments table
-    comments         = GenericRelation(Comment, object_id_field='commentable_id')
+    comments         = GenericRelation("activity.Comment", object_id_field='commentable_id')
     # m2m user favourites anime
     user_favorites   = models.ManyToManyField(
-        'authentication.User',
+        settings.AUTH_USER_MODEL,
         related_name='favorites_anime',
         blank=True
     )
@@ -37,7 +41,8 @@ class Anime(models.Model):
 
     def get_tags_list(self):
 
-        """ By now tags in model is text filed with enumaretiong of tag words.
+        """
+        By now "tags" in model is text filed with enumaretiong of tag words.
         Search engin suppose that filed is array conaining only one string,
         but it should be array of string, representig genres tags.
         """
@@ -52,7 +57,3 @@ class Anime(models.Model):
     @property
     def path(self):
         return f'/animes/{self.pk}/'
-
-    class Meta:
-        verbose_name = 'Anime'
-        verbose_name_plural = 'Animes'

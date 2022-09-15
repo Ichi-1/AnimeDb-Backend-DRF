@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.core.management.utils import get_random_secret_key
 from rest_framework_simplejwt.tokens import RefreshToken
-from .utils.utils import silly_username_generator
+from apps.authentication.utils import silly_username_generator
 
 
 class CustomManager(BaseUserManager):

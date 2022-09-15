@@ -31,7 +31,7 @@ def test_reviewable_type_invalid(api_client):
 def test_reviewable_404(api_client):
     review = {
         "reviewable_type": "manga",
-        "reviewable_id": 15,
+        "reviewable_id": 15555,
         "body": fake.text(),
         "santiment": "Negative"
     }
@@ -76,7 +76,10 @@ def test_review_author_anonymous():
 def test_update_my_review(api_client, manga_review):
     update_my_review = api_client.patch(
         path=URL + str(manga_review.id) + "/",
-        data={"body": fake.text(), "santiment": "Neutral"}
+        data={
+            "body": fake.text() + fake.text(),
+            "santiment": "Neutral"
+        }
     )
     response_text = str(update_my_review.json())
 
@@ -88,9 +91,11 @@ def test_update_my_review(api_client, manga_review):
 def test_restrict_update_someone_review(api_client, someone_review):
     restrict_update = api_client.patch(
         path=URL + str(someone_review.id) + "/",
-        data={"body": fake.text()}
+        data={"santiment": "Negative"}
     )
+
     assert restrict_update.status_code == 403
+    assert someone_review.santiment == "Positive"
 
 
 def test_delete_my_review(api_client, manga_review):

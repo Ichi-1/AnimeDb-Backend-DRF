@@ -1,21 +1,31 @@
-from apps.authentication.models import User
-from django.core.validators import MinLengthValidator
+from apps.users.models import User
+from django.core.validators import (
+    MinLengthValidator as MinStr,
+    MaxLengthValidator as MaxStr,
+    MaxValueValidator as MaxInt,
+    MinValueValidator as MinInt,
+)
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
-from rest_framework import serializers, status
+from faker import Faker
+from rest_framework import serializers as s, status
 from rest_framework.response import Response
-from .models import SANTIMENT, Comment, Review, MangaReview, AnimeReview
+from .models import (
+    SANTIMENT, Comment, Review,
+    AnimeReview, MangaReview,
+    MyList, MyMangaList, MyAnimeList,
+)
 from apps.anime_db.models import Anime
 from apps.manga_db.models import Manga
 
 
-class AuthorSerializer(serializers.ModelSerializer):
+class AuthorSerializer(s.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'nickname', 'avatar_url')
 
-    avatar_url = serializers.SerializerMethodField()
+    avatar_url = s.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.URI)
     def get_avatar_url(self, user: dict) -> str:
@@ -24,7 +34,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         return "No image assigned to object"
 
 
-class CommentsListSerializer(serializers.ModelSerializer):
+class CommentsListSerializer(s.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('author', 'id', 'body', 'created_at', 'updated_at')
@@ -32,15 +42,15 @@ class CommentsListSerializer(serializers.ModelSerializer):
     author = AuthorSerializer()
 
 
-class CommentCreateSerializer(serializers.Serializer):
+class CommentCreateSerializer(s.Serializer):
     COMMENTABLE_TYPES = (
         ('manga', 'manga'),
         ('anime', 'anime'),
         ('review', 'review')
     )
-    body = serializers.CharField(max_length=500, validators=[MinLengthValidator(20)])
-    commentable_type = serializers.ChoiceField(choices=COMMENTABLE_TYPES)
-    commentable_id = serializers.IntegerField()
+    body = s.CharField(max_length=500, validators=[MinStr(20)])
+    commentable_type = s.ChoiceField(choices=COMMENTABLE_TYPES)
+    commentable_id = s.IntegerField()
 
     def create(self, commentalbe, author):
         body = self.validated_data['body']
@@ -49,8 +59,8 @@ class CommentCreateSerializer(serializers.Serializer):
         return Response(status=status.HTTP_201_CREATED)
 
 
-class CommentUpdateSerializer(serializers.Serializer):
-    body = serializers.CharField(max_length=500, validators=[MinLengthValidator(20)])
+class CommentUpdateSerializer(s.Serializer):
+    body = s.CharField(max_length=500, validators=[MinStr(20)])
 
     def update(self, comment):
         body = self.validated_data['body']
@@ -58,7 +68,7 @@ class CommentUpdateSerializer(serializers.Serializer):
         comment.save()
 
 
-class ReviewCreateSerializer(serializers.Serializer):
+class ReviewCreateSerializer(s.Serializer):
     """
     Parent Review Serializer Schema
     Provide polymorhic creation for different type of reviewable object
@@ -67,10 +77,10 @@ class ReviewCreateSerializer(serializers.Serializer):
         ("anime", "anime"),
         ("manga", "manga")
     )
-    reviewable_type = serializers.ChoiceField(choices=REVIEWABLE_TYPES)
-    reviewable_id = serializers.IntegerField()
-    body = serializers.CharField(validators=[MinLengthValidator(100)])
-    santiment = serializers.ChoiceField(choices=SANTIMENT)
+    reviewable_type = s.ChoiceField(choices=REVIEWABLE_TYPES)
+    reviewable_id = s.IntegerField()
+    body = s.CharField(validators=[MinStr(100)])
+    santiment = s.ChoiceField(choices=SANTIMENT)
 
     def polymorhic_create(self, validated_data, author):
         reviewable_type = validated_data["reviewable_type"]
@@ -97,13 +107,13 @@ class ReviewCreateSerializer(serializers.Serializer):
             return Response(status=status.HTTP_201_CREATED)
 
 
-class ReviewUpdateSerializer(serializers.ModelSerializer):
+class ReviewUpdateSerializer(s.ModelSerializer):
     class Meta:
         model = Review
         fields = ("body", "santiment")
 
 
-class AnimeReviewListSerializer(serializers.ModelSerializer):
+class AnimeReviewListSerializer(s.ModelSerializer):
     class Meta:
         model = AnimeReview
         exclude = ("polymorphic_ctype", )
@@ -111,9 +121,30 @@ class AnimeReviewListSerializer(serializers.ModelSerializer):
     author = AuthorSerializer()
 
 
-class MangaReviewListSerializer(serializers.ModelSerializer):
+class MangaReviewListSerializer(s.ModelSerializer):
     class Meta:
         model = MangaReview
         exclude = ("polymorphic_ctype", )
 
     author = AuthorSerializer()
+
+
+class MyListSerializr(s.Serializer):
+    score = s.ChoiceField(choices=MyList.Score.choices, default=0)
+    note  = s.CharField(default=Faker().text(), validators=[MaxStr(200)])
+
+
+class MyAnimeListSerializer(MyListSerializr):
+    status = s.ChoiceField(choices=MyAnimeList.ListStatus.choices, default="Plat to watch")
+    num_episode_watched = s.IntegerField(default=0, validators=[MaxInt(1818), MinInt(0)])
+
+
+class MyMangaListSerializer(MyListSerializr):
+    status = s.ChoiceField(choices=MyMangaList.ListStatus.choices, default="Plan to read")
+    num_chapters_read = s.IntegerField(default=0, validators=[MaxInt(7764)])
+
+
+class MyAnimeListResponseSerializer(s.ModelSerializer):
+    class Meta:
+        model  = MyAnimeList
+        exclude = ("user", )

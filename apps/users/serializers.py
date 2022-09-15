@@ -1,11 +1,12 @@
-from rest_framework import serializers
-from apps.authentication.models import User
+from rest_framework import serializers as s
+from apps.users.models import User
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
 from apps.anime_db.models import Anime
 from apps.manga_db.models import Manga
 
-class UserListSerializer(serializers.ModelSerializer):
+
+class UserListSerializer(s.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -16,7 +17,7 @@ class UserListSerializer(serializers.ModelSerializer):
             'created_at',
         )
 
-    avatar_url = serializers.SerializerMethodField()
+    avatar_url = s.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.URI)
     def get_avatar_url(self, user: dict) -> str:
@@ -26,7 +27,7 @@ class UserListSerializer(serializers.ModelSerializer):
             return "No image assigned to object"
 
 
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserDetailSerializer(s.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -39,7 +40,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'about'
         )
 
-    avatar_url = serializers.SerializerMethodField()
+    avatar_url = s.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.URI)
     def get_avatar_url(self, user: dict) -> str:
@@ -49,25 +50,25 @@ class UserDetailSerializer(serializers.ModelSerializer):
             return "No image assigned to object"
 
 
-class UserUpdateSerializer(serializers.Serializer):
-    avatar    = serializers.ImageField(required=False)
-    gender    = serializers.CharField(required=False)
-    birthdate = serializers.DateField(required=False)
-    about     = serializers.CharField(required=False)
+class UserUpdateSerializer(s.Serializer):
+    avatar    = s.ImageField(required=False)
+    gender    = s.CharField(required=False)
+    birthdate = s.DateField(required=False)
+    about     = s.CharField(required=False)
 
 
-class FavoritesAnimeSchema(serializers.ModelSerializer):
+class FavoritesAnimeSerializer(s.ModelSerializer):
     class Meta:
         model = Anime
         fields = ("id", "title", "poster_image")
 
 
-class FavoritesMangaSchema(serializers.ModelSerializer):
+class FavoritesMangaSerializer(s.ModelSerializer):
     class Meta:
         model = Manga
         fields = ("id", "title", "picture_main")
 
 
-class UserFavoritesSchema(serializers.Serializer):
-    favorites_anime = FavoritesAnimeSchema(many=True)
-    favorites_manga = FavoritesMangaSchema(many=True)
+class UserFavoritesSerializer(s.Serializer):
+    favorites_anime = FavoritesAnimeSerializer(many=True)
+    favorites_manga = FavoritesMangaSerializer(many=True)

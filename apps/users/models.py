@@ -1,19 +1,19 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    PermissionsMixin
-)
-
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .managers import CustomManager
-from .utils.utils import get_path_upload_avatar
+from .utils import get_path_upload_avatar
 
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
-    Custom user model where nickname
-    is the unique identifiers for authentication
+    Custom user model where nicknameis the unique identifiers
+    for authentication (login)
     """
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+
     USERNAME_FIELD = 'nickname'
     REQUIRED_FIELDS = ['email']
     GENDERS = (('M', 'Male'), ('F', 'Female'))
@@ -41,7 +41,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.nickname
-
-    class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
