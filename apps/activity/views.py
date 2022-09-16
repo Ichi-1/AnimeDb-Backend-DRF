@@ -1,7 +1,7 @@
-from apps.users.models import User
 from apps.anime_db.models import Anime
 from apps.anime_db.utils.paging import TotalCountHeaderPagination
 from apps.manga_db.models import Manga
+from apps.users.models import User
 from django.shortcuts import get_object_or_404
 from faker import Faker
 from rest_framework import permissions, status
@@ -129,9 +129,9 @@ class CommentView(ModelViewSet):
         summary="Update my review",
         description="User can update review if he is author of"
     ),
-    destory=extend_schema(
+    destroy=extend_schema(
         summary="Delete my review",
-        description="User can delete review if he is the author of"
+        description="User can delete review if he is the author of",
     )
 )
 class ReviewView(ModelViewSet):

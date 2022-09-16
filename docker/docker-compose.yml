@@ -22,7 +22,20 @@ services:
       - "5050:80"
     volumes:
       - my_pgadmin:/var/lib/pgadmin
+  
+  redis-channel:
+    image: redis:6.2.7-alpine
+    container_name: redis-channels
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+    command: redis-server --save 60 --maxmemory 100mb
+    ports:
+      - '6379:6379'
+    volumes: 
+      - redis-channel:/dat
 
 volumes:
   postgres_vol:
   my_pgadmin:
+  redis-channel:

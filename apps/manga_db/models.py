@@ -1,6 +1,8 @@
-from django.db import models
+from apps.activity.models import MyList, Review
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MaxValueValidator as MaxInt
+from django.db import models
 
 
 class Manga(models.Model):
@@ -40,3 +42,29 @@ class Manga(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class MangaReview(Review):
+    manga = models.ForeignKey(
+        'manga_db.Manga',
+        blank=True,
+        null=True,
+        related_name='manga_review',
+        on_delete=models.CASCADE,
+    )
+
+
+class MyMangaList(MyList):
+    class ListStatus(models.Choices):
+        reading      = "Reading"
+        plat_to_read = "Plan to read"
+        completed    = "Completed"
+        dropped      = "Dropped"
+
+    manga  = models.ForeignKey(Manga, on_delete=models.CASCADE)
+    status = models.CharField(choices=ListStatus.choices, max_length=15)
+    num_chapters_read = models.PositiveIntegerField(
+        validators=[MaxInt(7774)],
+        null=True,
+        verbose_name="Number of readed chapters"
+    )

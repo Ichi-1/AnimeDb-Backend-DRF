@@ -1,14 +1,16 @@
-from rest_framework.serializers import ModelSerializer
-from .models import Manga
+from rest_framework import serializers as s
+from .models import Manga, MangaReview, MyMangaList
+from apps.activity.serializers import MyListSerializer, AuthorSerializer
+from django.core.validators import MaxValueValidator as MaxInt
 
 
-class MangaDetailSerializer(ModelSerializer):
+class MangaDetailSerializer(s.ModelSerializer):
     class Meta:
         model = Manga
         fields = '__all__'
 
 
-class MangaListSerializer(ModelSerializer):
+class MangaListSerializer(s.ModelSerializer):
     class Meta:
         model = Manga
         fields = (
@@ -19,3 +21,16 @@ class MangaListSerializer(ModelSerializer):
             'year_start',
             'tags',
         )
+
+
+class MangaReviewListSerializer(s.ModelSerializer):
+    class Meta:
+        model = MangaReview
+        exclude = ("polymorphic_ctype", )
+
+    author = AuthorSerializer()
+
+
+class MyMangaListSerializer(MyListSerializer):
+    status = s.ChoiceField(choices=MyMangaList.ListStatus.choices, default="Plan to read")
+    num_chapters_read = s.IntegerField(default=0, validators=[MaxInt(7764)])

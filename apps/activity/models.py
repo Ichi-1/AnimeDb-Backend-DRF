@@ -1,12 +1,10 @@
-from apps.anime_db.models import Anime
-from apps.manga_db.models import Manga
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from polymorphic.models import PolymorphicModel
 from django.core.validators import (
-    MaxValueValidator as MaxInt,
+    # MaxValueValidator as MaxInt,
     MinLengthValidator as MinStr,
 )
 
@@ -18,6 +16,7 @@ SANTIMENT = (
 )
 
 
+# Comment generic Entity
 class Comment(models.Model):
     """
     Entity represent comments of different commentable models:
@@ -40,8 +39,7 @@ class Comment(models.Model):
         return f'comment_id: {self.id}, commentable: {self.commentable}'
 
 
-# Reviews
-
+# Reviews Polymorhic Parent Entity
 class Review(PolymorphicModel):
     """
     Main difference from comment is "santiment" field.
@@ -72,33 +70,13 @@ class Review(PolymorphicModel):
         return self.polymorphic_ctype
 
 
-class AnimeReview(Review):
-    anime = models.ForeignKey(
-        'anime_db.Anime',
-        blank=True,
-        null=True,
-        related_name='anime_review',
-        on_delete=models.CASCADE,
-    )
-
-
-class MangaReview(Review):
-    manga = models.ForeignKey(
-        'manga_db.Manga',
-        blank=True,
-        null=True,
-        related_name='manga_review',
-        on_delete=models.CASCADE,
-    )
-
-
-# My List
-
+# My List Abstract Entity
 class MyList(models.Model):
     class Meta:
         abstract = True
 
     class Score(models.IntegerChoices):
+        NOT_RATED   = 0
         AWFUL       = 1
         PRETTY_BAD  = 2
         SO_SO       = 3
@@ -117,37 +95,3 @@ class MyList(models.Model):
     )
     note       = models.TextField(max_length=300, verbose_name="My note about item")
     updated_at = models.DateTimeField(auto_now=True)
-
-
-class MyAnimeList(MyList):
-
-    class ListStatus(models.Choices):
-        watching      = "Watching"
-        plan_to_watch = "Plan to watch"
-        completed     = "Completed"
-        dropped       = "Dropped"
-
-    anime  = models.ForeignKey(Anime, on_delete=models.CASCADE)
-    status = models.CharField(choices=ListStatus.choices, max_length=15)
-    num_episodes_watched = models.PositiveIntegerField(
-        validators=[MaxInt(100)],
-        default=0,
-        verbose_name="Number of watched episodes"
-    )
-
-
-class MyMangaList(MyList):
-
-    class ListStatus(models.Choices):
-        reading      = "Reading"
-        plat_to_read = "Plan to read"
-        completed    = "Completed"
-        dropped      = "Dropped"
-
-    manga  = models.ForeignKey(Manga, on_delete=models.CASCADE)
-    status = models.CharField(choices=ListStatus.choices, max_length=15)
-    num_chapters_read = models.PositiveIntegerField(
-        validators=[MaxInt(7774)],
-        default=0,
-        verbose_name="Number of readed chapters"
-    )

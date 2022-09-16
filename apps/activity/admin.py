@@ -2,19 +2,13 @@ from django.contrib import admin
 from .models import (
     Comment,
     Review,
-    AnimeReview,
-    MangaReview,
-    MyAnimeList,
-    MyMangaList
 )
+from apps.anime_db.models import AnimeReview
+from apps.manga_db.models import MangaReview
 from polymorphic.admin import (
     PolymorphicParentModelAdmin,
     PolymorphicChildModelAdmin
 )
-
-
-admin.site.register(MyMangaList)
-admin.site.register(MyAnimeList)
 
 
 class CommentAdminConfig(admin.ModelAdmin):

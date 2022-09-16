@@ -1,6 +1,7 @@
 import requests
 import pytest
-from apps.activity.models import AnimeReview, Comment
+from apps.activity.models import Comment
+from apps.anime_db.models import AnimeReview
 from faker import Faker
 
 

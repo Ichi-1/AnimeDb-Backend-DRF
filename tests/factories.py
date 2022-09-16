@@ -1,8 +1,7 @@
 import factory
 from faker import Faker
-from apps.anime_db.models import Anime
-from apps.manga_db.models import Manga
-from apps.activity.models import MangaReview
+from apps.anime_db.models import Anime, MyAnimeList
+from apps.manga_db.models import Manga, MangaReview
 from apps.users.models import User
 from datetime import datetime
 
@@ -70,3 +69,16 @@ class MangaReviewFactory(factory.django.DjangoModelFactory):
     created_at = datetime.now()
     updated_at = datetime.now()
     manga = factory.SubFactory(MangaFactory)
+
+
+class MyAnimeListFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = MyAnimeList
+
+    user  = factory.SubFactory(UserFactory)
+    score = 4
+    note = fake.text()
+    updated_at = datetime.now()
+    anime = factory.SubFactory(AnimeFactory)
+    status = "Watching"
+    num_episodes_watched = 21

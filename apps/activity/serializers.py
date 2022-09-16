@@ -2,8 +2,6 @@ from apps.users.models import User
 from django.core.validators import (
     MinLengthValidator as MinStr,
     MaxLengthValidator as MaxStr,
-    MaxValueValidator as MaxInt,
-    MinValueValidator as MinInt,
 )
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema_field
@@ -11,13 +9,9 @@ from drf_spectacular.types import OpenApiTypes
 from faker import Faker
 from rest_framework import serializers as s, status
 from rest_framework.response import Response
-from .models import (
-    SANTIMENT, Comment, Review,
-    AnimeReview, MangaReview,
-    MyList, MyMangaList, MyAnimeList,
-)
-from apps.anime_db.models import Anime
-from apps.manga_db.models import Manga
+from .models import SANTIMENT, Comment, Review, MyList
+from apps.anime_db.models import Anime, AnimeReview
+from apps.manga_db.models import Manga, MangaReview
 
 
 class AuthorSerializer(s.ModelSerializer):
@@ -113,38 +107,6 @@ class ReviewUpdateSerializer(s.ModelSerializer):
         fields = ("body", "santiment")
 
 
-class AnimeReviewListSerializer(s.ModelSerializer):
-    class Meta:
-        model = AnimeReview
-        exclude = ("polymorphic_ctype", )
-
-    author = AuthorSerializer()
-
-
-class MangaReviewListSerializer(s.ModelSerializer):
-    class Meta:
-        model = MangaReview
-        exclude = ("polymorphic_ctype", )
-
-    author = AuthorSerializer()
-
-
-class MyListSerializr(s.Serializer):
+class MyListSerializer(s.Serializer):
     score = s.ChoiceField(choices=MyList.Score.choices, default=0)
     note  = s.CharField(default=Faker().text(), validators=[MaxStr(200)])
-
-
-class MyAnimeListSerializer(MyListSerializr):
-    status = s.ChoiceField(choices=MyAnimeList.ListStatus.choices, default="Plat to watch")
-    num_episode_watched = s.IntegerField(default=0, validators=[MaxInt(1818), MinInt(0)])
-
-
-class MyMangaListSerializer(MyListSerializr):
-    status = s.ChoiceField(choices=MyMangaList.ListStatus.choices, default="Plan to read")
-    num_chapters_read = s.IntegerField(default=0, validators=[MaxInt(7764)])
-
-
-class MyAnimeListResponseSerializer(s.ModelSerializer):
-    class Meta:
-        model  = MyAnimeList
-        exclude = ("user", )

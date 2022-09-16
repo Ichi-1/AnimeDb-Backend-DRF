@@ -1,24 +1,28 @@
-from apps.activity.models import AnimeReview, Comment, MyAnimeList
+from apps.activity.models import Comment
+from apps.users.models import User
 from apps.activity.paging import CommentListPaginator
-from apps.activity.serializers import (
-    CommentsListSerializer, AnimeReviewListSerializer, MyAnimeListResponseSerializer, MyAnimeListSerializer
-)
+from apps.activity.serializers import CommentsListSerializer
+
 from core.serializers import EmptySerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema, extend_schema_view
+
 from rest_framework import permissions, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
-from .models import Anime
+from .models import Anime, AnimeReview, MyAnimeList
 from .utils.filterset import AnimeListFilter
 from .utils.paging import TotalCountHeaderPagination
 from .serializers import (
     AnimeDetailSerializer,
     AnimeListSerializer,
+    AnimeReviewListSerializer,
+    MyAnimeListSerializer,
+    MyAnimeListResponseSerializer
 )
 
 
@@ -158,9 +162,41 @@ class MyAnimeListView(GenericAPIView):
     http_method_names = ["put", "delete"]
     queryset = MyAnimeList.objects.all()
     serializer_class = MyAnimeListSerializer
+    lookup_field = "id"
+
+    def create_or_update(self, validated_data, request, anime):
+        """
+        If user has no relation to anime in MyAnimeList,
+        new relation would be created with given validated_date.
+        If relation exist, update it with new incoming data
+        """
+        user = User.objects.only("pk").get(pk=request.user.id)
+        my_list_status = self.queryset.filter(anime=anime, user=user)
+        my_list_status.update_or_create(defaults=validated_data, anime=anime, user=user)
+
+    def get_serializer_context(self):
+        """
+        Adding anime_id to context object, to
+        get anime instance by id for validation puprose into serializer method:
+
+        ```
+        def validate_num_episode_watched(self, num_watched_episode):
+            anime = Anime.objects.get(id=self.context.get("anime_id"))
+            # validation logic
+        ```
+        """
+        context = super().get_serializer_context()
+        context["anime_id"] = self.kwargs["id"]
+        return context
 
     def put(self, request, *args, **kwargs):
-        pass
+        anime = get_object_or_404(Anime, id=kwargs.get("id"))
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        self.create_or_update(serializer.data, request, anime)
+        return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         pass

@@ -35,6 +35,8 @@ services:
       - docker_my_pgadmin:/var/lib/pgadmin
     depends_on:
       - db
+  
+  
 
 
 volumes:
@@ -42,3 +44,4 @@ volumes:
     external: true
   docker_my_pgadmin:
     external: true
+  

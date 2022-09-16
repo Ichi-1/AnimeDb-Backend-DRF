@@ -1,6 +1,8 @@
-from django.db import models
+from apps.activity.models import MyList, Review
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.validators import MaxValueValidator as MaxInt
+from django.db import models
 
 
 class Anime(models.Model):
@@ -57,3 +59,29 @@ class Anime(models.Model):
     @property
     def path(self):
         return f'/animes/{self.pk}/'
+
+
+class AnimeReview(Review):
+    anime = models.ForeignKey(
+        'anime_db.Anime',
+        blank=True,
+        null=True,
+        related_name='anime_review',
+        on_delete=models.CASCADE,
+    )
+
+
+class MyAnimeList(MyList):
+    class ListStatus(models.Choices):
+        watching      = "Watching"
+        plan_to_watch = "Plan to watch"
+        completed     = "Completed"
+        dropped       = "Dropped"
+
+    anime  = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    status = models.CharField(choices=ListStatus.choices, max_length=15)
+    num_episodes_watched = models.PositiveIntegerField(
+        validators=[MaxInt(100)],
+        null=True,
+        verbose_name="Number of watched episodes"
+    )

@@ -1,7 +1,10 @@
 from rest_framework import serializers as s
-from .models import Anime
+from .models import Anime, AnimeReview, MyAnimeList
+from apps.activity.serializers import MyListSerializer, AuthorSerializer
+
 from django.core.validators import (
     MaxValueValidator as MaxInt,
+    MinValueValidator as MinInt,
 )
 from faker import Faker
 
@@ -55,3 +58,35 @@ class AnimeIndexSerializer(s.ModelSerializer):
             'year',
             'episode_count',
         )
+
+
+class AnimeReviewListSerializer(s.ModelSerializer):
+    class Meta:
+        model = AnimeReview
+        exclude = ("polymorphic_ctype", )
+
+    author = AuthorSerializer()
+
+
+class MyAnimeListSerializer(MyListSerializer):
+    status = s.ChoiceField(choices=MyAnimeList.ListStatus.choices, default="Plan to watch")
+    num_episodes_watched = s.IntegerField(default=0, validators=[MaxInt(1818), MinInt(0)])
+
+    def validate_num_episodes_watched(self, num_episode_watched):
+        """
+        Check if the number of episode passed by request
+        is appropriate to anime instance
+        """
+        anime = Anime.objects.get(id=self.context.get("anime_id"))
+
+        if num_episode_watched  > anime.episode_count:
+            raise s.ValidationError(
+                {"detail": f"{anime.title} contain only {anime.episode_count} episodes"}
+            )
+        return num_episode_watched
+
+
+class MyAnimeListResponseSerializer(s.ModelSerializer):
+    class Meta:
+        model  = MyAnimeList
+        exclude = ("user", )

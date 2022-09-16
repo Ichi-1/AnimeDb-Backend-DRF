@@ -1,8 +1,6 @@
-from apps.activity.serializers import (
-    CommentsListSerializer, MangaReviewListSerializer
-)
+from apps.activity.serializers import CommentsListSerializer
 from apps.anime_db.utils.paging import TotalCountHeaderPagination
-from apps.activity.models import Comment, MangaReview
+from apps.activity.models import Comment
 from core.serializers import EmptySerializer
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema_view, extend_schema
@@ -10,9 +8,11 @@ from rest_framework import permissions, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from .models import Manga
+from .models import Manga, MangaReview
 from .serializers import (
-    MangaDetailSerializer, MangaListSerializer
+    MangaDetailSerializer,
+    MangaListSerializer,
+    MangaReviewListSerializer
 )
 
 
