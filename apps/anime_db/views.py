@@ -1,12 +1,14 @@
+from itertools import count
 from apps.activity.models import Comment
-from apps.users.models import User
 from apps.activity.paging import CommentListPaginator
 from apps.activity.serializers import CommentsListSerializer
 
 from core.serializers import EmptySerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import (
+    extend_schema, extend_schema_view, OpenApiExample
+)
 
 from rest_framework import permissions, status
 from rest_framework.generics import GenericAPIView
@@ -22,7 +24,6 @@ from .serializers import (
     AnimeListSerializer,
     AnimeReviewListSerializer,
     MyAnimeListSerializer,
-    MyAnimeListResponseSerializer
 )
 
 
@@ -148,7 +149,7 @@ class AnimeFavoritesView(GenericAPIView):
             "If specified anime already in myanimelist, update its status. "
             "This endpoint updates only values specified by the parameter."
         ),
-        responses=MyAnimeListResponseSerializer
+        responses=None
     ),
     delete=extend_schema(
         summary="Delete my anime list item",
@@ -162,17 +163,8 @@ class MyAnimeListView(GenericAPIView):
     http_method_names = ["put", "delete"]
     queryset = MyAnimeList.objects.all()
     serializer_class = MyAnimeListSerializer
+    permission_classes = [permissions.IsAuthenticated]
     lookup_field = "id"
-
-    def create_or_update(self, validated_data, request, anime):
-        """
-        If user has no relation to anime in MyAnimeList,
-        new relation would be created with given validated_date.
-        If relation exist, update it with new incoming data
-        """
-        user = User.objects.only("pk").get(pk=request.user.id)
-        my_list_status = self.queryset.filter(anime=anime, user=user)
-        my_list_status.update_or_create(defaults=validated_data, anime=anime, user=user)
 
     def get_serializer_context(self):
         """
@@ -189,14 +181,63 @@ class MyAnimeListView(GenericAPIView):
         context["anime_id"] = self.kwargs["id"]
         return context
 
+    def update_or_create(self, validated_data, request, anime):
+        """
+        If user has no relation to anime in MyAnimeList,
+        new relation would be created with given validated_date.
+        If relation exist, update it with incoming data
+        """
+        my_list_status = self.queryset.filter(user=request.user, anime=anime)
+        my_list_status.update_or_create(
+            defaults=validated_data, anime=anime, user=request.user
+        )
+
     def put(self, request, *args, **kwargs):
-        anime = get_object_or_404(Anime, id=kwargs.get("id"))
+        anime = get_object_or_404(Anime.objects.only("id"), id=kwargs.get("id"))
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        self.create_or_update(serializer.data, request, anime)
+        self.update_or_create(serializer.data, request, anime)
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
-        pass
+        anime = get_object_or_404(Anime.objects.only("id"), id=kwargs.get("id"))
+        my_list_status = self.queryset.filter(user=request.user, anime=anime)
+        
+        if my_list_status.exists():
+            my_list_status.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        return Response(
+            {"detail": f"{anime.title} not added in {request.user.nickname} list"},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+
+@extend_schema_view(
+    get=extend_schema(
+        summary="Get anime status statistic in users lists",
+    )
+)
+class AnimeStatistic(GenericAPIView):
+    queryset = MyAnimeList.objects.all()
+    permission_classes = [permissions.AllowAny]
+    lookup_field = "id"
+
+    def get(self, request, *args, **kwargs):
+        anime = get_object_or_404(Anime, id=kwargs.get("id"))
+
+        watching = self.queryset.filter(anime=anime, status="Watching")
+        plan_to_watch = self.queryset.filter(anime=anime, status="Plan to watch")
+        completed = self.queryset.filter(anime=anime, status="Completed")
+        dropped = self.queryset.filter(anime=anime, status="Dropped")
+
+        return Response({
+            "data": {
+                "watching": watching.count(),
+                "plan_to_watch": plan_to_watch.count(),
+                "completed": completed.count(),
+                "dropped": dropped.count(),
+            }
+        })

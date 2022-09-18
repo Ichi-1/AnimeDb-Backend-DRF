@@ -9,6 +9,10 @@ class GitHubService:
 
     @staticmethod
     def get_access_token(code):
+        """
+        Return only token.
+        Also contain: 'token type', 'scope'
+        """
         data = {
             'client_id': settings.GITHUB_OAUTH_CLIENT_ID,
             'client_secret': settings.GITHUB_OAUTH_CLIENT_SECRET,
@@ -19,10 +23,6 @@ class GitHubService:
         }
         response = requests.post(AUTH_URL, data=data, headers=headers)
 
-        """
-        Return only token.
-        Also contain: 'token type', 'scope'
-        """
         return response.json()
 
     @staticmethod

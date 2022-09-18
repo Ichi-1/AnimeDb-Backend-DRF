@@ -84,9 +84,3 @@ class MyAnimeListSerializer(MyListSerializer):
                 {"detail": f"{anime.title} contain only {anime.episode_count} episodes"}
             )
         return num_episode_watched
-
-
-class MyAnimeListResponseSerializer(s.ModelSerializer):
-    class Meta:
-        model  = MyAnimeList
-        exclude = ("user", )

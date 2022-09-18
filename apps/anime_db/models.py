@@ -4,7 +4,6 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.validators import MaxValueValidator as MaxInt
 from django.db import models
 
-
 class Anime(models.Model):
     class Meta:
         verbose_name = 'Anime'

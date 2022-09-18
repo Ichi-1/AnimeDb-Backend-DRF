@@ -11,7 +11,7 @@ from .serializers import (
 from drf_spectacular.utils import extend_schema
 
 
-# TODO переработать вью социальны провайдеров. Слишком много return
+# TODO переработать вью социальных провайдеров. Слишком много return
 # TODO "post" has 5 returns that exceeds max allowed 3
 
 
@@ -63,9 +63,9 @@ class GitHubLoginAPIView(GenericAPIView):
     """
     If code in POST request is valid - will signed up user
     with given social provider data (login, email),
-    and then autorize him with jwt tokens pair.
-    If user already registred with this email -
-    autorize him in existed account with jwt tokens pair
+    and then authorize him with jwt tokens pair.
+    If user already registered with this email -
+    authorize him in existed account with jwt tokens pair
 
     """
     serializer_class = GitHubLoginSerializer
@@ -116,7 +116,7 @@ class GitHubLoginAPIView(GenericAPIView):
             )
             return Response(
                 {
-                    "detail": "Accoun created",
+                    "detail": "Account created",
                     "tokens": social_user_tokens
                 },
                 status=status.HTTP_201_CREATED

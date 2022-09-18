@@ -46,7 +46,13 @@ class UserView(ModelViewSet):
 
 
 @extend_schema_view(
-    get=extend_schema("Get user favorites lists")
+    get=extend_schema(
+        summary="Get user favorites lists",
+        description=(
+            "If user has no favorites "
+            "return json with emply lists ```200```"
+        ),
+    )
 )
 class UserFavoritesView(GenericAPIView):
     http_method_names = ["get"]
@@ -65,6 +71,6 @@ class UserFavoritesView(GenericAPIView):
         serializer_anime = FavoritesAnimeSerializer(favorites_anime, many=True)
 
         return Response({
-            "favorites_anime": serializer_anime.data,
-            "favorites_manga": serializer_manga.data
+            "anime": serializer_anime.data,
+            "manga": serializer_manga.data
         })

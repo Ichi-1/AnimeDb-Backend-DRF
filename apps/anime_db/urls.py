@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AnimeFavoritesView, MyAnimeListView
+from .views import AnimeFavoritesView, MyAnimeListView, AnimeStatistic
 from .router import (
     get_anime_list,
     get_anime_detail,
@@ -15,5 +15,6 @@ urlpatterns = [
     path('anime/<int:id>/comments/', get_anime_comments_list),
     path('anime/<int:id>/reviews/', get_anime_reviews_list),
     path("anime/<int:id>/favorites/", AnimeFavoritesView.as_view()),
-    path("anime/<int:id>/my_list/", MyAnimeListView.as_view())
+    path("anime/<int:id>/my_list/", MyAnimeListView.as_view()),
+    path("anime/<int:id>/statistic/", AnimeStatistic.as_view()),
 ]
