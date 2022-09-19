@@ -2,6 +2,8 @@ from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 
 """
+Mixin Example
+
 Mixed permission base model allowing for action level
 permission control. Subclasses may define their permissions
 by creating a 'permission_classes_by_action' variable.

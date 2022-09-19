@@ -101,3 +101,43 @@ db.manga_joined.updateMany({}, {$rename: {
     "year_end": 1,
 
 }
+
+
+
+{
+    "watching": [
+        {
+            "anime": {
+                "id": 1,
+                "title": "Cowboy Bebop",
+                "kind": "TV",
+                "poster_image": "https://example.com",
+                "episode_count": 26
+            },
+            "list_status": {
+                "score": 4,
+                "num_episode_watch": 14,
+                "updated_at": 2022-07-21,
+            }
+        },
+        {
+            "anime": {
+                "id": 1,
+                "title": "Cowboy Bebop The Movie",
+                "kind": "movie",
+                "poster_image": "https://example.com",
+                "episode_count": 1
+            },
+            "list_status": {
+                "score": 5,
+                "num_episode_watch": 1,
+                "updated_at": 2022-07-25,
+            }
+        },
+
+    ],
+    "dropped": [],
+    "completed": [],
+    "plan_to_watch": []
+    
+}

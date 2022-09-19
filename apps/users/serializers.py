@@ -1,9 +1,14 @@
 from rest_framework import serializers as s
+from apps.anime_db.models import MyAnimeList
 from apps.users.models import User
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
-from apps.anime_db.models import Anime
-from apps.manga_db.models import Manga
+from apps.anime_db.serializers import (
+    AnimeStatusCountSerializer, 
+    AnimeInMyListSerializer,
+)
+from apps.manga_db.serializers import MangaStatusCountSerializer
+from apps.activity.serializers import ActivityCountSerializer
 
 
 class UserListSerializer(s.ModelSerializer):
@@ -57,18 +62,35 @@ class UserUpdateSerializer(s.Serializer):
     about     = s.CharField(required=False)
 
 
-class FavoritesAnimeSerializer(s.ModelSerializer):
-    class Meta:
-        model = Anime
-        fields = ("id", "title", "poster_image")
-
-
-class FavoritesMangaSerializer(s.ModelSerializer):
-    class Meta:
-        model = Manga
-        fields = ("id", "title", "picture_main")
+class MediaEntitySerializer(s.Serializer):
+    id           = s.IntegerField()
+    title        = s.CharField()
+    poster_image = s.URLField()
 
 
 class UserFavoritesSerializer(s.Serializer):
-    favorites_anime = FavoritesAnimeSerializer(many=True)
-    favorites_manga = FavoritesMangaSerializer(many=True)
+    anime = MediaEntitySerializer(many=True)
+    manga = MediaEntitySerializer(many=True)
+
+
+class UserStatisticSerializer(s.Serializer):
+    activity = ActivityCountSerializer()
+    manga    = MangaStatusCountSerializer()
+    anime    = AnimeStatusCountSerializer()
+
+
+class UserListStatusSerializer(s.ModelSerializer):
+    class Meta:
+        model = MyAnimeList
+        fields = ("score", "num_episodes_watched", "updated_at")
+
+
+class ListNodeSerializer(s.Serializer):
+    title = s.CharField()
+    poster_image = s.URLField()
+    episode_count = s.IntegerField()
+    list_status = s.CharField()
+    my_score = s.IntegerField()
+    my_num_episodes_watched = s.IntegerField()
+    updated = s.DateTimeField()
+

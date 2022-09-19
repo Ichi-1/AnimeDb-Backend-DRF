@@ -9,13 +9,13 @@ class Manga(models.Model):
     class Meta:
         verbose_name = "Manga"
         verbose_name_plural = "Manga"
+    
+    class Status(models.Choices):
+        finished     = "Finished"
+        on_hiatus    = "On Hiatus"
+        publishing   = "Publishing"
+        discontinued = "Discontinued"
 
-    STATUS = (
-        ('Finished', 'Finished'),
-        ('On Hiatus', 'On Hiatus'),
-        ('Publishing', 'Publishing'),
-        ('Discontinued', 'Discontinued'),
-    )
 
     id               = models.AutoField(primary_key=True)
     author           = models.TextField(verbose_name='Manga Author')
@@ -23,8 +23,8 @@ class Manga(models.Model):
     chapters         = models.PositiveIntegerField(verbose_name='Chapters count')
     description      = models.TextField(verbose_name='Description')
     media_type       = models.CharField(max_length=20)
-    picture_main     = models.URLField(max_length=255, verbose_name='Poster URL')
-    status           = models.CharField(choices=STATUS, max_length=20)
+    poster_image     = models.URLField(max_length=255, verbose_name='Poster URL')
+    status           = models.CharField(choices=Status.choices, max_length=20)
     tags             = models.TextField(verbose_name='Genres Tags', null=True)
     title            = models.CharField(max_length=255, verbose_name='English title')
     title_jp         = models.CharField(max_length=255, verbose_name='Japan title')
@@ -55,16 +55,22 @@ class MangaReview(Review):
 
 
 class MyMangaList(MyList):
+    class Meta:
+        verbose_name_plural = "MyManga list"
+
     class ListStatus(models.Choices):
         reading      = "Reading"
-        plat_to_read = "Plan to read"
+        plan_to_read = "Plan to read"
         completed    = "Completed"
         dropped      = "Dropped"
 
     manga  = models.ForeignKey(Manga, on_delete=models.CASCADE)
     status = models.CharField(choices=ListStatus.choices, max_length=15)
-    num_chapters_read = models.PositiveIntegerField(
+    num_chapters_readed = models.PositiveIntegerField(
         validators=[MaxInt(7774)],
         null=True,
         verbose_name="Number of readed chapters"
-    )
+    )  
+
+    def __str__(self):
+        return f"{self.user.nickname}, {self.manga.title}, {self.status}, {self.score}"

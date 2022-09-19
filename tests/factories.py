@@ -49,7 +49,7 @@ class MangaFactory(factory.django.DjangoModelFactory):
     chapters = 12
     description = fake.text()
     media_type = "manga"
-    picture_main = "example.com"
+    poster_image = "example.com"
     status = "status"
     tags = "tags"
     title = "Berserk"

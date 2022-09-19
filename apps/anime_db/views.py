@@ -1,15 +1,12 @@
-from itertools import count
 from apps.activity.models import Comment
 from apps.activity.paging import CommentListPaginator
 from apps.activity.serializers import CommentsListSerializer
-
 from core.serializers import EmptySerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import (
-    extend_schema, extend_schema_view, OpenApiExample
+    extend_schema, extend_schema_view
 )
-
 from rest_framework import permissions, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import ModelViewSet
@@ -24,6 +21,7 @@ from .serializers import (
     AnimeListSerializer,
     AnimeReviewListSerializer,
     MyAnimeListSerializer,
+    AnimeStatisticSerializer
 )
 
 
@@ -54,7 +52,7 @@ class AnimeView(ModelViewSet):
         summary="Get anime comments list",
         description=(
             "If commentable resource has no comments, "
-            "return empty list ```200 Ok```"
+            "empty list would be returned ```200```"
         )
     )
 )
@@ -79,7 +77,7 @@ class AnimeCommentsListView(ModelViewSet):
         summary="Get anime reviews list",
         description=(
             "If reviewable resource has no review, "
-            "return empty list ```200 Ok```"
+            "empty list would be returned ```200```"
         )
     )
 )
@@ -96,14 +94,14 @@ class AnimeReviewsListView(ModelViewSet):
         description=(
             "Add specific anime to my favorites list. "
             "If anime already added to user favorites"
-            "this endpoint does nothing and returns ```409 Conflict```"
+            "this endpoint does nothing and returns ```409```"
         )
     ),
     delete=extend_schema(
         summary="Delete my favorites anime",
         description=(
             "If the specified anime does not exist in user's anime list"
-            "this endpoint does nothing and returns ```404 Not Found```."
+            "this endpoint does nothing and returns ```404```."
         )
     )
 )
@@ -146,7 +144,7 @@ class AnimeFavoritesView(GenericAPIView):
         summary="Update my anime list status",
         description=(
             "Add specified anime to my anime list. "
-            "If specified anime already in myanimelist, update its status. "
+            "If specified anime already in my anime list, update its status. "
             "This endpoint updates only values specified by the parameter."
         ),
         responses=None
@@ -155,7 +153,7 @@ class AnimeFavoritesView(GenericAPIView):
         summary="Delete my anime list item",
         description=(
             "If the specified anime does not exist in user's anime list, "
-            "this endpoint does nothing and returns ```404 Not Found```."
+            "this endpoint does nothing and returns ```404```."
         )
     )
 )
@@ -169,7 +167,7 @@ class MyAnimeListView(GenericAPIView):
     def get_serializer_context(self):
         """
         Adding anime_id to context object, to
-        get anime instance by id for validation puprose into serializer method:
+        get anime instance by id into serializer method validate_:
 
         ```
         def validate_num_episode_watched(self, num_watched_episode):
@@ -185,7 +183,7 @@ class MyAnimeListView(GenericAPIView):
         """
         If user has no relation to anime in MyAnimeList,
         new relation would be created with given validated_date.
-        If relation exist, update it with incoming data
+        If relation exist, update it with new status data.
         """
         my_list_status = self.queryset.filter(user=request.user, anime=anime)
         my_list_status.update_or_create(
@@ -217,24 +215,36 @@ class MyAnimeListView(GenericAPIView):
 
 @extend_schema_view(
     get=extend_schema(
-        summary="Get anime status statistic in users lists",
+        summary="Get anime statistic",
+        description=(
+            "Retrieve count of each activity type and each list status type. "
+            "Response status always ```200```, except anime not found ```404```"
+        )
     )
 )
-class AnimeStatistic(GenericAPIView):
+class AnimeStatisticView(GenericAPIView):
     queryset = MyAnimeList.objects.all()
+    serializer_class = AnimeStatisticSerializer
     permission_classes = [permissions.AllowAny]
     lookup_field = "id"
 
     def get(self, request, *args, **kwargs):
         anime = get_object_or_404(Anime, id=kwargs.get("id"))
-
+        # activity 
+        comments = anime.comments
+        reviews = AnimeReview.objects.filter(anime=anime)
+        # my_list 
         watching = self.queryset.filter(anime=anime, status="Watching")
         plan_to_watch = self.queryset.filter(anime=anime, status="Plan to watch")
         completed = self.queryset.filter(anime=anime, status="Completed")
         dropped = self.queryset.filter(anime=anime, status="Dropped")
 
         return Response({
-            "data": {
+            "activity": {
+                "comments": comments.count(),
+                "reviews": reviews.count(),
+            },
+            "my_list": {
                 "watching": watching.count(),
                 "plan_to_watch": plan_to_watch.count(),
                 "completed": completed.count(),

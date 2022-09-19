@@ -25,7 +25,10 @@ from drf_spectacular.utils import (
 @extend_schema_view(
     create=extend_schema(
         summary="Create comment. Authorized Only",
-        description="Appropriate commentable type: 'manga', 'anime', 'review'"
+        description=(
+            "Valid commentable type: "
+            "```manga```, ```anime```, ```review```"
+        )
     ),
     partial_update=extend_schema(
         summary="Update my comment. Authorized Only",
@@ -104,6 +107,10 @@ class CommentView(ModelViewSet):
 @extend_schema_view(
     create=extend_schema(
         summary="Create review. Authorized Only.",
+        description=(
+            "Valid reviewable type: "
+            "```anime```, ```manga```"
+        ),
         examples=[
             OpenApiExample(
                 name="Anime Review",
@@ -178,8 +185,8 @@ class ReviewView(ModelViewSet):
     list=extend_schema(
         summary="Get review comments list",
         description=(
-            "If commentable resource has no comments"
-            "empty list would returned ```200```"
+            "If review has no comments"
+            "empty list would be returned ```200```"
         )
     )
 )

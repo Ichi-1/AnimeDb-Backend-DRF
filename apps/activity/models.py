@@ -9,13 +9,6 @@ from django.core.validators import (
 )
 
 
-SANTIMENT = (
-    ('Positive', 'Positive'),
-    ('Neutral', 'Neutral'),
-    ('Negative', 'Negative'),
-)
-
-
 # Comment generic Entity
 class Comment(models.Model):
     """
@@ -48,13 +41,18 @@ class Review(PolymorphicModel):
     emotional and evaluative attitude to a viewed or read title.
     (This is an opinion about the title, analysis, analysis, evaluation)
     """
+    class Santiment(models.Choices):
+        positive = "Positive"
+        neutral  = "Neutral"
+        negative = "Negative"
+
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='review_author',
         on_delete=models.DO_NOTHING,
     )
     body              = models.TextField(validators=[MinStr(200)])
-    santiment         = models.CharField(choices=SANTIMENT, max_length=10)
+    santiment         = models.CharField(choices=Santiment.choices, max_length=10)
     created_at        = models.DateTimeField(auto_now_add=True)
     updated_at        = models.DateTimeField(auto_now=True)
     comments          = GenericRelation(Comment, object_id_field='commentable_id')

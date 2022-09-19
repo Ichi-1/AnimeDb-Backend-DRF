@@ -9,7 +9,7 @@ from drf_spectacular.types import OpenApiTypes
 from faker import Faker
 from rest_framework import serializers as s, status
 from rest_framework.response import Response
-from .models import SANTIMENT, Comment, Review, MyList
+from .models import Comment, Review, MyList
 from apps.anime_db.models import Anime, AnimeReview
 from apps.manga_db.models import Manga, MangaReview
 
@@ -42,6 +42,8 @@ class CommentCreateSerializer(s.Serializer):
         ('anime', 'anime'),
         ('review', 'review')
     )
+
+    
     body = s.CharField(max_length=500, validators=[MinStr(20)])
     commentable_type = s.ChoiceField(choices=COMMENTABLE_TYPES)
     commentable_id = s.IntegerField()
@@ -74,7 +76,7 @@ class ReviewCreateSerializer(s.Serializer):
     reviewable_type = s.ChoiceField(choices=REVIEWABLE_TYPES)
     reviewable_id = s.IntegerField()
     body = s.CharField(validators=[MinStr(100)])
-    santiment = s.ChoiceField(choices=SANTIMENT)
+    santiment = s.ChoiceField(choices=Review.Santiment.choices)
 
     def polymorhic_create(self, validated_data, author):
         reviewable_type = validated_data["reviewable_type"]
@@ -110,3 +112,8 @@ class ReviewUpdateSerializer(s.ModelSerializer):
 class MyListSerializer(s.Serializer):
     score = s.ChoiceField(choices=MyList.Score.choices, default=0)
     note  = s.CharField(default=Faker().text(), validators=[MaxStr(200)])
+
+
+class ActivityCountSerializer(s.Serializer):
+    comments = s.IntegerField()
+    reviews  = s.IntegerField()

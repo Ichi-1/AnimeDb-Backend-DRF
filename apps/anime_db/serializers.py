@@ -1,6 +1,10 @@
 from rest_framework import serializers as s
 from .models import Anime, AnimeReview, MyAnimeList
-from apps.activity.serializers import MyListSerializer, AuthorSerializer
+from apps.activity.serializers import (
+    AuthorSerializer, 
+    ActivityCountSerializer,
+    MyListSerializer, 
+)
 
 from django.core.validators import (
     MaxValueValidator as MaxInt,
@@ -45,21 +49,6 @@ class AnimeListSerializer(s.ModelSerializer):
     title = s.CharField(default="Cowboy Bebop")
 
 
-class AnimeIndexSerializer(s.ModelSerializer):
-    class Meta:
-        model = Anime
-        fields = (
-            'id',
-            'title',
-            'poster_image',
-            'kind',
-            'average_rating',
-            'studio',
-            'year',
-            'episode_count',
-        )
-
-
 class AnimeReviewListSerializer(s.ModelSerializer):
     class Meta:
         model = AnimeReview
@@ -84,3 +73,21 @@ class MyAnimeListSerializer(MyListSerializer):
                 {"detail": f"{anime.title} contain only {anime.episode_count} episodes"}
             )
         return num_episode_watched
+
+
+class AnimeStatusCountSerializer(s.Serializer):
+    watching      = s.IntegerField(default=15)
+    plan_to_watch = s.IntegerField(default=3)
+    completed     = s.IntegerField(default=1)
+    dropped       = s.IntegerField(default=3)
+
+
+class AnimeStatisticSerializer(s.Serializer):
+    activity = ActivityCountSerializer()
+    my_list  = AnimeStatusCountSerializer()
+
+
+class AnimeInMyListSerializer(s.ModelSerializer):
+    class Meta:
+        model = Anime
+        fields = ("id", "title", "episode_count", "poster_image", "kind")

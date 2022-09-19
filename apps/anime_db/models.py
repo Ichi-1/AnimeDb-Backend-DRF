@@ -71,16 +71,22 @@ class AnimeReview(Review):
 
 
 class MyAnimeList(MyList):
+    class Meta:
+        verbose_name_plural = "MyAnime list"
+
     class ListStatus(models.Choices):
         watching      = "Watching"
         plan_to_watch = "Plan to watch"
         completed     = "Completed"
         dropped       = "Dropped"
 
-    anime  = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    anime  = models.ForeignKey(Anime, on_delete=models.CASCADE, related_name="my_list")
     status = models.CharField(choices=ListStatus.choices, max_length=15)
     num_episodes_watched = models.PositiveIntegerField(
         validators=[MaxInt(100)],
         null=True,
         verbose_name="Number of watched episodes"
     )
+
+    def __str__(self):
+        return f"{self.user.nickname}, {self.anime.title}, {self.status}, {self.score}"
