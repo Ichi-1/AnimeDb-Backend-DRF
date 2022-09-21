@@ -3,7 +3,7 @@ from .models import Manga, MangaReview, MyMangaList
 from apps.activity.serializers import (
     AuthorSerializer,
     ActivityCountSerializer,
-    MyListSerializer, 
+    MyListUpdateOrDeleteSerializer,
 )
 from django.core.validators import MaxValueValidator as MaxInt
 
@@ -35,7 +35,7 @@ class MangaReviewListSerializer(s.ModelSerializer):
     author = AuthorSerializer()
 
 
-class MyMangaListSerializer(MyListSerializer):
+class MyMangaListUpdateOrDeleteSerializer(MyListUpdateOrDeleteSerializer):
     status = s.ChoiceField(choices=MyMangaList.ListStatus.choices, default="Plan to read")
     num_chapters_readed = s.IntegerField(default=0, validators=[MaxInt(7764)])
 
@@ -48,7 +48,7 @@ class MyMangaListSerializer(MyListSerializer):
             )
         return num_chapters_readed
 
-    
+
 class MangaStatusCountSerializer(s.Serializer):
     reading       = s.IntegerField(default=15)
     plan_to_read  = s.IntegerField(default=3)

@@ -1,8 +1,10 @@
 from apps.anime_db.utils.filterset import MyAnimeListFilter
+from apps.manga_db.filterset import MyMangaListFilter
 from apps.users.models import User
 from apps.anime_db.models import MyAnimeList
 from apps.manga_db.models import MyMangaList
 from apps.activity.models import Comment, Review
+from django.db.models import F
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import (
@@ -15,15 +17,16 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from .serializers import (
+    MediaEntitySerializer,
+    MyAnimeListGetSerializer,
+    MyMangaListGetSerializer,
     UserListSerializer,
     UserDetailSerializer,
+    UserFavoritesSerializer,
     UserStatisticSerializer,
     UserUpdateSerializer,
-    UserFavoritesSerializer,
-    MediaEntitySerializer,
-    ListNodeSerializer
 )
-from django.db.models import F
+
 
 @extend_schema_view(
     list=extend_schema(summary='Get users list'),
@@ -93,7 +96,7 @@ class UserFavoritesView(GenericAPIView):
         )
     )
 )
-class UserStatisticView(GenericAPIView):    
+class UserStatisticView(GenericAPIView):
     queryset = User.objects.all()
     serializer_class = UserStatisticSerializer
     permission_classes = [permissions.AllowAny]
@@ -131,15 +134,15 @@ class UserStatisticView(GenericAPIView):
     get=extend_schema(
         summary="Get MyAnimeList",
         description=(
-            "This endpoint always return ```200``` " 
+            "This endpoint always return ```200``` "
             "except user not found ```404```"
         )
     )
 )
 class UserMyAnimeListView(ListAPIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = ListNodeSerializer
-    filter_backends = (DjangoFilterBackend,)
+    serializer_class = MyAnimeListGetSerializer
+    filter_backends = (DjangoFilterBackend, )
     filterset_class = MyAnimeListFilter
     lookup_field = "id"
 
@@ -152,27 +155,39 @@ class UserMyAnimeListView(ListAPIView):
         return MyAnimeList.objects.all().select_related("anime").values(
             title=F("anime__title"),
             poster_image=F("anime__poster_image"),
-            episode_count=F("anime__episode_count"),
             kind=F("anime__kind"),
+            episode_count=F("anime__episode_count"),
             list_status=F("status"),
             my_score=F("score"),
+            updated=F("updated_at"),
             my_num_episodes_watched=F("num_episodes_watched"),
-            updated=F("updated_at")
-        ) 
+        )
 
-    # def list(self, request, *args, **kwargs):
-    #     user = get_object_or_404(User.objects.only("pk"), pk=kwargs.get("id"))
-    #     my_list_related = self.get_queryset().filter(user=user)
 
-    #     watching = my_list_related.filter(status="Watching")
-    #     plan_to_watch = my_list_related.filter(status="Plan to watch")
-    #     completed = my_list_related.filter(status="Completed")
-    #     dropped = my_list_related.filter(status="Dropped")
+@extend_schema_view(
+    get=extend_schema(
+        summary="Get MyMangaList",
+        description=(
+            "This endpoint always return ```200``` "
+            "except user not found ```404```"
+        )
+    )
+)
+class UserMyMangaListView(ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = MyMangaListGetSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = MyMangaListFilter
+    lookup_field = "id"
 
-    #     return Response({
-    #         "watching": NodeSerializer(watching, many=True).data,
-    #         "plan_to_watch": NodeSerializer(plan_to_watch, many=True).data,
-    #         "completed": NodeSerializer(completed, many=True).data,
-    #         "dropped": NodeSerializer(dropped, many=True).data
-    #     }
-
+    def get_queryset(self):
+        return MyMangaList.objects.all().select_related("manga").values(
+            title=F("manga__title"),
+            poster_image=F("manga__poster_image"),
+            media_type=F("manga__media_type"),
+            chapters=F("manga__chapters"),
+            list_status=F("status"),
+            my_score=F("score"),
+            updated=F("updated_at"),
+            my_num_chapters_readed=F("num_chapters_readed")
+        )

@@ -1,14 +1,15 @@
 from rest_framework import serializers as s
-from apps.anime_db.models import MyAnimeList
 from apps.users.models import User
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
 from apps.anime_db.serializers import (
-    AnimeStatusCountSerializer, 
-    AnimeInMyListSerializer,
+    AnimeStatusCountSerializer,
 )
 from apps.manga_db.serializers import MangaStatusCountSerializer
-from apps.activity.serializers import ActivityCountSerializer
+from apps.activity.serializers import (
+    ActivityCountSerializer,
+    MyListGetSerializer
+)
 
 
 class UserListSerializer(s.ModelSerializer):
@@ -79,18 +80,13 @@ class UserStatisticSerializer(s.Serializer):
     anime    = AnimeStatusCountSerializer()
 
 
-class UserListStatusSerializer(s.ModelSerializer):
-    class Meta:
-        model = MyAnimeList
-        fields = ("score", "num_episodes_watched", "updated_at")
-
-
-class ListNodeSerializer(s.Serializer):
-    title = s.CharField()
-    poster_image = s.URLField()
+class MyAnimeListGetSerializer(MyListGetSerializer):
+    kind = s.CharField()
     episode_count = s.IntegerField()
-    list_status = s.CharField()
-    my_score = s.IntegerField()
     my_num_episodes_watched = s.IntegerField()
-    updated = s.DateTimeField()
 
+
+class MyMangaListGetSerializer(MyListGetSerializer):
+    media_type = s.CharField()
+    chapters = s.IntegerField()
+    my_num_chapters_readed = s.IntegerField()

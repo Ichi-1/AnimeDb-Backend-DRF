@@ -9,13 +9,12 @@ class Manga(models.Model):
     class Meta:
         verbose_name = "Manga"
         verbose_name_plural = "Manga"
-    
+
     class Status(models.Choices):
         finished     = "Finished"
         on_hiatus    = "On Hiatus"
         publishing   = "Publishing"
         discontinued = "Discontinued"
-
 
     id               = models.AutoField(primary_key=True)
     author           = models.TextField(verbose_name='Manga Author')
@@ -70,7 +69,7 @@ class MyMangaList(MyList):
         validators=[MaxInt(7774)],
         null=True,
         verbose_name="Number of readed chapters"
-    )  
+    )
 
     def __str__(self):
         return f"{self.user.nickname}, {self.manga.title}, {self.status}, {self.score}"

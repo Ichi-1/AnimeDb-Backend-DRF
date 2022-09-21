@@ -22,10 +22,10 @@ class MyAnimeListFilter(filters.FilterSet):
     class Meta:
         model = MyAnimeList
         fields = ("status",)
-    
+
     status = filters.CharFilter(
         help_text=(
-            "Filters returned my anime list by these statutes."
+            "Filters returned my anime list by these statutes. "
             "To return all anime do not specify this field. "
             "Valid values:"
             "```Watching```, ```Plan to watch```, "

@@ -249,8 +249,6 @@ ALLOWED_HOSTS = [
 ]
 
 
-
-
 # API Keys
 
 # Google API
@@ -275,7 +273,6 @@ CLOUDINARY_STORAGE = {
 }
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 STORAGE_URL = config("STORAGE_URL")
-
 
 
 SITE_ID = 1

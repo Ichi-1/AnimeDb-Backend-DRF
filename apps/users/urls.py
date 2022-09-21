@@ -1,9 +1,10 @@
 from django.urls import path
 from djoser.views import UserViewSet as Djoser
 from .views import (
-    UserView, 
-    UserFavoritesView, 
+    UserView,
+    UserFavoritesView,
     UserMyAnimeListView,
+    UserMyMangaListView,
     UserStatisticView
 )
 from .router import (
@@ -18,6 +19,7 @@ urlpatterns = [
     path("users/", UserView.as_view({"get": "list"})),
     path("users/<int:pk>/", get_or_patch_user),
     path("users/<int:id>/list/anime/", UserMyAnimeListView.as_view()),
+    path("users/<int:id>/list/manga/", UserMyMangaListView.as_view()),
     path("users/<int:id>/statistic/", UserStatisticView.as_view()),
     path("users/<int:id>/favorites/", UserFavoritesView.as_view()),
     # user auth-kinda endpoints

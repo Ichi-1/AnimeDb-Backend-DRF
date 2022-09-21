@@ -13,7 +13,7 @@ from .serializers import (
     MangaDetailSerializer,
     MangaListSerializer,
     MangaReviewListSerializer,
-    MyMangaListSerializer,
+    MyMangaListUpdateOrDeleteSerializer,
     MangaStatisticSerializer
 )
 
@@ -146,7 +146,7 @@ class MangaFavoritesView(GenericAPIView):
 class MyMangaListView(GenericAPIView):
     http_method_names = ["put", "delete"]
     queryset = MyMangaList.objects.all()
-    serializer_class = MyMangaListSerializer
+    serializer_class = MyMangaListUpdateOrDeleteSerializer
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "id"
 
@@ -164,7 +164,7 @@ class MyMangaListView(GenericAPIView):
         context = super().get_serializer_context()
         context["manga_id"] = self.kwargs["id"]
         return context
-    
+
     def update_or_create(self, validated_data, request, manga):
         """
         If user has no relation to manga in MyMangaList,
@@ -188,16 +188,15 @@ class MyMangaListView(GenericAPIView):
     def delete(self, request, *args, **kwargs):
         manga = get_object_or_404(Manga.objects.only("id"), id=kwargs.get("id"))
         my_list_status = self.queryset.filter(user=request.user, manga=manga)
-        
+
         if my_list_status.exists():
             my_list_status.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        
+
         return Response(
             {"detail": f"{manga.title} not added in {request.user.nickname} list"},
             status=status.HTTP_404_NOT_FOUND
         )
-
 
 
 @extend_schema_view(
@@ -217,7 +216,7 @@ class MangaStatisticView(GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         manga = get_object_or_404(Manga, id=kwargs.get("id"))
-        # activity 
+        # activity
         comments = manga.comments
         reviews = MangaReview.objects.filter(manga=manga)
         # my_list

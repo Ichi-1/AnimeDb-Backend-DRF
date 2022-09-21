@@ -1,16 +1,15 @@
-from rest_framework import serializers as s
-from .models import Anime, AnimeReview, MyAnimeList
 from apps.activity.serializers import (
-    AuthorSerializer, 
+    AuthorSerializer,
     ActivityCountSerializer,
-    MyListSerializer, 
+    MyListUpdateOrDeleteSerializer,
 )
-
 from django.core.validators import (
     MaxValueValidator as MaxInt,
     MinValueValidator as MinInt,
 )
 from faker import Faker
+from rest_framework import serializers as s
+from .models import Anime, AnimeReview, MyAnimeList
 
 
 class AnimeDetailSerializer(s.ModelSerializer):
@@ -57,7 +56,7 @@ class AnimeReviewListSerializer(s.ModelSerializer):
     author = AuthorSerializer()
 
 
-class MyAnimeListSerializer(MyListSerializer):
+class MyAnimeListUpdateOrDeleteSerializer(MyListUpdateOrDeleteSerializer):
     status = s.ChoiceField(choices=MyAnimeList.ListStatus.choices, default="Plan to watch")
     num_episodes_watched = s.IntegerField(default=0, validators=[MaxInt(1818), MinInt(0)])
 
@@ -85,9 +84,3 @@ class AnimeStatusCountSerializer(s.Serializer):
 class AnimeStatisticSerializer(s.Serializer):
     activity = ActivityCountSerializer()
     my_list  = AnimeStatusCountSerializer()
-
-
-class AnimeInMyListSerializer(s.ModelSerializer):
-    class Meta:
-        model = Anime
-        fields = ("id", "title", "episode_count", "poster_image", "kind")

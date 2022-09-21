@@ -43,7 +43,6 @@ class CommentCreateSerializer(s.Serializer):
         ('review', 'review')
     )
 
-    
     body = s.CharField(max_length=500, validators=[MinStr(20)])
     commentable_type = s.ChoiceField(choices=COMMENTABLE_TYPES)
     commentable_id = s.IntegerField()
@@ -109,11 +108,27 @@ class ReviewUpdateSerializer(s.ModelSerializer):
         fields = ("body", "santiment")
 
 
-class MyListSerializer(s.Serializer):
+class ActivityCountSerializer(s.Serializer):
+    comments = s.IntegerField()
+    reviews  = s.IntegerField()
+
+
+class MyListUpdateOrDeleteSerializer(s.Serializer):
+    """
+    Serializer used as parent class to MyMangaList and MyAnimeList
+    serializers.
+    """
     score = s.ChoiceField(choices=MyList.Score.choices, default=0)
     note  = s.CharField(default=Faker().text(), validators=[MaxStr(200)])
 
 
-class ActivityCountSerializer(s.Serializer):
-    comments = s.IntegerField()
-    reviews  = s.IntegerField()
+class MyListGetSerializer(s.Serializer):
+    """
+    Serializer used as parent class to MyMangaListGet and MyAnimeListGet
+    serializers.
+    """
+    title = s.CharField()
+    poster_image = s.URLField()
+    list_status = s.CharField()
+    my_score = s.IntegerField()
+    updated = s.DateTimeField()

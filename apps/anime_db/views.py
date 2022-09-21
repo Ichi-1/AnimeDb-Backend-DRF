@@ -20,7 +20,7 @@ from .serializers import (
     AnimeDetailSerializer,
     AnimeListSerializer,
     AnimeReviewListSerializer,
-    MyAnimeListSerializer,
+    MyAnimeListUpdateOrDeleteSerializer,
     AnimeStatisticSerializer
 )
 
@@ -160,7 +160,7 @@ class AnimeFavoritesView(GenericAPIView):
 class MyAnimeListView(GenericAPIView):
     http_method_names = ["put", "delete"]
     queryset = MyAnimeList.objects.all()
-    serializer_class = MyAnimeListSerializer
+    serializer_class = MyAnimeListUpdateOrDeleteSerializer
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "id"
 
@@ -202,11 +202,11 @@ class MyAnimeListView(GenericAPIView):
     def delete(self, request, *args, **kwargs):
         anime = get_object_or_404(Anime.objects.only("id"), id=kwargs.get("id"))
         my_list_status = self.queryset.filter(user=request.user, anime=anime)
-        
+
         if my_list_status.exists():
             my_list_status.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        
+
         return Response(
             {"detail": f"{anime.title} not added in {request.user.nickname} list"},
             status=status.HTTP_404_NOT_FOUND
@@ -230,10 +230,10 @@ class AnimeStatisticView(GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         anime = get_object_or_404(Anime, id=kwargs.get("id"))
-        # activity 
+        # activity
         comments = anime.comments
         reviews = AnimeReview.objects.filter(anime=anime)
-        # my_list 
+        # my_list
         watching = self.queryset.filter(anime=anime, status="Watching")
         plan_to_watch = self.queryset.filter(anime=anime, status="Plan to watch")
         completed = self.queryset.filter(anime=anime, status="Completed")

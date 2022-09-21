@@ -10,7 +10,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-    
+
         # Add custom claims
         token['nickname'] = user.nickname
         token['avatar'] = f'{settings.STORAGE_URL}{user.avatar}'

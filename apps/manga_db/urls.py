@@ -6,8 +6,8 @@ from .router import (
     get_manga_reviews_list,
 )
 from .views import (
-    MangaFavoritesView, 
-    MyMangaListView, 
+    MangaFavoritesView,
+    MyMangaListView,
     MangaStatisticView
 )
 

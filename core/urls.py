@@ -1,4 +1,4 @@
-from django.conf import settings
+# from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.reverse import reverse
@@ -9,7 +9,6 @@ from drf_spectacular.views import (
     SpectacularSwaggerView
 )
 from drf_spectacular.utils import extend_schema
-
 
 
 class DocsView(views.APIView):
