@@ -1,7 +1,7 @@
 from algoliasearch_django import AlgoliaIndex
 from algoliasearch_django.decorators import register
 
-from apps.anime_db.models import Anime
+from apps.anime.models import Anime
 
 
 @register(Anime)

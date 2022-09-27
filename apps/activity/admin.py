@@ -3,8 +3,8 @@ from .models import (
     Comment,
     Review,
 )
-from apps.anime_db.models import AnimeReview
-from apps.manga_db.models import MangaReview
+from apps.anime.models import AnimeReview
+from apps.manga.models import MangaReview
 from polymorphic.admin import (
     PolymorphicParentModelAdmin,
     PolymorphicChildModelAdmin

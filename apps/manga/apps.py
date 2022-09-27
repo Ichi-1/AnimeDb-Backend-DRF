@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AnimeListConfig(AppConfig):
+class MangaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.anime_db'
+    name = 'apps.manga'

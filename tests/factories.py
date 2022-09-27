@@ -1,7 +1,7 @@
 import factory
 from faker import Faker
-from apps.anime_db.models import Anime, MyAnimeList
-from apps.manga_db.models import Manga, MangaReview
+from apps.anime.models import Anime, MyAnimeList
+from apps.manga.models import Manga, MangaReview
 from apps.users.models import User
 from datetime import datetime
 

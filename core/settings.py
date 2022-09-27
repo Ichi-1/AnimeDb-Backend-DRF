@@ -8,8 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 #   * SECURITY WARNING: keep the secret key used in production secret!
 #   * SECURITY WARNING: don"t run with debug turned on in production!
-
-
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", cast=bool)
 
@@ -42,8 +40,8 @@ INSTALLED_APPS = [
     # my apps
     "apps.activity",
     "apps.authentication",
-    "apps.anime_db",
-    "apps.manga_db",
+    "apps.anime",
+    "apps.manga",
     "apps.users",
 ]
 
@@ -221,21 +219,8 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "v1",
     "SERVE_INCLUDE_SCHEMA": False,
     "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@latest",
-    # 'ENUM_NAME_OVERRIDES': {"Statuc98cEnum": ""},
     'POSTPROCESSING_HOOKS': [],
-    # 'ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE': False,
 }
-
-# smtp settings
-# if not DEBUG:
-#     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-#     EMAIL_PORT = config("EMAIL_PORT")
-#     EMAIL_HOST = config("EMAIL_HOST")
-#     EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-#     EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-#     EMAIL_USE_TLS = True
-# else:
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 CORS_ALLOWED_ORIGINS = [
@@ -282,24 +267,6 @@ SITE_ID = 1
 #     MIDDLEWARE += ("silk.middleware.SilkyMiddleware",)
 #     INSTALLED_APPS.extend(("silk",))
 
-
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "handlers": {
-#         "console": {
-#             "level": "DEBUG",
-#             "class": "logging.StreamHandler",
-#         }
-#     },
-#     "loggers": {
-#         "django.db.backends": {
-#             "handlers": ["console"],
-#             "level": "DEBUG",
-#         },
-#     }
-# }
-
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
@@ -311,3 +278,14 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     X_FRAME_OPTIONS = "DENY"
+ 
+# smtp settings
+# if not DEBUG:
+#     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+#     EMAIL_PORT = config("EMAIL_PORT")
+#     EMAIL_HOST = config("EMAIL_HOST")
+#     EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+#     EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+#     EMAIL_USE_TLS = True
+# else:
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

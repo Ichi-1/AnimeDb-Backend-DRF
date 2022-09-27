@@ -2,10 +2,10 @@ from rest_framework import serializers as s
 from apps.users.models import User
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
-from apps.anime_db.serializers import (
+from apps.anime.serializers import (
     AnimeStatusCountSerializer,
 )
-from apps.manga_db.serializers import MangaStatusCountSerializer
+from apps.manga.serializers import MangaStatusCountSerializer
 from apps.activity.serializers import (
     ActivityCountSerializer,
     MyListGetSerializer

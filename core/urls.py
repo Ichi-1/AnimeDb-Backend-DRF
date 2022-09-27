@@ -27,7 +27,6 @@ class DocsView(views.APIView):
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("activity/", include('actstream.urls')),
-    # path("root/", DocsView.as_view()),
     # Spectacular
     path("api/schema/", SpectacularAPIView.as_view(api_version="v1"), name="schema"),
     path("api/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
@@ -36,8 +35,8 @@ urlpatterns = [
     path("api/auth/", include("apps.authentication.urls", namespace="auth")),
     path("api/", include("apps.users.urls", namespace="users")),
     #
-    path("api/", include("apps.anime_db.urls")),
-    path("api/", include("apps.manga_db.urls")),
+    path("api/", include("apps.anime.urls")),
+    path("api/", include("apps.manga.urls")),
     path("api/", include("apps.activity.urls")),
 ]
 

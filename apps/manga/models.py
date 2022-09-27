@@ -45,7 +45,7 @@ class Manga(models.Model):
 
 class MangaReview(Review):
     manga = models.ForeignKey(
-        'manga_db.Manga',
+        Manga,
         blank=True,
         null=True,
         related_name='manga_review',

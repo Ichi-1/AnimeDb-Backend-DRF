@@ -1,11 +1,16 @@
 from apps.activity.models import MyList, Review
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
-from django.core.validators import MaxValueValidator as MaxInt
+from django.core.validators import (
+    MaxValueValidator as MaxInt, 
+    FileExtensionValidator,
+)
 from django.db import models
+from .utils.utils import get_path_upload_screenshot
 
 
 class Anime(models.Model):
+
     class Meta:
         verbose_name = 'Anime'
         verbose_name_plural = 'Anime'
@@ -63,7 +68,7 @@ class Anime(models.Model):
 
 class AnimeReview(Review):
     anime = models.ForeignKey(
-        'anime_db.Anime',
+        Anime,
         blank=True,
         null=True,
         related_name='anime_review',
@@ -91,3 +96,20 @@ class MyAnimeList(MyList):
 
     def __str__(self):
         return f"{self.user.nickname}, {self.anime.title}, {self.status}, {self.score}"
+
+
+class Screenshot(models.Model):
+    anime = models.ForeignKey(
+        Anime, 
+        on_delete=models.CASCADE, 
+        related_name="screenshot"
+    )
+    url = models.ImageField(
+        upload_to=get_path_upload_screenshot,
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'png']),
+        ],
+        null=False
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

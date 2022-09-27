@@ -10,8 +10,8 @@ from faker import Faker
 from rest_framework import serializers as s, status
 from rest_framework.response import Response
 from .models import Comment, Review, MyList
-from apps.anime_db.models import Anime, AnimeReview
-from apps.manga_db.models import Manga, MangaReview
+from apps.anime.models import Anime, AnimeReview
+from apps.manga.models import Manga, MangaReview
 
 
 class AuthorSerializer(s.ModelSerializer):

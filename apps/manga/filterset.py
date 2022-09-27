@@ -1,4 +1,4 @@
-from apps.manga_db.models import MyMangaList
+from apps.manga.models import MyMangaList
 from django_filters import rest_framework as filters
 
 

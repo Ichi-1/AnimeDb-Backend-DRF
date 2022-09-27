@@ -1,4 +1,4 @@
-COPY anime_db_anime(
+COPY anime_anime(
 	age_rating, 
 	age_rating_guide,
     average_rating,
@@ -23,13 +23,13 @@ DELIMITER ','
 CSV HEADER;
 
 
-COPY manga_db_manga(
+COPY manga_manga(
     author,
     average_rating,
     chapters,
     description,
     media_type,
-    picture_main,
+    poster_image,
     status,
     tags,
     title,

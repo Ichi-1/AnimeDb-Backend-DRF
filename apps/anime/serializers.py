@@ -9,7 +9,7 @@ from django.core.validators import (
 )
 from faker import Faker
 from rest_framework import serializers as s
-from .models import Anime, AnimeReview, MyAnimeList
+from .models import Anime, AnimeReview, MyAnimeList, Screenshot
 
 
 class AnimeDetailSerializer(s.ModelSerializer):
@@ -84,3 +84,14 @@ class AnimeStatusCountSerializer(s.Serializer):
 class AnimeStatisticSerializer(s.Serializer):
     activity = ActivityCountSerializer()
     my_list  = AnimeStatusCountSerializer()
+
+
+class ScreenshotSerializer(s.Serializer):
+    screenshot = s.ImageField(required=True)
+
+    def create(self, anime):
+        file_path = self.validated_data["screenshot"]
+        try:
+            Screenshot(url=file_path, anime=anime).save()
+        except BaseException:
+            raise ValueError("Screenshot uploda failed")

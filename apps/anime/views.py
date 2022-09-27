@@ -13,16 +13,22 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
-from .models import Anime, AnimeReview, MyAnimeList
-from .utils.filterset import AnimeListFilter
-from .utils.paging import TotalCountHeaderPagination
+from .models import (
+    Anime, 
+    AnimeReview, 
+    MyAnimeList, 
+    Screenshot
+)
 from .serializers import (
     AnimeDetailSerializer,
     AnimeListSerializer,
     AnimeReviewListSerializer,
+    AnimeStatisticSerializer,
     MyAnimeListUpdateOrDeleteSerializer,
-    AnimeStatisticSerializer
+    ScreenshotSerializer
 )
+from .utils.filterset import AnimeListFilter
+from .utils.paging import TotalCountHeaderPagination
 
 
 @extend_schema_view(
@@ -251,3 +257,44 @@ class AnimeStatisticView(GenericAPIView):
                 "dropped": dropped.count(),
             }
         })
+
+
+
+@extend_schema_view(
+    create=extend_schema(
+        description="Load anime screenshot",
+        request={
+            'multipart/form-data': {
+                'type': 'object',
+                'properties': {
+                    'screenshot': {
+                        'type': 'string',
+                        'format': 'binary'
+                    }
+                }
+            }
+        }
+    ),
+    list=extend_schema(
+        summary="Get anime screenshots",
+        request=None
+    )
+)
+class ScreenshotView(ModelViewSet):
+    http_method_names = ["post", "get", "delete"]
+    queryset = Screenshot.objects.all()
+    serializer_class = ScreenshotSerializer
+    lookup_field = "id"
+
+
+    def create(self, request, *args, **kwargs):
+        anime = get_object_or_404(Anime.objects.only("id"), id=kwargs.get("id"))
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.create(anime)
+        return Response(status=status.HTTP_201_CREATED)
+
+    def list(self, request, *args, **kwargs):
+        anime = get_object_or_404(Anime.objects.only("id"), id=kwargs.get("id"))
+        screenshots = Screenshot.objects.select_related("anime")
+        print(screenshots)

@@ -1,4 +1,4 @@
-from apps.anime_db.models import MyAnimeList
+from apps.anime.models import MyAnimeList
 from django_filters.constants import EMPTY_VALUES
 from django_filters import rest_framework as filters
 

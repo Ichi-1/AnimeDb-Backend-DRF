@@ -1,5 +1,5 @@
 from apps.activity.serializers import CommentsListSerializer
-from apps.anime_db.utils.paging import TotalCountHeaderPagination
+from apps.anime.utils.paging import TotalCountHeaderPagination
 from apps.activity.models import Comment
 from core.serializers import EmptySerializer
 from django.shortcuts import get_object_or_404

@@ -25,19 +25,19 @@ class User(AbstractBaseUser, PermissionsMixin):
         default='media/user_avatar/default',
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png'])],
     )
-    auth_provider     = models.CharField(max_length=255, null=False, default='email')
-    about             = models.TextField(max_length=2000, blank=True, null=True)
-    birthdate         = models.DateField(help_text='User birthdate', null=True)
-    email             = models.EmailField(max_length=150, unique=True, null=False)
-    gender            = models.CharField(choices=GENDERS, max_length=10)
-    nickname          = models.CharField(max_length=255, unique=True, blank=True)
-    name              = models.CharField(max_length=255, blank=True)
-    created_at        = models.DateTimeField(auto_now_add=True)
-    updated_at        = models.DateTimeField(auto_now=True)
+    auth_provider = models.CharField(max_length=255, null=False, default='email')
+    about         = models.TextField(max_length=2000, blank=True, null=True)
+    birthdate     = models.DateField(help_text='User birthdate', null=True)
+    email         = models.EmailField(max_length=150, unique=True, null=False)
+    gender        = models.CharField(choices=GENDERS, max_length=10)
+    nickname      = models.CharField(max_length=255, unique=True, blank=True)
+    name          = models.CharField(max_length=255, blank=True)
+    created_at    = models.DateTimeField(auto_now_add=True)
+    updated_at    = models.DateTimeField(auto_now=True)
     # Permissions
-    is_active         = models.BooleanField(default=True)   # true for development, false for prod
-    is_staff          = models.BooleanField(default=False)
-    read_only         = models.BooleanField(default=False)
+    is_active     = models.BooleanField(default=True)   # true for development, false for prod
+    is_staff      = models.BooleanField(default=False)
+    read_only     = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nickname

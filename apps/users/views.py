@@ -1,8 +1,8 @@
-from apps.anime_db.utils.filterset import MyAnimeListFilter
-from apps.manga_db.filterset import MyMangaListFilter
+from apps.anime.utils.filterset import MyAnimeListFilter
+from apps.manga.filterset import MyMangaListFilter
 from apps.users.models import User
-from apps.anime_db.models import MyAnimeList
-from apps.manga_db.models import MyMangaList
+from apps.anime.models import MyAnimeList
+from apps.manga.models import MyMangaList
 from apps.activity.models import Comment, Review
 from django.db.models import F
 from django.shortcuts import get_object_or_404
@@ -28,10 +28,13 @@ from .serializers import (
 )
 
 
+# TODO пофиксить загрузку файла в API схеме сваггера
 @extend_schema_view(
     list=extend_schema(summary='Get users list'),
     retrieve=extend_schema(summary='Get user public profile'),
-    partial_update=extend_schema(summary='Patch user profile. Authorized Only'),
+    partial_update=extend_schema(
+        summary='Patch user profile. Authorized Only',
+    ),
 )
 class UserView(ModelViewSet):
     queryset = User.objects.all().order_by('-last_login')
