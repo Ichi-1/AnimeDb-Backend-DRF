@@ -94,4 +94,4 @@ class ScreenshotSerializer(s.Serializer):
         try:
             Screenshot(url=file_path, anime=anime).save()
         except BaseException:
-            raise ValueError("Screenshot uploda failed")
+            raise ValueError("Screenshot upload failed")

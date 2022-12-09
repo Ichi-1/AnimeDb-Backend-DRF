@@ -15,6 +15,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework.viewsets import ModelViewSet
 from .serializers import (
     MediaEntitySerializer,
@@ -49,7 +50,7 @@ class UserView(ModelViewSet):
             return UserDetailSerializer
 
     @permission_classes([permissions.IsAuthenticated])
-    def partial_update(self, request, *args, **kwargs):
+    def partial_update(self, request: Request, *args, **kwargs):
         user_id = request.user.id
         user_to_update = kwargs['pk']
 
@@ -74,7 +75,7 @@ class UserFavoritesView(GenericAPIView):
     permission_classes = [permissions.AllowAny]
     lookup_field = "id"
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs):
         user_id = kwargs.get("id")
         user = User.objects.only("id").get(id=user_id)
         favorites_anime = user.favorites_anime.only("id", "title", "poster_image").all()

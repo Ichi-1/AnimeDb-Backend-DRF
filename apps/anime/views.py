@@ -12,6 +12,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
+from rest_framework.request import Request
 
 from .models import (
     Anime, 
@@ -234,7 +235,7 @@ class AnimeStatisticView(GenericAPIView):
     permission_classes = [permissions.AllowAny]
     lookup_field = "id"
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         anime = get_object_or_404(Anime, id=kwargs.get("id"))
         # activity
         comments = anime.comments
@@ -287,7 +288,7 @@ class ScreenshotView(ModelViewSet):
     lookup_field = "id"
 
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs) -> Response:
         anime = get_object_or_404(Anime.objects.only("id"), id=kwargs.get("id"))
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

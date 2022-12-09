@@ -39,7 +39,3 @@ urlpatterns = [
     path("api/", include("apps.manga.urls")),
     path("api/", include("apps.activity.urls")),
 ]
-
-
-# if settings.DEBUG:
-#     urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]

@@ -10,13 +10,18 @@ from apps.authentication.utils import silly_username_generator
 
 class CustomManager(BaseUserManager):
 
-    def email_validation(self, email):
+    def email_validation(self, email: str):
         try:
             validate_email(email)
         except ValidationError:
             raise ValueError('You must provide a valid email')
 
-    def create_superuser(self, nickname, email, password=None, **extra_fields):
+    def create_superuser(self, 
+        nickname: str, 
+        email: str, 
+        password: str = None, 
+        **extra_fields
+    ):
         if not nickname:
             raise ValueError('Superuser Account: You must provide a nickname')
 
@@ -34,7 +39,12 @@ class CustomManager(BaseUserManager):
 
         return self.create_user(nickname, email, password, **extra_fields)
 
-    def create_user(self, nickname, email, password=None, **extra_fields):
+    def create_user(self, 
+        nickname: str, 
+        email: str, 
+        password: str = None, 
+        **extra_fields
+    ):
         """
         Create a regular User Account with the given email and password.
         """
@@ -49,7 +59,10 @@ class CustomManager(BaseUserManager):
         user.save()
         return user
 
-    def create_social_user(self, provider, user_data):
+    def create_social_user(self, 
+        provider: str, 
+        user_data: dict
+    ):
         """
         Create a User Account based on social provider data (OAuth2)
         """
@@ -86,7 +99,7 @@ class CustomManager(BaseUserManager):
             return tokens
 
     @staticmethod
-    def get_tokens(user):
+    def get_tokens(user: dict):
         refresh = RefreshToken.for_user(user)
 
         # Add custom claims
